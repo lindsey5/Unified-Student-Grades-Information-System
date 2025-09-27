@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import type React from "react";
 
 interface ButtonProps {
@@ -29,3 +29,15 @@ export const DeleteButton = ({ onClick, label = "Delete" }: ButtonProps) => {
     </button>
   );
 };
+
+export const AddButton = ({ onClick, label = "Add" }: { onClick: () => void, label?: string }) => {
+  return (
+        <button
+            className="mb-4 flex items-center gap-2 py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition cursor-pointer"
+            onClick={onClick}
+        >
+            <Plus size={18} />
+            <span className="hidden lg:inline">{label}</span>
+        </button>
+    );
+}

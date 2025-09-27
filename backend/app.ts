@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import departmentRoutes from './routes/departmentRoutes';
 import courseRoutes from './routes/courseRoutes';
 import studentRoutes from './routes/studentRoutes';
+import subjectRoutes from './routes/subjectRoutes';
 
 const app = express();
 
@@ -18,11 +19,12 @@ app.use(cors({
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.static('public'));
-app.use(express.json({ limit: '200mb' }));
-app.use(express.urlencoded({ limit: '200mb', extended: true }));
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.use('/api/departments', departmentRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/subjects', subjectRoutes);
 
 export default app

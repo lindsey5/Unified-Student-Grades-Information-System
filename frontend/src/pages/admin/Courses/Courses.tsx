@@ -1,8 +1,7 @@
 import { useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import { formatDate } from "../../../utils/dateUtils";
-import { Plus } from "lucide-react";
-import { DeleteButton, EditButton } from "../../../components/Button";
+import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import CourseModal from "./components/Course";
 import { SearchField } from "../../../components/Textfield";
 import { useDebounce } from "../../../hooks/useDebounce";
@@ -10,6 +9,7 @@ import { EmeraldSelect } from "../../../components/Select";
 import { MenuItem } from "@mui/material";
 import { deleteData } from "../../../utils/api";
 import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
+import EmeraldTable from "../../../components/Table";
 
 const Courses = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,13 +60,7 @@ const Courses = () => {
             {/* Page Title */}
             <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <h1 className="text-2xl font-bold text-emerald-700">Courses</h1>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="flex items-center gap-2 py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition cursor-pointer"
-                >
-                    <Plus size={18} />
-                    <span className="hidden sm:inline">Add Course</span>
-                </button>
+                <AddButton onClick={() => setIsModalOpen(true)} label="Add Course" />
             </div>
 
             {/* Actions: Add + Search */}
@@ -95,32 +89,17 @@ const Courses = () => {
                         ))}
                     </EmeraldSelect>
                 </div>
-        
             </div>
 
             {/* Courses Table */}
-            <div className="w-full max-h-screen overflow-y-auto bg-white shadow-sm rounded-lg border border-gray-200">
-                <table className="min-w-full border-collapse">
-                <thead className="bg-emerald-600 text-white text-left text-sm font-medium sticky top-0">
-                    <tr>
-                    <th className="py-3 px-4">#</th>
-                    <th className="py-3 px-4">Course</th>
-                    <th className="py-3 px-4">Department</th>
-                    <th className="py-3 px-4">Created At</th>
-                    <th className="py-3 px-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.courses.map((course: Course, index: number) => (
-                    <tr
-                        key={course._id}
-                        className="hover:bg-gray-50 transition border-b border-gray-200"
-                    >
-                        <td className="py-3 px-4">{index + 1}</td>
-                        <td className="py-3 px-4">{course.name}</td>
-                        <td className="py-3 px-4">{course.department.name}</td>
-                        <td className="py-3 px-4">{formatDate(course.createdAt)}</td>
-                        <td className="py-3 px-4">
+            <EmeraldTable 
+                columns={["#", "Course", "Department", "Created At", "Actions"]}
+                data={data?.courses.map((course: Course, index: number) => ({
+                    "#": index + 1,
+                    "Course": course.name,
+                    "Department": course.department.name,
+                    "Created At": formatDate(course.createdAt),
+                    "Actions": (
                         <div className="flex gap-2">
                             <EditButton
                             onClick={() => {
@@ -129,13 +108,10 @@ const Courses = () => {
                             }}
                             />
                             <DeleteButton onClick={() => handleDelete(course._id as string)} />
-                        </div>
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
-                </table>
-            </div>
+                        </div>)
+                })) || []
+                }
+            />
 
             {/* Modal */}
             <CourseModal

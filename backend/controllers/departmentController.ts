@@ -18,13 +18,20 @@ export const createDepartment = async (req : Request, res : Response) => {
             return;
         }
 
+        let department = await Department.findOne({ name, status: 'active' })
+
+        if(department){
+            res.status(400).json({ message: 'Department already exists'});
+            return;
+        }
+
         const uploadedImage = await uploadImage(image);
         if(!uploadedImage){
             res.status(500).json({ message: "Image upload failed" });
             return;
         }
 
-        let department = await Department.findOne({ name, status: 'inactive' });
+        department = await Department.findOne({ name, status: 'inactive' });
         if(department){
             department.status = 'active';
             department.image = uploadedImage;
@@ -36,7 +43,6 @@ export const createDepartment = async (req : Request, res : Response) => {
         res.status(201).json({ success: true , department});
 
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Department already exists");
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
@@ -54,6 +60,12 @@ export const editDepartment = async (req : Request, res : Response) => {
     try{
         const { id } = req.params;
         const { name, image } = req.body;
+
+        const isExist = await Department.findOne({ name, status: 'active' });
+        if(isExist){
+            res.status(409).json({ message: 'Deparment name already exists'});
+            return;
+        }
 
         const department = await Department.findById(id);
         if(!department){

@@ -1,17 +1,18 @@
 import mongoose, { Schema, Types, Document } from 'mongoose';
 import { Image } from '../types/types';
 import { hashPassword } from '../utils/authUtils';
+import StudentSubject from './StudentSubject';
 
 export interface IStudent extends Document {
   student_id: string;
   email: string;
   firstname: string;
+  middlename: string;
   lastname: string;
   password: string;
   gender: string;
   image?: Image;
   course: Types.ObjectId;
-  status: 'active' | 'inactive';
 }
 
 // Define the schema
@@ -30,6 +31,11 @@ const StudentSchema: Schema<IStudent> = new Schema(
       trim: true
     },
     firstname: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    middlename: {
       type: String,
       required: true,
       trim: true
@@ -58,11 +64,6 @@ const StudentSchema: Schema<IStudent> = new Schema(
         ref: "Course",
         required: true, 
     },
-    status: {
-      type: String,
-      enum: ['active', 'inactive'],
-      default: 'active',
-    },
   },
   { timestamps: true }
 );
@@ -72,6 +73,14 @@ StudentSchema.pre<IStudent>('save', async function (next) {
     return next();
   }
   this.password = await hashPassword(this.password);
+  next();
+});
+
+StudentSchema.pre('findOneAndDelete', async function (next) {
+  const student = await this.model.findOne(this.getFilter());
+  if (student) {
+    await StudentSubject.deleteMany({ student_id: student._id });
+  }
   next();
 });
 

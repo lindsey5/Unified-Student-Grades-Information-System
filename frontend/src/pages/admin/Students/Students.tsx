@@ -1,73 +1,121 @@
-import { BookOpen, Plus } from "lucide-react"
-import { useState } from "react";
+import { BookOpen } from "lucide-react"
 import useFetch from "../../../hooks/useFetch";
-import { DeleteButton, EditButton } from "../../../components/Button";
+import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
-import { Avatar } from "@mui/material";
+import { Avatar, MenuItem, Pagination } from "@mui/material";
+import EmeraldTable from "../../../components/Table";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { useState } from "react";
+import { SearchField } from "../../../components/Textfield";
+import { EmeraldSelect } from "../../../components/Select";
+import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
+import { deleteData } from "../../../utils/api";
 
 const Students = () => {
-    const { data } = useFetch("/api/students");
+    const [page, setPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const searchDebounce = useDebounce(searchTerm, 200);
+    const [selectedCourse, setSelectedCourse] = useState<string>("");
+    const { data : coursesData } = useFetch("/api/courses");
+    const { data } = useFetch(`/api/students?searchTerm=${searchDebounce}&page=${page}&limit=50&course=${selectedCourse}`);
     const navigate = useNavigate();
+
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
+    const handleDelete = async (studentId : Student['_id']) => {
+        const confirmed = await confirmDialog(
+        "Delete Student",
+        "Are you sure you want to delete this student? This action cannot be undone.",
+        "warning",
+        "Delete",
+        "Cancel"
+        );
+
+        if (!confirmed) return;
+
+        const response = await deleteData(`/api/students/${studentId}`);
+
+        if (response.success) {
+            await successAlert(
+                "Department Deleted",
+                "The department has been successfully removed from the system."
+            );
+            window.location.reload();
+        } else {
+            errorAlert(
+                "Delete Failed",
+                response.message || "Something went wrong while deleting the department."
+            );
+        }
+    };
     
     return (
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
            <div className="w-full flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-emerald-700">Students</h1>
-                <button
-                    className="mb-4 flex items-center gap-2 py-2 px-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition cursor-pointer"
-                >
-                    <Plus size={18} />
-                    <span className="hidden lg:inline" onClick={() => navigate('/admin/student')}>Add Student</span>
-                </button>
+                <AddButton onClick={() => navigate('/admin/student')} label="Add Student" />
             </div>
-            <div className="w-full max-h-screen overflow-y-auto bg-white shadow-sm rounded-lg border border-gray-200">
-                <table className="min-w-full border-collapse">
-                <thead className="bg-emerald-600 text-white text-left text-sm font-medium sticky top-0">
-                    <tr>
-                        <th className="py-3 px-4">Fullname</th>
-                        <th className="py-3 px-4">Student ID</th>
-                        <th className="py-3 px-4">Email</th>
-                        <th className="py-3 px-4">Gender</th>
-                        <th className="py-3 px-4">Course</th>
-                        <th className="py-3 px-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.students.map((student : Student) => (
-                    <tr
-                        key={student._id}
-                        className="hover:bg-gray-50 transition border-b border-gray-200"
+            <div className="w-full flex justify-between items-center">
+                <div className="w-full md:w-1/2">
+                    <SearchField 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        placeholder="Search by student id, firstname, lastname or email..."
+                    />
+                </div>
+                <div className="w-full md:w-64">
+                    <EmeraldSelect
+                    value={selectedCourse}
+                    onChange={(e) => setSelectedCourse(e.target.value)}
+                    displayEmpty
                     >
-                        <td className="py-3 px-4">
-                            <div className="flex items-center gap-4">
-                                <Avatar src={student?.image?.imageUrl}/>
-                                {student.firstname} {student.lastname}
-                            </div>
-                        </td>
-                        <td className="py-3 px-4">{student.student_id}</td>
-                        <td className="py-3 px-4">{student.email}</td>
-                        <td className="py-3 px-4">{student.gender}</td>
-                        <td className="py-3 px-4">{student.course.name}</td>
-                        <td className="py-3 px-4">
+                    <MenuItem value="" disabled>
+                        <span className="text-gray-400">Select a course</span>
+                    </MenuItem>
+                    {coursesData?.courses?.map((c: Course) => (
+                        <MenuItem key={c._id} value={c._id}>
+                        {c.name}
+                        </MenuItem>
+                    ))}
+                    </EmeraldSelect>
+                </div>
+            </div>
+            <EmeraldTable 
+                columns={["Fullname", "Student ID", "Email", "Gender", "Course", "Actions"]}
+                data={data?.students.map((student : Student) => ({
+                    "Fullname": (
+                        <div className="flex items-center gap-4">
+                            <Avatar src={student?.image?.imageUrl}/>
+                            {student.firstname} {student.lastname}
+                        </div>
+                    ),
+                    "Student ID": student.student_id,
+                    "Email": student.email,
+                    "Gender": student.gender,
+                    "Course": student.course.name,
+                    "Actions": (
                         <div className="flex gap-2">
-                           <button
-  className="cursor-pointer flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition text-sm"
->
-  <BookOpen size={16} />
-  View Grades
-</button>
+                            <button
+                                className="cursor-pointer flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition text-sm"
+                            >
+                                <BookOpen size={16} />
+                                View Grades
+                            </button>
                             <EditButton
                                 onClick={() => navigate(`/admin/student/${student._id}`)}
                             />
-                            <DeleteButton onClick={() => {}} />
+                            <DeleteButton onClick={() => handleDelete(student._id)} />
                         </div>
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
-                </table>
-            </div>
-            
+                    ),
+                })) || []}
+            />
+            {data?.students.length > 0 && <Pagination
+                page={page}
+                count={data?.totalPages || 1}
+                onChange={handleChange}
+                color="primary"
+            />}
         </div>
     )
 }

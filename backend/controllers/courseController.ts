@@ -44,8 +44,8 @@ export const getAllCourses = async (req : Request, res : Response) => {
             filter = { ...filter, name: { $regex: searchTerm, $options: 'i' } };
         }
 
-        const courses = await Course.find(filter).populate('department').sort({ createdAt: -1 });
-        res.status(200).json({ success: true, courses: courses.sort((a, b) => a.name.localeCompare(b.name)) });
+        const courses = await Course.find(filter).populate('department').sort({ name: 1 });
+        res.status(200).json({ success: true, courses });
     }catch(error : any){
         console.log(error)
         res.status(500).json({ message: error.message || "Server Error" });

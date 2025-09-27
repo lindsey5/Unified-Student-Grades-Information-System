@@ -19,10 +19,19 @@ interface Student {
     student_id: string;
     email: string;
     firstname: string;
+    middlename: string;
     lastname: string;
     gender: string;
     image?: Image;
     course: Course;
+    createdAt?: Date;
+}
+
+interface Subject{
+    _id?: string;
+    name: string;
+    code: string;
+    createdAt?: Date;
 }
 
 interface Image {

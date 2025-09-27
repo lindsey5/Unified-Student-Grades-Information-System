@@ -1,10 +1,9 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubject extends Document {
   name: string;
   code: string;
-  time: string;
-  academicYear: string;
+  status?: 'active' | 'inactive';
 }
 
 // Define the schema
@@ -13,24 +12,20 @@ const SubjectSchema: Schema<ISubject> = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
     },
     code: {
       type: String,
       required: true,
-      unique: true,
       uppercase: true,
       trim: true,
     },
-    time: {
+    status: {
       type: String,
-      required: true,
-      trim: true,
+      enum: ['active', 'inactive'],
+      default: 'active',
     },
-    academicYear: {
-      type: String,
-      required: true
-    }
   },
   { timestamps: true }
 );
