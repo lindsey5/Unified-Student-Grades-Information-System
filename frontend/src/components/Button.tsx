@@ -37,7 +37,7 @@ export const AddButton = ({ onClick, label = "Add" }: { onClick: () => void, lab
             onClick={onClick}
         >
             <Plus size={18} />
-            <span className="hidden lg:inline">{label}</span>
+            <span className="inline">{label}</span>
         </button>
     );
 }

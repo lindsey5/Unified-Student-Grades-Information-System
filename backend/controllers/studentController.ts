@@ -43,9 +43,7 @@ export const getAllStudents = async (req : Request, res : Response) => {
             ];
         }
 
-        if(course){
-            query.course = course;
-        }
+        if(course && course !== 'All') query.course = course;
 
         const students = await Student.find(query)
             .populate('course')

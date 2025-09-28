@@ -34,6 +34,15 @@ interface Subject{
     createdAt?: Date;
 }
 
+interface Instructor {
+    _id?: string;
+    firstname: string;
+    lastname: string;
+    department: Department; 
+    status: 'active' | 'inactive'
+    createdAt: Date
+}
+
 interface Image {
     imageUrl: string;
     imagePublicId: string;

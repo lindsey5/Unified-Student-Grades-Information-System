@@ -15,7 +15,7 @@ const Students = () => {
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const searchDebounce = useDebounce(searchTerm, 200);
-    const [selectedCourse, setSelectedCourse] = useState<string>("");
+    const [selectedCourse, setSelectedCourse] = useState<string>("All");
     const { data : coursesData } = useFetch("/api/courses");
     const { data } = useFetch(`/api/students?searchTerm=${searchDebounce}&page=${page}&limit=50&course=${selectedCourse}`);
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ const Students = () => {
     const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
+    
     const handleDelete = async (studentId : Student['_id']) => {
         const confirmed = await confirmDialog(
         "Delete Student",
@@ -56,7 +57,7 @@ const Students = () => {
                 <h1 className="text-2xl font-bold text-emerald-700">Students</h1>
                 <AddButton onClick={() => navigate('/admin/student')} label="Add Student" />
             </div>
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="w-full md:w-1/2">
                     <SearchField 
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -66,13 +67,12 @@ const Students = () => {
                 </div>
                 <div className="w-full md:w-64">
                     <EmeraldSelect
-                    value={selectedCourse}
-                    onChange={(e) => setSelectedCourse(e.target.value)}
-                    displayEmpty
+                        value={selectedCourse}
+                        onChange={(e) => setSelectedCourse(e.target.value)}
+                        displayEmpty
+                        label="Course"
                     >
-                    <MenuItem value="" disabled>
-                        <span className="text-gray-400">Select a course</span>
-                    </MenuItem>
+                    <MenuItem value="All">All</MenuItem>
                     {coursesData?.courses?.map((c: Course) => (
                         <MenuItem key={c._id} value={c._id}>
                         {c.name}

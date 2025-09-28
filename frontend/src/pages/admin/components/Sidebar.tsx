@@ -8,6 +8,8 @@ import {
   UserCheck,
   BookMarked,
   GraduationCap,
+  Shield,
+  IdCard,
 } from "lucide-react";
 
 interface SidebarButtonProps {
@@ -55,6 +57,8 @@ const Sidebar = () => {
         <SidebarButton icon={<Users size={20} />} label="Students" to="/admin/students" />
         <SidebarButton icon={<UserCheck size={20} />} label="Instructors" to="/admin/instructors" />
         <SidebarButton icon={<BookMarked size={20} />} label="Subjects" to="/admin/subjects" />
+        <SidebarButton icon={<Shield size={20} />} label="Admins" to="/admin/admins" />
+        <SidebarButton icon={<IdCard size={20} />} label="Registrars" to="/admin/registrars" />
       </nav>
     </aside>
   );

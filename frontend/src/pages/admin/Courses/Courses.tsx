@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useFetch from "../../../hooks/useFetch";
-import { formatDate } from "../../../utils/dateUtils";
+import { formatDateTime } from "../../../utils/dateUtils";
 import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import CourseModal from "./components/Course";
 import { SearchField } from "../../../components/Textfield";
@@ -98,7 +98,7 @@ const Courses = () => {
                     "#": index + 1,
                     "Course": course.name,
                     "Department": course.department.name,
-                    "Created At": formatDate(course.createdAt),
+                    "Created At": formatDateTime(course.createdAt),
                     "Actions": (
                         <div className="flex gap-2">
                             <EditButton

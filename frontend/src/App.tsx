@@ -7,6 +7,7 @@ import Students from './pages/admin/Students/Students'
 import Student from './pages/admin/Students/Student'
 import Subjects from './pages/admin/Subjects/Subjects'
 import StudentGrades from './pages/admin/StudentGrades/StudentGrades'
+import Instructors from './pages/admin/Instructors/Instructors'
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ function App() {
           <Route path='student' element={<Student />}/>
           <Route path='grades/:id' element={<StudentGrades />} />
           <Route path='subjects' element={<Subjects />} />
+          <Route path='instructors' element={<Instructors />} />
         </Route>
       </Routes>
     </BrowserRouter>

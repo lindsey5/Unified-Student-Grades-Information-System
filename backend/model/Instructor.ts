@@ -4,7 +4,7 @@ export interface IInstructor extends Document {
   firstname: string;
   lastname: string;
   department: Types.ObjectId; 
-  status: 'Active' | 'Inactive'
+  status: 'active' | 'inactive' | 'deleted'
 }
 
 // Define the schema
@@ -27,9 +27,9 @@ const InstructorSchema: Schema<IInstructor> = new Schema(
     },
     status: {
         type: String,
-        enum: ['Active', 'Inactive'],
+        enum: ['active', 'inactive', 'deleted'],
         required: true,
-        default: 'Active'
+        default: 'active'
     }
   },
   { timestamps: true }

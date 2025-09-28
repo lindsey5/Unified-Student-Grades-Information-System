@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddDepartmentModal from "./components/DepartmentModal";
 import useFetch from "../../../hooks/useFetch";
-import { formatDate } from "../../../utils/dateUtils";
+import { formatDateTime } from "../../../utils/dateUtils";
 import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import { confirmDialog, successAlert, errorAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
@@ -66,7 +66,7 @@ const Departments = () => {
               <span>{department.name}</span>
             </div>
           ),
-          "Created At": formatDate(department.createdAt),
+          "Created At": formatDateTime(department.createdAt),
           "Actions": (
             <div className="flex gap-2">
               <EditButton

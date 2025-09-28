@@ -3,7 +3,7 @@ import { AddButton, DeleteButton, EditButton } from "../../../components/Button"
 import SubjectModal from "./components/SubjectModal";
 import useFetch from "../../../hooks/useFetch";
 import EmeraldTable from "../../../components/Table";
-import { formatDate } from "../../../utils/dateUtils";
+import { formatDateTime } from "../../../utils/dateUtils";
 import { Pagination } from "@mui/material";
 import { SearchField } from "../../../components/Textfield";
 
@@ -50,7 +50,7 @@ const Subjects = () => {
                     '#': index + 1,
                     'Subject': subject.name,
                     'Code' : subject.code,
-                    'Created At' : formatDate(subject.createdAt),
+                    'Created At' : formatDateTime(subject.createdAt),
                     'Actions' : (
                         <div className="flex gap-2">
                             <EditButton
