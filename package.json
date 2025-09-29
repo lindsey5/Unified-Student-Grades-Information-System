@@ -20,6 +20,7 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.5.2",
     "@types/nodemailer": "^7.0.1",
+    "cross-env": "^10.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
