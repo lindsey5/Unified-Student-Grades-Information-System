@@ -2,14 +2,14 @@ import { Navigate, useParams } from "react-router-dom";
 import { AddButton } from "../../../components/Button";
 import useFetch from "../../../hooks/useFetch";
 import SemesterModal from "./components/SemesterModal";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { confirmDialog, errorAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
 import { Edit3, X } from "lucide-react";
 import SubjectModal from "./components/StudentSubjectModal";
 import EmeraldTable from "../../../components/Table";
 
-const StudentGradesInfoHeader = ({ id } : { id : string}) => {
+const StudentGradesInfoHeader = memo(({ id, semester } : { id : string, semester : Semester}) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const { data: studentData, loading } = useFetch(`/api/students/${id}`);
 
@@ -23,7 +23,7 @@ const StudentGradesInfoHeader = ({ id } : { id : string}) => {
             <h1 className="text-2xl font-bold text-emerald-700 mb-2">Student Grades</h1>
             <h1 className="text-gray-500">Student ID: {studentData?.student.student_id}</h1>
             <h1 className="text-gray-500">Fullname: {studentData?.student.firstname} {studentData?.student.lastname}</h1>
-            <h1 className="text-gray-500">Course: {studentData?.student.course.name}</h1>
+            <h1 className="text-gray-500">Course: {semester.course.name}</h1>
         </div>
         <AddButton onClick={() => setIsModalOpen(true)} label="Add Semester" />
         {/* Modal */}
@@ -34,7 +34,7 @@ const StudentGradesInfoHeader = ({ id } : { id : string}) => {
         />
         </div>
     )
-}
+})
 
 const StudentGrades = () => {
     const { id } = useParams();
@@ -59,7 +59,7 @@ const StudentGrades = () => {
     return (
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Header */}
-        <StudentGradesInfoHeader id={id || ""}/>
+        <StudentGradesInfoHeader id={id || ""} semester={selectedSemester as Semester}/>
 
         {/* Semester Tabs */}
         <div className="w-full border-b border-gray-200 flex gap-6 overflow-x-auto">
@@ -87,8 +87,6 @@ const StudentGrades = () => {
             <p className="text-gray-500 italic">No semesters yet.</p>
             )}
         </div>
-
-        {selectedSemester && <AddButton label="Add Subject" onClick={() => setIsSubjectModalOpen(true)}/>}
         
         {selectedSemester && (
         <EmeraldTable 
@@ -117,6 +115,12 @@ const StudentGrades = () => {
             })) || []
             }
         />
+        )}
+
+        {selectedSemester && (
+            <div className="w-full flex justify-end">
+                <AddButton label="Add Subject" onClick={() => setIsSubjectModalOpen(true)}/>
+            </div>
         )}
 
         <SubjectModal 

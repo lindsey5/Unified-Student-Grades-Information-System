@@ -2,6 +2,7 @@ import mongoose, { Schema, Types, Document } from 'mongoose';
 import { Image } from '../types/types';
 import { hashPassword } from '../utils/authUtils';
 import StudentSubject from './StudentSubject';
+import Semester from './Semester';
 
 export interface IStudent extends Document {
   student_id: string;
@@ -80,6 +81,8 @@ StudentSchema.pre('findOneAndDelete', async function (next) {
   const student = await this.model.findOne(this.getFilter());
   if (student) {
     await StudentSubject.deleteMany({ student_id: student._id });
+    await Semester.deleteMany({ student_id: student._id});
+    await StudentSubject.deleteMany({ student_id: student._id});
   }
   next();
 });

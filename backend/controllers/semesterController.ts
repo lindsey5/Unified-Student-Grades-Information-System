@@ -14,17 +14,18 @@ export const createSemester = async (req : Request, res : Response) => {
 export const getStudentSemester = async (req : Request, res : Response) => {
     try{
 
-        const semesters = await Semester.find({ student_id: req.params.id })
+        const semesters = await Semester.find({ student_id: req.params.id }).populate("course")
         res.status(200).json({ success: true, semesters });
 
     }catch(err : any){
+        console.log(err)
         res.status(500).json({ message: err.message || 'Server Error'})
     }
 }
 
 export const deleteSemester = async (req : Request, res : Response) => {
     try{
-        const semester = await Semester.findByIdAndDelete(req.params.id);
+        const semester = await Semester.findOneAndDelete({ _id: req.params.id });
         if(!semester){
             res.status(404).json({ message: 'Semester not found.'});
             return;

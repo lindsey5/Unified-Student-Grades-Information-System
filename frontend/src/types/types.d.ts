@@ -50,6 +50,7 @@ interface Semester {
     schoolYear: string; // ex. "2025-2026"
     enrollmentStatus: 'Regular' | 'Irregular'
     status: "active" | "inactive";
+    course: Course;
 }
 
 interface StudentSubject {
