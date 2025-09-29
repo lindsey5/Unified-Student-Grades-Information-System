@@ -23,7 +23,7 @@ const StudentGradesInfoHeader = memo(({ id, semester } : { id : string, semester
             <h1 className="text-2xl font-bold text-emerald-700 mb-2">Student Grades</h1>
             <h1 className="text-gray-500">Student ID: {studentData?.student.student_id}</h1>
             <h1 className="text-gray-500">Fullname: {studentData?.student.firstname} {studentData?.student.lastname}</h1>
-            <h1 className="text-gray-500">Course: {semester.course.name}</h1>
+            <h1 className="text-gray-500">Course: {semester?.course.name}</h1>
         </div>
         <AddButton onClick={() => setIsModalOpen(true)} label="Add Semester" />
         {/* Modal */}
