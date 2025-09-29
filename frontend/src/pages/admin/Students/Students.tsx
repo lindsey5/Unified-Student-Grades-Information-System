@@ -23,7 +23,7 @@ const Students = () => {
     const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
-    
+
     const handleDelete = async (studentId : Student['_id']) => {
         const confirmed = await confirmDialog(
         "Delete Student",
@@ -98,6 +98,7 @@ const Students = () => {
                         <div className="flex gap-2">
                             <button
                                 className="cursor-pointer flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition text-sm"
+                                onClick={() => navigate(`/admin/grades/${student._id}`)}
                             >
                                 <BookOpen size={16} />
                                 View Grades

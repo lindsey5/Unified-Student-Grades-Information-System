@@ -43,7 +43,35 @@ interface Instructor {
     createdAt: Date
 }
 
+interface Semester {
+    _id?: string;
+    student_id: string;
+    term: "1st" | "2nd" | "Summer";
+    schoolYear: string; // ex. "2025-2026"
+    enrollmentStatus: 'Regular' | 'Irregular'
+    status: "active" | "inactive";
+}
+
+interface StudentSubject {
+    _id?: string;
+    student_id: string;
+    subject: Subject;
+    section: string;
+    room: number;
+    time: string;
+    units: number;
+    hours: number;
+    instructor: Instructor;
+    midtermGrade: number;
+    finalGrade: number;
+}
+
 interface Image {
     imageUrl: string;
     imagePublicId: string;
+}
+
+interface Option {
+  label: string;
+  value: any;
 }

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { AddButton, DeleteButton, EditButton } from "../../../components/Button"
+import { AddButton, EditButton } from "../../../components/Button"
 import InstructorModal from "./components/InstructorModal";
 import useFetch from "../../../hooks/useFetch";
 import { useDebounce } from "../../../hooks/useDebounce";

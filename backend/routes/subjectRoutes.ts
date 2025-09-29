@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { createSubject, getAllSubjects } from "../controllers/subjectController";
+import { createSubject, editSubject, getAllSubjects } from "../controllers/subjectController";
 
 const router = Router();
 
 router.post('/', createSubject);
 router.get('/', getAllSubjects); 
+router.put('/:id', editSubject);
 
 const subjectRoutes = router;
 

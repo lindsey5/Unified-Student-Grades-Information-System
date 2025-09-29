@@ -1,4 +1,4 @@
-import { TextField, type TextFieldProps } from "@mui/material";
+import { Autocomplete, TextField, type TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { InputAdornment } from "@mui/material";
 import { Search } from "lucide-react";
@@ -41,6 +41,47 @@ export const SearchField = ({ value, onChange, placeholder = "Search...", fullWi
           </InputAdornment>
         ),
       }}
+    />
+  );
+};
+
+interface SearchDropdownProps {
+  value: Option | null;
+  onChange: (newValue: Option | null) => void;
+  textOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  options: Option[];
+  placeholder?: string;
+  fullWidth?: boolean;
+  label: string;
+}
+
+export const SearchDropdown = ({
+  value,
+  onChange,
+  options,
+  placeholder = "Search...",
+  fullWidth = true,
+  label,
+  textOnChange
+}: SearchDropdownProps) => {
+  return (
+    <Autocomplete
+      freeSolo
+      options={options}
+      getOptionLabel={(option) => (typeof option === "string" ? option : option.label)}
+      value={value}
+      onChange={(_, newValue) =>
+        onChange(typeof newValue === "string" ? { label: newValue, value: newValue } : newValue)
+      }
+      renderInput={(params) => (
+        <EmeraldTextField
+          {...params}
+          label={label}
+          placeholder={placeholder}
+          fullWidth={fullWidth}
+          onChange={textOnChange}
+        />
+      )}
     />
   );
 };

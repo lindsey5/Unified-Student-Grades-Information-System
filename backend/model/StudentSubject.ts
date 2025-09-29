@@ -2,11 +2,13 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IStudentSubject extends Document {
   student_id: Types.ObjectId;
-  subject_id: Types.ObjectId;
+  subject: Types.ObjectId;
+  semester: Types.ObjectId;
   section: string;
   room: number;
   time: string;
-  academicYear: string;
+  units: number;
+  hours: number;
   instructor: Types.ObjectId;
   midtermGrade: number;
   finalGrade: number;
@@ -19,7 +21,12 @@ const StudentSubjectSchema: Schema<IStudentSubject> = new Schema(
       ref: "Student",
       required: true,
     },
-    subject_id: {
+    semester: {
+      type: Schema.Types.ObjectId,
+      ref: "Semester",
+      required: true,
+    },
+    subject: {
       type: Schema.Types.ObjectId,
       ref: "Subject",
       required: true,
@@ -38,10 +45,15 @@ const StudentSubjectSchema: Schema<IStudentSubject> = new Schema(
       required: true,
       trim: true,
     },
-    academicYear: {
-      type: String,
+    units: {
+      type: Number,
       required: true,
-      trim: true,
+      min: 0
+    },
+    hours: {
+      type: Number,
+      required: true,
+      min: 0
     },
     instructor: {
       type: Schema.Types.ObjectId,
