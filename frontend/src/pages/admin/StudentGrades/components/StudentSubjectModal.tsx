@@ -1,9 +1,9 @@
-import { Modal } from "@mui/material";
-import { useState } from "react";
+import { Chip, Modal } from "@mui/material";
+import { memo, useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { EmeraldTextField, SearchDropdown } from "../../../../components/Textfield";
 import { confirmDialog, errorAlert } from "../../../../utils/swal";
-import { postData } from "../../../../utils/api";
+import { postData, updateData } from "../../../../utils/api";
 import LoadingScreen from "../../../../components/LoadingScreen";
 import useFetch from "../../../../hooks/useFetch";
 import { useDebounce } from "../../../../hooks/useDebounce";
@@ -12,18 +12,28 @@ interface StudentSubjectModalProps {
     isOpen: boolean;
     onClose: () => void;
     studentId: string;
+    studentSubject?: StudentSubject;
     semester?: Semester;
 }
 
-const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSubjectModalProps) => {
-    const [subject, setSubject] = useState<StudentSubject>();
+type ExtendedStudentSubject = Omit<StudentSubject, "subject" | "instructor"> & {
+    subject?: Subject;
+    instructor?: Instructor;
+};
+
+const StudentSubjectModal = ({
+    isOpen,
+    onClose,
+    studentId,
+    semester,
+    studentSubject,
+}: StudentSubjectModalProps) => {
+    const [subject, setSubject] = useState<ExtendedStudentSubject>();
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [subjectOption, setSubjectOption] = useState<Option | null>(null);
     const [subjectSearch, setSubjectSearch] = useState<string>("");
     const subjectSearchDebounce = useDebounce(subjectSearch, 500);
 
-    const [instructorOption, setInstructorOption] = useState<Option | null>(null);
     const [instructorSearch, setInstructorSearch] = useState<string>("");
     const instructorSearchDebounce = useDebounce(instructorSearch, 500);
 
@@ -31,11 +41,17 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
     const { data: subjectsData } = useFetch(`/api/subjects?searchTerm=${subjectSearchDebounce}`);
     const { data: instructorsData } = useFetch(`/api/instructors?searchTerm=${instructorSearchDebounce}`);
 
+    useEffect(() => {
+        if (studentSubject) setSubject(studentSubject);
+    }, [studentSubject, studentId]);
+
     const handleSaveSubject = async () => {
+        const isEdit = Boolean(subject?._id);
+
         if (
         await confirmDialog(
             "Are you sure?",
-            "Do you really want to add this subject?"
+            `Do you really want to ${isEdit ? "update" : "add"} this subject?`
         )
         ) {
         if (
@@ -46,7 +62,7 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
             !subject?.room ||
             !subject?.units ||
             !subject?.hours
-            ) {
+        ) {
             errorAlert("Missing Information", "Please fill in all required fields.");
             return;
         }
@@ -64,12 +80,12 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
             finalGrade: Number(subject?.finalGrade || 0),
         };
 
-        const response = await postData("/api/student-subjects", payload);
+        const response = isEdit ? await updateData(`/api/student-subjects/${subject._id}`, payload) : await postData("/api/student-subjects", payload);
 
         setLoading(false);
 
         if (!response.success) {
-            errorAlert("Error", response.message || "Failed to save subject.");
+            errorAlert("Error", response.message || `Failed to ${isEdit ? "update" : "save"} subject.`);
             return;
         }
 
@@ -81,41 +97,76 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
         setSubject((prev: any) => ({ ...prev, [field]: value }));
     };
 
+    const isEdit = Boolean(subject?._id);
+
     return (
         <Modal open={isOpen} onClose={onClose} sx={{ zIndex: 1 }}>
-        <div className="absolute top-1/2 left-1/2 w-[600px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-6">
+        <div className="items-start flex flex-col gap-4 absolute top-1/2 left-1/2 w-[600px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-6">
             <LoadingScreen loading={loading} />
 
             {/* Title */}
-            <h2 className="text-lg font-semibold text-emerald-700 mb-4">
-            Add Subject
+            <h2 className="text-lg font-semibold text-emerald-700">
+            {isEdit ? "Edit Subject" : "Add Subject"}
             </h2>
 
-            <h1 className="mb-4">
+            <h1>
             Semester: {semester?.term} - {semester?.schoolYear}
             </h1>
 
-            {/* Form Grid */}
-            <div className="grid grid-cols-2 items-center gap-3">
+            {/* subject selection */}
+            {!subject?.subject && (
             <SearchDropdown
-                value={subjectOption}
-                onChange={(newValue: Option | null) => {
-                setSubjectOption(newValue);
-                handleChange("subject", newValue?.value);
-                }}
-                textOnChange={(e) => setSubjectSearch(e.target.value)}
-                label="Subject"
+                value={subjectSearch}
                 placeholder="Search subject"
+                onChange={(e) => setSubjectSearch(e.target.value)}
+                onSelect={(value) => handleChange("subject", value)}
                 options={
-                subjectSearch
-                    ? subjectsData?.subjects.map((s: Subject) => ({
-                        label: `${s.code} - ${s.name}`,
-                        value: s,
-                    })) || []
-                    : []
+                subjectsData?.subjects.map((s: Subject) => ({
+                    label: `${s.code} - ${s.name}`,
+                    value: s,
+                })) || []
                 }
             />
+            )}
 
+            {subject?.subject && (
+            <div className="flex gap-5 items-center">
+                <h1 className="text-gray-500">Subject:</h1>
+                <Chip
+                onDelete={() => setSubject((prev) => ({ ...prev!, subject: undefined }))}
+                label={`${subject.subject.code} - ${subject.subject.name}`}
+                />
+            </div>
+            )}
+
+            {/* instructor selection */}
+            {!subject?.instructor && (
+            <SearchDropdown
+                value={instructorSearch}
+                placeholder="Search instructor"
+                onChange={(e) => setInstructorSearch(e.target.value)}
+                onSelect={(value) => handleChange("instructor", value)}
+                options={
+                instructorsData?.instructors.map((i: Instructor) => ({
+                    label: `${i.firstname} ${i.lastname} - ${i.department.name}`,
+                    value: i,
+                })) || []
+                }
+            />
+            )}
+
+            {subject?.instructor && (
+            <div className="flex gap-5 items-center">
+                <h1 className="text-gray-500">Instructor:</h1>
+                <Chip
+                onDelete={() => setSubject((prev) => ({ ...prev!, instructor: undefined }))}
+                label={`${subject.instructor.firstname} ${subject.instructor.lastname} - ${subject.instructor.department.name}`}
+                />
+            </div>
+            )}
+
+            {/* Form Grid */}
+            <div className="w-full grid grid-cols-2 items-center gap-3">
             <EmeraldTextField
                 label="Time"
                 value={subject?.time}
@@ -153,29 +204,10 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
                 onChange={(e) => handleChange("section", e.target.value)}
                 placeholder="e.g. BSIS-4A"
             />
-
-            <SearchDropdown
-                value={instructorOption}
-                onChange={(newValue: Option | null) => {
-                setInstructorOption(newValue);
-                handleChange("instructor", newValue?.value);
-                }}
-                textOnChange={(e) => setInstructorSearch(e.target.value)}
-                label="Instructor"
-                placeholder="Search instructor"
-                options={
-                instructorSearch
-                    ? instructorsData?.instructors.map((i: Instructor) => ({
-                        label: `${i.firstname} ${i.lastname} - ${i.department.name}`,
-                        value: i,
-                    })) || []
-                    : []
-                }
-            />
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="w-full flex justify-end gap-2 mt-6">
             <button
                 onClick={onClose}
                 className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition cursor-pointer"
@@ -187,7 +219,7 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
                 className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
             >
                 <Check size={18} />
-                Save
+                {isEdit ? "Update" : "Save"}
             </button>
             </div>
         </div>
@@ -195,4 +227,4 @@ const StudentSubjectModal = ({ isOpen, onClose, studentId, semester }: StudentSu
     );
 };
 
-export default StudentSubjectModal;
+export default memo(StudentSubjectModal);

@@ -1,9 +1,9 @@
 import { Navigate, useParams } from "react-router-dom";
-import { AddButton } from "../../../components/Button";
+import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import useFetch from "../../../hooks/useFetch";
 import SemesterModal from "./components/SemesterModal";
 import { memo, useEffect, useState } from "react";
-import { confirmDialog, errorAlert } from "../../../utils/swal";
+import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
 import { Edit3, X } from "lucide-react";
 import SubjectModal from "./components/StudentSubjectModal";
@@ -43,8 +43,14 @@ const StudentGrades = () => {
     const [selectedSemester, setSelectedSemester] = useState<Semester>();
     const [isSubjectModalOpen, setIsSubjectModalOpen] = useState<boolean>(false);
     const { data : subjectsData } = useFetch(`/api/student-subjects/${id}?semester=${selectedSemester?._id}`)
-    
+    const [selectedSubject, setSelectedSubject] = useState<StudentSubject>();
+
     useEffect(() => setSelectedSemester(semestersData?.semesters[0]), [semestersData])
+
+    const handleModalClose = () => {
+        setIsSubjectModalOpen(false)
+        setSelectedSubject(undefined)
+    }
 
     const handleDeleteSemester = async (semesterId: string) => {
         if (await confirmDialog("Are you sure?", "Do you really want to delete this semester?")) {
@@ -54,6 +60,33 @@ const StudentGrades = () => {
                 return;
             }
             window.location.reload();
+        }
+    };
+
+    const handleDelete = async (studentSubject: string) => {
+        const confirmed = await confirmDialog(
+          "Delete Subject",
+          "Are you sure you want to delete this subject? This action cannot be undone.",
+          "warning",
+          "Delete",
+          "Cancel"
+        );
+    
+        if (!confirmed) return;
+    
+        const response = await deleteData(`/api/student-subjects/${studentSubject}`);
+    
+        if (response.success) {
+          await successAlert(
+            "Subject Deleted",
+            "The subject has been successfully removed from the system."
+          );
+          window.location.reload();
+        } else {
+          errorAlert(
+            "Delete Failed",
+            response.message || "Something went wrong while deleting the department."
+          );
         }
     };
 
@@ -106,12 +139,19 @@ const StudentGrades = () => {
                 "Final": subject.finalGrade,
                 "GWA": ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
                 "Actions": (
-                <button
-                    className="cursor-pointer flex items-center gap-1 px-3 py-1 text-sm bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition"
-                >
-                    <Edit3 size={16} />
-                    Add Grades
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        className="cursor-pointer flex items-center gap-1 px-3 py-1 text-sm bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition"
+                    >
+                        <Edit3 size={16} />
+                        Add Grades
+                    </button>
+                    <EditButton onClick={() => {
+                        setIsSubjectModalOpen(true)
+                        setSelectedSubject(subject)
+                    }}/>
+                    <DeleteButton onClick={() => handleDelete(subject._id as string)}/>
+                </div>
                 ),
             })) || []
             }
@@ -126,9 +166,10 @@ const StudentGrades = () => {
 
         <SubjectModal 
             isOpen={isSubjectModalOpen}
-            onClose={() => setIsSubjectModalOpen(false)}
+            onClose={handleModalClose}
             studentId={id || ""}
             semester={selectedSemester}
+            studentSubject={selectedSubject}
         />
 
         </div>

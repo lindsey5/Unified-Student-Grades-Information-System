@@ -1,5 +1,5 @@
 import { Modal, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Check } from "lucide-react";
 import { EmeraldTextField } from "../../../../components/Textfield";
 import { EmeraldSelect } from "../../../../components/Select";
@@ -117,4 +117,4 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
   );
 };
 
-export default SemesterModal;
+export default memo(SemesterModal);
