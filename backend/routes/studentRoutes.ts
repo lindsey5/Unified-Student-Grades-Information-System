@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { createStudent, deleteStudent, editStudent, getAllStudents, getStudentById } from "../controllers/studentController";
+import { createStudent, deleteStudent, editStudent, getAllStudents, getStudentById, getStudentCountPerYearLevel, getTotalStudent } from "../controllers/studentController";
 const router = Router();
 
 router.post('/', createStudent);
 router.get('/', getAllStudents);
+router.get('/count', getStudentCountPerYearLevel);
+router.get('/total', getTotalStudent);
 router.get('/:id', getStudentById);
 router.put('/:id', editStudent);
 router.delete('/:id', deleteStudent);

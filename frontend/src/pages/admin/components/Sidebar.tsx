@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Building2,
   BookOpen,
-  Users,
   UserCheck,
   BookMarked,
   GraduationCap,
@@ -51,10 +50,10 @@ const Sidebar = () => {
 
       {/* Sidebar buttons */}
       <nav className="flex flex-col gap-2">
-        <SidebarButton icon={<LayoutDashboard size={20} />} label="Dashboard" to="/admin/dashboard" />
+        <SidebarButton icon={<LayoutDashboard size={20} />} label="Dashboard" to="/admin" />
         <SidebarButton icon={<Building2 size={20} />} label="Departments" to="/admin/departments" />
         <SidebarButton icon={<BookOpen size={20} />} label="Courses" to="/admin/courses" />
-        <SidebarButton icon={<Users size={20} />} label="Students" to="/admin/students" />
+        <SidebarButton icon={<GraduationCap size={20} />} label="Students" to="/admin/students" />
         <SidebarButton icon={<UserCheck size={20} />} label="Instructors" to="/admin/instructors" />
         <SidebarButton icon={<BookMarked size={20} />} label="Subjects" to="/admin/subjects" />
         <SidebarButton icon={<Shield size={20} />} label="Admins" to="/admin/admins" />

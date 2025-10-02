@@ -86,3 +86,14 @@ export const editCourse = async (req : Request, res : Response) => {
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
+
+export const getTotalCourses = async (req : Request, res : Response) =>{
+    try{
+        const total = await Course.countDocuments({ status: 'active' });
+        res.status(200).json({ success: true, total });
+
+    }catch(error : any){
+        uniqueErrorHandler(error, res, "Course already exists");
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}

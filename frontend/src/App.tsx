@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import AdminDashboard from './pages/admin/Dashboard'
+import AdminDashboard from './pages/admin/Dashboard/Dashboard'
 import AdminLayout from './layouts/AdminLayout'
 import Departments from './pages/admin/Departments/Departments'
 import Courses from './pages/admin/Courses/Courses'
@@ -8,6 +8,7 @@ import Student from './pages/admin/Students/Student'
 import Subjects from './pages/admin/Subjects/Subjects'
 import StudentGrades from './pages/admin/StudentGrades/StudentGrades'
 import Instructors from './pages/admin/Instructors/Instructors'
+
 function App() {
   return (
     <BrowserRouter>

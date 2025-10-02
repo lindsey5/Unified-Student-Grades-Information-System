@@ -3,6 +3,7 @@ import Student from "../model/Student";
 import generatePassword from "../utils/passwordGenerator";
 import { sendStudentEmail } from "../services/emailService";
 import { uniqueErrorHandler } from "../utils/errorHandler";
+import mongoose from "mongoose";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -107,5 +108,58 @@ export const deleteStudent = async (req : Request, res : Response) => {
 
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const getStudentCountPerYearLevel = async (req: Request, res: Response) => {
+    try {
+        const { course } = req.query;
+
+        const pipeline: any[] = [];
+
+        // If course filter is provided
+        if (course && course !== "all") {
+            pipeline.push({
+                $match: { course: new mongoose.Types.ObjectId(course as string) },
+            });
+        }
+
+        // Group students by year_level
+        pipeline.push(
+        {
+            $group: {
+            _id: "$year_level",
+            count: { $sum: 1 },
+            },
+        },
+        {
+            $sort: { _id: 1 },
+        }
+        );
+
+        const students = await Student.aggregate(pipeline);
+
+        // Transform into structured response
+        const result = {
+        year1: students.find((s) => s._id === 1)?.count || 0,
+        year2: students.find((s) => s._id === 2)?.count || 0,
+        year3: students.find((s) => s._id === 3)?.count || 0,
+        year4: students.find((s) => s._id === 4)?.count || 0,
+        };
+
+        res.status(200).json({ success: true, data: result });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server Error" });
+    }
+};
+
+export const getTotalStudent = async (req : Request, res : Response) => {
+    try{
+        const total = await Student.countDocuments({ status: 'Active' });
+
+        res.status(200).json({ success: true, total });
+
+    }catch (error: any) {
+        res.status(500).json({ message: error.message || "Server Error" });
     }
 }

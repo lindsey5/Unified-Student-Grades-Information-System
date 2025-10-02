@@ -3,7 +3,6 @@ import Department from "../model/Department";
 import { deleteImage, uploadImage } from "../services/cloudinaryService";
 import { uniqueErrorHandler } from "../utils/errorHandler";
 
-
 export const createDepartment = async (req : Request, res : Response) => {
     try{
 
@@ -108,6 +107,17 @@ export const deleteDepartment = async (req : Request, res : Response) => {
         department.status = 'inactive';
         await department.save();
         res.status(200).json({ success: true, message: "Department deleted successfully" });
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const getTotalDepartments = async (req : Request, res : Response) => {
+    try{
+        const total = await Department.countDocuments({ status: 'active' });
+
+        res.status(200).json({ success: true, total });
+        
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   
     }

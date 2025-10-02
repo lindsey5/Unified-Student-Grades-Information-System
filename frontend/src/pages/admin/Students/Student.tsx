@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { MenuItem } from "@mui/material";
 import { Check, ArrowLeft, User, Mail, BookOpen, Users } from "lucide-react";
@@ -20,6 +20,8 @@ const Student = () => {
     const [lastname, setLastname] = useState("");
     const [gender, setGender] = useState("Male");
     const [course, setCourse] = useState("");
+    const [yearLevel, setYearLevel] = useState("");
+    const [status, setStatus] = useState("Active");
     const [loading, setLoading] = useState(false);
 
     const { data: studentData } = useFetch(id ? `/api/students/${id}` : "");
@@ -35,49 +37,52 @@ const Student = () => {
         setLastname(s.lastname);
         setGender(s.gender);
         setCourse(s.course?._id || "");
+        setYearLevel(s.year_level || "");
+        setStatus(s.status || "Active");
         }
     }, [studentData]);
 
     const handleSave = async () => {
         const action = id ? "update" : "add";
         if (
-            await confirmDialog(
-                "Are you sure?",
-                `Do you really want to ${action} this student?`
-            )
-            ) {
-            if (!studentId || !email || !firstname || !lastname || !course) {
-                errorAlert("Missing Information", "Please fill out all required fields.");
-                return;
-            }
+        await confirmDialog(
+            "Are you sure?",
+            `Do you really want to ${action} this student?`
+        )
+        ) {
+        if (!studentId || !email || !firstname || !lastname || !course || !yearLevel) {
+            errorAlert("Missing Information", "Please fill out all required fields.");
+            return;
+        }
 
-            setLoading(true);
-            const payload = {
-                student_id: studentId,
-                email,
-                firstname,
-                middlename, 
-                lastname,
-                gender,
-                course,
-            };
+        setLoading(true);
+        const payload = {
+            student_id: studentId,
+            email,
+            firstname,
+            middlename, 
+            lastname,
+            gender,
+            course,
+            year_level: yearLevel,
+            status,
+        };
 
-            const response = !id
-                ? await postData("/api/students", payload)
-                : await updateData(`/api/students/${id}`, payload);
+        const response = !id
+            ? await postData("/api/students", payload)
+            : await updateData(`/api/students/${id}`, payload);
 
-            setLoading(false);
+        setLoading(false);
 
-            if (!response.success) {
-                errorAlert("Error", response.message || "Failed to save student.");
-                return;
-            }
-            await successAlert(
-                `Student ${id ? 'Updated' : 'Saved'}`,
-                `The student has been successfully ${id ? 'updated' : 'saved'}.`
-            );
-            if(!id) navigate(`/admin/students`)
-            
+        if (!response.success) {
+            errorAlert("Error", response.message || "Failed to save student.");
+            return;
+        }
+        await successAlert(
+            `Student ${id ? 'Updated' : 'Saved'}`,
+            `The student has been successfully ${id ? 'updated' : 'saved'}.`
+        );
+        if(!id) navigate(`/admin/students`)
         }
     };
 
@@ -90,8 +95,8 @@ const Student = () => {
             <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center gap-4">
                 <button
-                onClick={() => navigate("/admin/students")}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
+                    onClick={() => navigate("/admin/students")}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
                 >
                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                 <span className="font-medium">Back to Students</span>
@@ -134,7 +139,7 @@ const Student = () => {
             {/* Form Fields */}
             <div className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                
+
                 {/* Student ID */}
                 <div>
                     <div className="flex items-center gap-2 mb-3">
@@ -264,6 +269,52 @@ const Student = () => {
                     ))}
                     </EmeraldSelect>
                 </div>
+
+                {/* Year Level */}
+                <div>
+                    <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <BookOpen size={16} className="text-yellow-600" />
+                    </div>
+                    <label className="text-sm font-semibold text-gray-700">Year Level</label>
+                    <span className="text-red-500">*</span>
+                    </div>
+                    <EmeraldSelect
+                    value={yearLevel}
+                    onChange={(e) => setYearLevel(e.target.value)}
+                    displayEmpty
+                    >
+                    <MenuItem value="" disabled>
+                        <span className="text-gray-400">Select year level</span>
+                    </MenuItem>
+                    {[1, 2, 3, 4].map((y) => (
+                        <MenuItem key={y} value={y}>
+                        Year {y}
+                        </MenuItem>
+                    ))}
+                    </EmeraldSelect>
+                </div>
+
+                {/* Status */}
+                <div>
+                    <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                        <Users size={16} className="text-red-600" />
+                    </div>
+                    <label className="text-sm font-semibold text-gray-700">Status</label>
+                    </div>
+                    <EmeraldSelect
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    displayEmpty
+                    >
+                    {["Active", "Graduated", "Inactive"].map((s) => (
+                        <MenuItem key={s} value={s}>
+                        {s}
+                        </MenuItem>
+                    ))}
+                    </EmeraldSelect>
+                </div>
                 </div>
 
                 {/* Required Fields Notice */}
@@ -286,7 +337,7 @@ const Student = () => {
                 </button>
                 <button
                     onClick={handleSave}
-                    className="flex items-center gap-3 px-8 py-3 bg-emerald-600 text-white rounded-xl hover:from-emerald-700 hover:bg-emerald-500 font-medium shadow-lg hover:shadow-xl cursor-pointer"
+                    className="flex items-center gap-3 px-8 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-medium shadow-lg hover:shadow-xl cursor-pointer"
                 >
                     <Check size={18} />
                     {id ? "Update Student" : "Create Student"}

@@ -6,10 +6,11 @@ import { AddButton, DeleteButton, EditButton } from "../../../components/Button"
 import { confirmDialog, successAlert, errorAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
 import EmeraldTable from "../../../components/Table";
+import { CircularProgress } from "@mui/material"; // Spinner
 
 const Departments = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data } = useFetch("/api/departments");
+  const { data, loading } = useFetch("/api/departments"); // get loading state
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
 
   const handleClose = () => {
@@ -52,34 +53,45 @@ const Departments = () => {
       {/* Add Department Button */}
       <AddButton onClick={() => setIsModalOpen(true)} label="Add Department" />
 
-      <EmeraldTable 
-        columns={["#", "Department Name", "Created At", "Actions"]}
-        data={data?.departments.map((department: Department, index: number) => ({
-          "#": index + 1,
-          "Department Name": (
-            <div className="flex items-center gap-2">
-              <img
-                className="w-10 h-10 object-cover rounded"
-                src={department.image.imageUrl}
-                alt="logo"
-              />
-              <span>{department.name}</span>
-            </div>
-          ),
-          "Created At": formatDateTime(department.createdAt),
-          "Actions": (
-            <div className="flex gap-2">
-              <EditButton
-                onClick={() => {
-                  setSelectedDepartment(department);
-                  setIsModalOpen(true);
-                }}
-              />
-              <DeleteButton onClick={() => handleDelete(department._id as string)} />
-            </div>
-          ),
-        })) || []}
-      />
+      {/* Loading / No Data / Table */}
+      {loading ? (
+        <div className="w-full flex justify-center items-center h-64">
+          <CircularProgress sx={{ color: "#10b981" }} /> {/* Emerald Spinner */}
+        </div>
+      ) : data?.departments?.length > 0 ? (
+        <EmeraldTable
+          columns={["#", "Department Name", "Created At", "Actions"]}
+          data={data.departments.map((department: Department, index: number) => ({
+            "#": index + 1,
+            "Department Name": (
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-10 h-10 object-cover rounded"
+                  src={department.image.imageUrl}
+                  alt="logo"
+                />
+                <span>{department.name}</span>
+              </div>
+            ),
+            "Created At": formatDateTime(department.createdAt),
+            "Actions": (
+              <div className="flex gap-2">
+                <EditButton
+                  onClick={() => {
+                    setSelectedDepartment(department);
+                    setIsModalOpen(true);
+                  }}
+                />
+                <DeleteButton onClick={() => handleDelete(department._id as string)} />
+              </div>
+            ),
+          }))}
+        />
+      ) : (
+        <div className="w-full flex justify-center items-center h-64">
+          <p className="text-gray-500 italic">No departments found.</p>
+        </div>
+      )}
 
       {/* Add Department Modal */}
       <AddDepartmentModal

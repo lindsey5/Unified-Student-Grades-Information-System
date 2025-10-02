@@ -24,6 +24,8 @@ interface Student {
     gender: string;
     image?: Image;
     course: Course;
+    year_level: 1 | 2 | 3 | 4;
+    status: 'Active' | 'Inactive' | 'Graduated';
     createdAt?: Date;
 }
 

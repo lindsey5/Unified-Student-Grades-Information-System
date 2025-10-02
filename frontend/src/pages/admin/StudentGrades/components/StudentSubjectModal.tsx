@@ -42,7 +42,7 @@ const StudentSubjectModal = ({
     const { data: instructorsData } = useFetch(`/api/instructors?searchTerm=${instructorSearchDebounce}`);
 
     useEffect(() => {
-        if (studentSubject) setSubject(studentSubject);
+        setSubject(studentSubject)
     }, [studentSubject, studentId]);
 
     const handleSaveSubject = async () => {
@@ -204,8 +204,28 @@ const StudentSubjectModal = ({
                 onChange={(e) => handleChange("section", e.target.value)}
                 placeholder="e.g. BSIS-4A"
             />
+
             </div>
 
+            {studentSubject && <div className="w-full grid grid-cols-2 gap-3">
+                <EmeraldTextField
+                    label="Midterm Grade"
+                    value={subject?.midtermGrade || ""}
+                    type="number"
+                    fullWidth
+                    onChange={(e) => handleChange("midtermGrade", Number(e.target.value))}
+                    placeholder="Enter Midterm Grade"
+                />
+
+                <EmeraldTextField
+                    label="Final Grade"
+                    fullWidth
+                    value={subject?.finalGrade || ""}
+                    type="number"
+                    onChange={(e) => handleChange("finalGrade", Number(e.target.value))}
+                    placeholder="Enter Final Grade"
+                />
+            </div>}
             {/* Actions */}
             <div className="w-full flex justify-end gap-2 mt-6">
             <button
