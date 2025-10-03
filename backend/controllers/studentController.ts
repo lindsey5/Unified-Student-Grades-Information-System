@@ -126,15 +126,20 @@ export const getStudentCountPerYearLevel = async (req: Request, res: Response) =
 
         // Group students by year_level
         pipeline.push(
-        {
-            $group: {
-            _id: "$year_level",
-            count: { $sum: 1 },
+            {
+                $match: {
+                    status: 'Active',
+                }
             },
-        },
-        {
-            $sort: { _id: 1 },
-        }
+            {
+                $group: {
+                _id: "$year_level",
+                count: { $sum: 1 },
+                },
+            },
+            {
+                $sort: { _id: 1 },
+            }
         );
 
         const students = await Student.aggregate(pipeline);
@@ -158,6 +163,17 @@ export const getTotalStudent = async (req : Request, res : Response) => {
         const total = await Student.countDocuments({ status: 'Active' });
 
         res.status(200).json({ success: true, total });
+
+    }catch (error: any) {
+        res.status(500).json({ message: error.message || "Server Error" });
+    }
+}
+
+export const getRecentStudents = async (req : Request, res : Response) => {
+    try{
+        const recentStudents = await Student.find().sort({ createAt: -1 }).limit(10);
+
+        res.status(200).json({ success: true, recentStudents });
 
     }catch (error: any) {
         res.status(500).json({ message: error.message || "Server Error" });

@@ -1,13 +1,14 @@
 type EmeraldTableProps = {
   columns: string[];
   data: any[];
+  classname?: string; 
 };
 
-const EmeraldTable = ({ columns, data }: EmeraldTableProps) => {
+const EmeraldTable = ({ columns, data, classname = 'className="hidden md:block max-h-screen overflow-y-auto"' }: EmeraldTableProps) => {
   return (
     <div className="w-full bg-white shadow-sm rounded-lg border border-gray-200">
       {/* ✅ Desktop / Tablet View */}
-      <div className="hidden md:block max-h-screen overflow-y-auto">
+      <div className={classname}>
         <table className="min-w-full border-collapse">
           <thead className="bg-emerald-600 text-white text-left text-sm font-medium sticky top-0">
             <tr>

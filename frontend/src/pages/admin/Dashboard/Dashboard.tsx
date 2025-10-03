@@ -1,4 +1,5 @@
 import { TotalCoursesCard, TotalDepartmentsCard, TotalInstuctorsCard, TotalStudentCard } from "./components/DashboardCard";
+import RecentStudentsTable from "./components/RecentStudentsTable";
 import StudentCountChart from "./components/StudentCountChart";
 
 const AdminDashboard = () => {
@@ -15,9 +16,8 @@ const AdminDashboard = () => {
         </div>
 
         {/* Chart */}
-        <div className="w-full h-[500px]">
-            <StudentCountChart />
-        </div>
+        <StudentCountChart />
+        <RecentStudentsTable />
         </div>
     );
 };
