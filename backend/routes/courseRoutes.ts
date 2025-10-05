@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { createCourse, deleteCourse, editCourse, getAllCourses, getTotalCourses } from "../controllers/courseController";
+import { adminRequireAuth } from "../middlewares/authRequire";
 
 const router = Router();
 
-router.post('/', createCourse);
+router.post('/', adminRequireAuth, createCourse);
 router.get('/', getAllCourses);
 router.get('/total', getTotalCourses);
-router.put('/:id', editCourse);
-router.delete('/:id', deleteCourse);
+router.put('/:id', adminRequireAuth, editCourse);
+router.delete('/:id', adminRequireAuth, deleteCourse);
 
 const courseRoutes = router;
 

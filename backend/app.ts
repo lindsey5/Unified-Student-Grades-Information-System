@@ -9,6 +9,8 @@ import subjectRoutes from './routes/subjectRoutes';
 import instructorRoutes from './routes/instructorRoutes';
 import semesterRoutes from './routes/semesterRoutes';
 import studentSubjectRoutes from './routes/studentSubjectRoutes';
+import adminRoutes from './routes/adminRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 
@@ -32,5 +34,7 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/instructors', instructorRoutes);
 app.use('/api/semesters', semesterRoutes);
 app.use('/api/student-subjects', studentSubjectRoutes);
+app.use('/api/admins', adminRoutes);
+app.use('/api/auth', authRoutes);
 
 export default app

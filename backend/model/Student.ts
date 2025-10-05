@@ -1,8 +1,8 @@
 import mongoose, { Schema, Types, Document } from 'mongoose';
-import { Image } from '../types/types';
 import { hashPassword } from '../utils/authUtils';
 import StudentSubject from './StudentSubject';
 import Semester from './Semester';
+import { Image } from '../types/types';
 
 export interface IStudent extends Document {
   student_id: string;
