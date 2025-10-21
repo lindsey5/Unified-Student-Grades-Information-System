@@ -8,7 +8,9 @@ import Student from './pages/admin/Students/Student'
 import Subjects from './pages/admin/Subjects/Subjects'
 import StudentGrades from './pages/admin/StudentGrades/StudentGrades'
 import Instructors from './pages/admin/Instructors/Instructors'
-import LoginPage from './pages/auth/loginPage'
+import LoginPage from './pages/auth/LoginPage'
+import StudentLayout from './layouts/StudentLayout'
+import Grades from './pages/student/Grades'
 
 function App() {
   return (
@@ -25,6 +27,9 @@ function App() {
           <Route path='grades/:id' element={<StudentGrades />} />
           <Route path='subjects' element={<Subjects />} />
           <Route path='instructors' element={<Instructors />} />
+        </Route>
+        <Route path='student' element={<StudentLayout />}>
+          <Route index element={<Grades />} />
         </Route>
       </Routes>
     </BrowserRouter>

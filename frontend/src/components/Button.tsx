@@ -1,5 +1,7 @@
 import { Pencil, Plus, Trash2 } from "lucide-react";
+import type { ReactNode } from "react";
 import type React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface ButtonProps {
   onClick: (e : React.MouseEvent) => void;
@@ -41,3 +43,25 @@ export const AddButton = ({ onClick, label = "Add" }: { onClick: () => void, lab
         </button>
     );
 }
+
+interface SidebarButtonProps {
+  icon: ReactNode;
+  label: string;
+  to: string;
+}
+
+export const SidebarButton = ({ icon, label, to }: SidebarButtonProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+    <Link
+      to={to}
+      className={`flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer
+        ${isActive ? "bg-emerald-600 text-white" : "hover:bg-emerald-800"}`}
+    >
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
+};

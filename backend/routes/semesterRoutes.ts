@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { createSemester, deleteSemester, getStudentSemester } from "../controllers/semesterController";
+import { createSemester, deleteSemester, getAuthenticatedSemesters, getStudentSemesters } from "../controllers/semesterController";
+import { studentRequireAuth } from "../middlewares/authRequire";
 
 const router = Router();
 
 router.post('/', createSemester);
-router.get('/:id', getStudentSemester);
+router.get('/', studentRequireAuth, getAuthenticatedSemesters);
+router.get('/:id', getStudentSemesters);
 router.delete('/:id', deleteSemester);
 
 const semesterRoutes = router;

@@ -59,15 +59,10 @@ const StudentGradesInfoHeader = memo(
 
 const StudentGrades = () => {
     const { id } = useParams();
-    const { data: semestersData, loading: semestersLoading } = useFetch(
-        `/api/semesters/${id}`
-    );
+    const { data: semestersData, loading: semestersLoading } = useFetch(`/api/semesters/${id}`);
     const [selectedSemester, setSelectedSemester] = useState<Semester>();
     const [isSubjectModalOpen, setIsSubjectModalOpen] = useState<boolean>(false);
-    const {
-        data: subjectsData,
-        loading: subjectsLoading,
-    } = useFetch(`/api/student-subjects/${id}?semester=${selectedSemester?._id}`);
+    const { data: subjectsData, loading: subjectsLoading } = useFetch(`/api/student-subjects/${id}?semester=${selectedSemester?._id}`);
     const [selectedSubject, setSelectedSubject] = useState<StudentSubject>();
 
     useEffect(

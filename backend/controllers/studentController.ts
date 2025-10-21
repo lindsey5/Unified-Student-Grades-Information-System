@@ -4,6 +4,7 @@ import generatePassword from "../utils/passwordGenerator";
 import { sendStudentEmail } from "../services/emailService";
 import { uniqueErrorHandler } from "../utils/errorHandler";
 import mongoose from "mongoose";
+import { AuthenticatedRequest } from "../types/types";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -14,11 +15,13 @@ export const createStudent = async (req : Request, res : Response) => {
             return;
         }
 
-        const password = generatePassword();
+        const password = generatePassword(12);
         req.body.password = password;
 
+        console.log(password)
+
         const student = await Student.create(req.body);
-        await sendStudentEmail(student);
+        await sendStudentEmail(student, password);
         res.status(201).json({ success: true , student});
 
     }catch(error : any){
@@ -64,6 +67,19 @@ export const getStudentById = async (req : Request, res : Response) => {
     try{
         const { id } = req.params;
         const student = await Student.findById(id).populate('course');
+        if(!student){
+            res.status(404).json({ message: "Student not found" });
+            return;
+        }
+        res.status(200).json({ success: true, student });
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });
+    }
+}
+
+export const getStudentData = async (req : AuthenticatedRequest, res : Response) => {
+        try{
+        const student = await Student.findById(req.user_id).populate('course');
         if(!student){
             res.status(404).json({ message: "Student not found" });
             return;
@@ -176,6 +192,41 @@ export const getRecentStudents = async (req : Request, res : Response) => {
         res.status(200).json({ success: true, recentStudents });
 
     }catch (error: any) {
+        res.status(500).json({ message: error.message || "Server Error" });
+    }
+}
+
+export const getStudentGenderCount = async (req: Request, res: Response) => {
+  try {
+    const count = await Student.aggregate([
+      {
+        $group: {
+          _id: "$gender",        
+          total: { $sum: 1 }    
+        }
+      }
+    ]);
+
+    res.status(200).json({ success: true, count });
+  } catch (error: any) {
+    console.log("Error fetching gender count:", error);
+    res.status(500).json({ message: error.message || "Server Error" });
+  }
+};
+
+export const changeStudentPassword = async (req : AuthenticatedRequest , res : Response) => {
+    try{
+        const student = await Student.findById(req.user_id);
+        if(!student){
+            res.status(404).json({ error: 'Student not found.'});
+            return;
+        }
+        student.password = req.body.password;
+        await student.save();
+
+        res.status(200).json({ success: true, message: 'Password updated successfully.' })
+    }catch(error : any){
+        console.log("Error fetching gender count:", error);
         res.status(500).json({ message: error.message || "Server Error" });
     }
 }

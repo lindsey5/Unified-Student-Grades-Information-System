@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import StudentSubject from "../model/StudentSubject";
+import { getStudentSubjectById } from "../services/studentSubjectService";
+import { AuthenticatedRequest } from "../types/types";
 
 export const createStudentSubject = async (req :Request, res : Response) => {
     try{   
@@ -25,22 +27,22 @@ export const createStudentSubject = async (req :Request, res : Response) => {
 
 export const getStudentSubjects = async (req : Request, res :Response) => {
     try{
-        const studentSubjects = await StudentSubject
-        .find({ student_id: req.params.id, semester: req.query.semester})
-        .populate({
-            path: "instructor",
-            populate: {
-            path: "department", 
-            model: "Department"
-            }
-        })
-        .populate("subject")
-        res.status(201).json({ success: true, studentSubjects});
-
+        const studentSubjects  = await getStudentSubjectById(req.params.id, req.query.semester as string);
+        res.status(200).json({ success: true, studentSubjects});
     }catch(err : any){
         res.status(500).json({ message: err.message || "Server Error"})
     }
 }
+
+
+export const getAuthenticatedStudentSubjects = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const studentSubjects = await getStudentSubjectById(req.user_id as string, req.query.semester as string);
+        res.status(200).json({ success: true, studentSubjects });
+    } catch (err: any) {
+        res.status(500).json({ message: err.message || "Server Error" });
+    }
+};
 
 export const deleteStudentSubject = async (req : Request, res : Response) => {
     try{

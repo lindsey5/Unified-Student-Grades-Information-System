@@ -1,5 +1,3 @@
-import { type ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Building2,
@@ -9,29 +7,10 @@ import {
   GraduationCap,
   Shield,
   IdCard,
+  LogOutIcon,
 } from "lucide-react";
-
-interface SidebarButtonProps {
-  icon: ReactNode;
-  label: string;
-  to: string;
-}
-
-export const SidebarButton = ({ icon, label, to }: SidebarButtonProps) => {
-  const location = useLocation();
-  const isActive = location.pathname === to;
-
-  return (
-    <Link
-      to={to}
-      className={`flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer
-        ${isActive ? "bg-emerald-600 text-white" : "hover:bg-emerald-800"}`}
-    >
-      {icon}
-      <span>{label}</span>
-    </Link>
-  );
-};
+import { logout } from "../../../utils/auth";
+import { SidebarButton } from "../../../components/Button";
 
 const Sidebar = () => {
   return (
@@ -58,6 +37,13 @@ const Sidebar = () => {
         <SidebarButton icon={<BookMarked size={20} />} label="Subjects" to="/admin/subjects" />
         <SidebarButton icon={<Shield size={20} />} label="Admins" to="/admin/admins" />
         <SidebarButton icon={<IdCard size={20} />} label="Registrars" to="/admin/registrars" />
+        <button 
+          className="hover:bg-emerald-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer"
+          onClick={async () => await logout()}
+        >
+          <LogOutIcon />
+          Logout
+        </button>
       </nav>
     </aside>
   );

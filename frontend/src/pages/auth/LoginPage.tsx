@@ -18,11 +18,12 @@ const LoginPage = () => {
 
     const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(userType === 'admin') await adminLogin();
+        await userLogin();
     }
 
-    const adminLogin = async () => {
-        const response = await postData('/api/auth/admin', { email, password });
+    const userLogin = async () => {
+        const user = userType === 'admin' ? 'admin' : userType === 'student' ? 'student' : 'registrar'
+        const response = await postData(`/api/auth/${user}`, { email, password });
 
         if (!response?.success) {
             errorAlert(response?.message || 'Login failed', 'Please try again.');
@@ -30,7 +31,7 @@ const LoginPage = () => {
         }
 
         await successAlert('Login Successful', 'Welcome back, Admin!');
-        navigate('/admin')
+        navigate(`/${user}`)
     };
 
     return (
