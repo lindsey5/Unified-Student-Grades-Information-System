@@ -11,6 +11,7 @@ import Instructors from './pages/admin/Instructors/Instructors'
 import LoginPage from './pages/auth/LoginPage'
 import StudentLayout from './layouts/StudentLayout'
 import Grades from './pages/student/Grades'
+import StudentSecurity from './pages/student/StudentSecurity'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         </Route>
         <Route path='student' element={<StudentLayout />}>
           <Route index element={<Grades />} />
+          <Route path='security' element={<StudentSecurity />} />
         </Route>
       </Routes>
     </BrowserRouter>

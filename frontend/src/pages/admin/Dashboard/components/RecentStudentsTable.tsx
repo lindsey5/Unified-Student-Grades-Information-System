@@ -13,7 +13,7 @@ const RecentStudentsTable = () => {
                 data={data?.recentStudents.map((student : Student) => ({
                     'Student ID' : student.student_id,
                     'Fullname' : `${student.firstname} ${student.lastname}`,
-                    'Course' : student.course,
+                    'Course' : student.course.name,
                     'Year Level' : student.year_level
                 })) || []}
             />

@@ -38,8 +38,8 @@ const StudentSubjectModal = ({
     const instructorSearchDebounce = useDebounce(instructorSearch, 500);
 
     // Fetch subjects & instructors
-    const { data: subjectsData } = useFetch(`/api/subjects?searchTerm=${subjectSearchDebounce}`);
-    const { data: instructorsData } = useFetch(`/api/instructors?searchTerm=${instructorSearchDebounce}`);
+    const { data: subjectsData, loading: subjectsLoading } = useFetch(`/api/subjects?searchTerm=${subjectSearchDebounce}`);
+    const { data: instructorsData, loading: instructorsLoading } = useFetch(`/api/instructors?searchTerm=${instructorSearchDebounce}`);
 
     useEffect(() => {
         setSubject(studentSubject)
@@ -117,6 +117,7 @@ const StudentSubjectModal = ({
             {!subject?.subject && (
             <SearchDropdown
                 value={subjectSearch}
+                isLoading={subjectsLoading}
                 placeholder="Search subject"
                 onChange={(e) => setSubjectSearch(e.target.value)}
                 onSelect={(value) => handleChange("subject", value)}
@@ -143,6 +144,7 @@ const StudentSubjectModal = ({
             {!subject?.instructor && (
             <SearchDropdown
                 value={instructorSearch}
+                isLoading={instructorsLoading}
                 placeholder="Search instructor"
                 onChange={(e) => setInstructorSearch(e.target.value)}
                 onSelect={(value) => handleChange("instructor", value)}

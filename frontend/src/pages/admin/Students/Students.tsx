@@ -2,7 +2,7 @@ import { BookOpen } from "lucide-react";
 import useFetch from "../../../hooks/useFetch";
 import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
-import { Avatar, MenuItem, Pagination, CircularProgress } from "@mui/material";
+import { MenuItem, Pagination, CircularProgress } from "@mui/material";
 import EmeraldTable from "../../../components/Table";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useState } from "react";
@@ -10,15 +10,16 @@ import { SearchField } from "../../../components/Textfield";
 import { EmeraldSelect } from "../../../components/Select";
 import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
+import StatusChip from "../../../components/Chip";
 
 const Students = () => {
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchDebounce = useDebounce(searchTerm, 200);
     const [selectedCourse, setSelectedCourse] = useState<string>("All");
-
+    const [seleectedStatus, setSelectedStatus] = useState<string>("Active");
     const { data: coursesData } = useFetch("/api/courses");
-    const { data, loading } = useFetch(`/api/students?searchTerm=${searchDebounce}&page=${page}&limit=50&course=${selectedCourse}`);
+    const { data, loading } = useFetch(`/api/students?searchTerm=${searchDebounce}&page=${page}&limit=50&course=${selectedCourse}&status=${seleectedStatus}`);
 
     const navigate = useNavigate();
 
@@ -70,6 +71,18 @@ const Students = () => {
             </div>
             <div className="w-full md:w-64">
             <EmeraldSelect
+                value={seleectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                displayEmpty
+                label="Status"
+            >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Graduated">Graduated</MenuItem>
+                <MenuItem value="Inactive">Inactive</MenuItem>
+            </EmeraldSelect>
+            </div>
+            <div className="w-full md:w-64">
+            <EmeraldSelect
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
                 displayEmpty
@@ -105,18 +118,13 @@ const Students = () => {
                 ]}
                 data={
                 data?.students.map((student: Student) => ({
-                    Fullname: (
-                    <div className="flex items-center gap-4">
-                        <Avatar src={student?.image?.imageUrl} />
-                        {student.firstname} {student.lastname}
-                    </div>
-                    ),
+                    Fullname: `${student.firstname} ${student.middlename} ${student.lastname}`,
                     "Student ID": student.student_id,
                     Email: student.email,
                     Gender: student.gender,
                     Course: student.course.name,
                     "Year Level": student.year_level,
-                    Status: student.status,
+                    Status: <StatusChip status={student.status}/>,
                     Actions: (
                     <div className="flex gap-2">
                         <button

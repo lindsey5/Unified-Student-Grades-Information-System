@@ -32,7 +32,7 @@ export const createStudent = async (req : Request, res : Response) => {
 
 export const getAllStudents = async (req : Request, res : Response) => {
     try{
-        const { page, limit, searchTerm, course } = req.query;
+        const { page, limit, searchTerm, course, status } = req.query;
         const pageNumber = parseInt(page as string) || 1;
         const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
@@ -48,6 +48,8 @@ export const getAllStudents = async (req : Request, res : Response) => {
         }
 
         if(course && course !== 'All') query.course = course;
+
+        if(status) query.status = status;
 
         const students = await Student.find(query)
             .populate('course')
@@ -187,7 +189,7 @@ export const getTotalStudent = async (req : Request, res : Response) => {
 
 export const getRecentStudents = async (req : Request, res : Response) => {
     try{
-        const recentStudents = await Student.find().sort({ createAt: -1 }).limit(10);
+        const recentStudents = await Student.find().populate('course').sort({ createAt: -1 }).limit(10);
 
         res.status(200).json({ success: true, recentStudents });
 
@@ -198,13 +200,19 @@ export const getRecentStudents = async (req : Request, res : Response) => {
 
 export const getStudentGenderCount = async (req: Request, res: Response) => {
   try {
+    const { course, year_level } = req.query;
     const count = await Student.aggregate([
-      {
-        $group: {
-          _id: "$gender",        
-          total: { $sum: 1 }    
+        { $match: { 
+            ...(course && course !== "all" ? { course: new mongoose.Types.ObjectId(course as string) } : {}),
+            ...(year_level && year_level !== "all" ? { year_level: parseInt(year_level as string) } : {}),
+            status: 'Active',
+        }},
+        {
+            $group: {
+            _id: "$gender",        
+            total: { $sum: 1 }    
+            }
         }
-      }
     ]);
 
     res.status(200).json({ success: true, count });
@@ -221,12 +229,12 @@ export const changeStudentPassword = async (req : AuthenticatedRequest , res : R
             res.status(404).json({ error: 'Student not found.'});
             return;
         }
-        student.password = req.body.password;
+        student.password = req.body.newPassword;
         await student.save();
 
         res.status(200).json({ success: true, message: 'Password updated successfully.' })
     }catch(error : any){
-        console.log("Error fetching gender count:", error);
+        console.log("Error", error);
         res.status(500).json({ message: error.message || "Server Error" });
     }
 }

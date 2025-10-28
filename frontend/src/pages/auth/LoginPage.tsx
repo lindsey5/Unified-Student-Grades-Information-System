@@ -30,7 +30,7 @@ const LoginPage = () => {
             return;
         }
 
-        await successAlert('Login Successful', 'Welcome back, Admin!');
+        await successAlert('Login Successful', `Welcome back, ${user}!`);
         navigate(`/${user}`)
     };
 

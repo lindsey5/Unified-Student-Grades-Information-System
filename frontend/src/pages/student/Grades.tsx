@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import EmeraldTable from "../../components/Table";
 
 const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
-    const { data: studentData, loading } = useFetch(`/api/students/data`);
+    const { data: studentData, loading } = useFetch(`/api/students/me`);
 
     if (loading) {
       return (
@@ -16,7 +16,7 @@ const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
     }
 
     if (!studentData?.student) {
-      return <Navigate to="/admin/students" />;
+      return <Navigate to="/student" />;
     }
 
     return (
@@ -47,13 +47,12 @@ const Grades = () => {
     const [selectedSemester, setSelectedSemester] = useState<Semester>();
     const { data: subjectsData, loading: subjectsLoading } = useFetch(`/api/student-subjects?semester=${selectedSemester?._id}`);
 
-    useEffect(
-        () => setSelectedSemester(semestersData?.semesters[0]),
+    useEffect(() => setSelectedSemester(semestersData?.semesters[0]),
         [semestersData]
     );
 
     return (
-        <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
+        <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5 bg-gradient-to-br from-emerald-50 to-teal-50">
         {/* Header */}
         <GradesInfoHeader semester={selectedSemester as Semester}/>
 

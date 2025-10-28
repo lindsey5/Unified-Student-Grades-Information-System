@@ -64,20 +64,23 @@ const StudentCountChart = () => {
     return (
         <div className="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200">
         {/* Course filter dropdown */}
-        <div className="mb-4 flex items-center gap-2">
-            <label className="text-sm font-medium">Filter by Course:</label>
-            <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="px-3 py-2 border rounded-md text-sm"
-            >
-            <option value="all">All Courses</option>
-            {coursesData?.courses.map((course: Course) => (
-                <option key={course._id} value={course._id}>
-                {course.name}
-                </option>
-            ))}
-            </select>
+        <div className="mb-4 flex items-center justify-between">
+            <h1 className="text-xl font-bold text-emerald-700">Student Count Per Year Level</h1>
+            <div className="flex items-center gap-4">
+                <label className="text-sm font-medium">Filter by Course:</label>
+                <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm"
+                >
+                <option value="all">All Courses</option>
+                {coursesData?.courses.map((course: Course) => (
+                    <option key={course._id} value={course._id}>
+                    {course.name}
+                    </option>
+                ))}
+                </select>
+            </div>
         </div>
 
         {/* Chart */}

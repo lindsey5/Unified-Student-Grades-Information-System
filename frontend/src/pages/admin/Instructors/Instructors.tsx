@@ -75,7 +75,7 @@ const Instructors = () => {
             <div className="w-full flex justify-center items-center h-64">
             <CircularProgress sx={{ color: "#10b981" }} />
             </div>
-        ) : instructorsData?.instructors?.length === 0 ? (
+        ) : instructorsData?.instructors?.leng6th === 0 ? (
             <div className="w-full flex justify-center items-center h-64 text-gray-500">
             No instructors found
             </div>
