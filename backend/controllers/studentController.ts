@@ -18,8 +18,6 @@ export const createStudent = async (req : Request, res : Response) => {
         const password = generatePassword(12);
         req.body.password = password;
 
-        console.log(password)
-
         const student = await Student.create(req.body);
         await sendStudentEmail(student, password);
         res.status(201).json({ success: true , student});

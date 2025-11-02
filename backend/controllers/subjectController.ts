@@ -4,29 +4,19 @@ import { uniqueErrorHandler } from "../utils/errorHandler";
 
 export const createSubject = async (req : Request, res : Response) => {
     try{
-        let subject = await Subject.findOne({ name: req.body.name, status: 'inactive' });
+        let subject = await Subject.findOne({ name: req.body.name, status: 'inactive' })
         if(subject){
-            subject.status = 'active';
-            subject = await subject.save();
-        }
-
-        subject = await Subject.findOne({ name: req.body.name, status: 'active' });
-
-        if(subject){
-            res.status(400).json({ message: "Subject already exists" });
-            return;
-        }
-        subject = await Subject.findOne({ name: req.body.name, status: 'inactive' })
-        if(subject){
-            subject.status = 'active',
-            subject.name = req.body.name,
+            subject.status = 'active'
+            subject.name = req.body.name
             subject.code = req.body.code
+            subject = await subject.save();
         }else{
             subject = await Subject.create(req.body);
         }
         
         res.status(201).json({ success: true , subject});
     }catch(error : any){
+        uniqueErrorHandler(error, res, "Subject already exists.")
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
