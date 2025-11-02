@@ -12,6 +12,7 @@ import LoginPage from './pages/auth/LoginPage'
 import StudentLayout from './layouts/StudentLayout'
 import Grades from './pages/student/Grades'
 import StudentSecurity from './pages/student/StudentSecurity'
+import Admins from './pages/admin/Admins/Admins'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path='grades/:id' element={<StudentGrades />} />
           <Route path='subjects' element={<Subjects />} />
           <Route path='instructors' element={<Instructors />} />
+          <Route path='admins' element={<Admins />} />
         </Route>
         <Route path='student' element={<StudentLayout />}>
           <Route index element={<Grades />} />

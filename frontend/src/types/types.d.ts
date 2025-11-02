@@ -68,6 +68,14 @@ interface StudentSubject {
     finalGrade: number;
 }
 
+interface Admin {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    createdAt: string;
+}
+
 interface Image {
     imageUrl: string;
     imagePublicId: string;
