@@ -4,67 +4,51 @@ type EmeraldTableProps = {
   classname?: string; 
 };
 
-const EmeraldTable = ({ columns, data, classname = 'hidden md:block max-h-screen overflow-y-auto' }: EmeraldTableProps) => {
+const EmeraldTable = ({ columns, data, classname = 'className="hidden md:block max-h-screen overflow-y-auto"' }: EmeraldTableProps) => {
   return (
-    <div className="w-full">
+    <div className="w-full bg-white shadow-sm rounded-lg border border-gray-200">
       {/* ✅ Desktop / Tablet View */}
       <div className={classname}>
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-gradient-to-r from-emerald-500 to-emerald-600">
+        <table className="min-w-full border-collapse">
+          <thead className="bg-emerald-600 text-white text-left text-sm font-medium sticky top-0">
+            <tr>
+              {columns.map((column) => (
+                <th key={column} className="py-3 px-4">
+                  {column}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr
+                key={index}
+                className="hover:bg-gray-50 transition border-b border-gray-200"
+              >
                 {columns.map((column) => (
-                  <th 
-                    key={column} 
-                    className="py-4 px-6 text-left text-sm font-semibold text-white"
-                  >
-                    {column}
-                  </th>
+                  <td key={column} className="py-3 px-4 text-sm">
+                    {row[column]}
+                  </td>
                 ))}
               </tr>
-            </thead>
-            <tbody>
-              {data.map((row, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-100 last:border-0 hover:bg-emerald-50/50 transition-colors"
-                >
-                  {columns.map((column) => (
-                    <td key={column} className="py-4 px-6 text-sm text-gray-700">
-                      {row[column]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* ✅ Mobile View (Cards) */}
-      <div className="block md:hidden space-y-4">
+      <div className="block md:hidden divide-y divide-gray-200">
         {data.map((row, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+            className="p-4 hover:bg-gray-50 transition flex flex-col gap-2"
           >
-            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3">
-              <span className="text-white font-semibold text-sm">
-                Item #{index + 1}
-              </span>
-            </div>
-            <div className="p-4 space-y-3">
-              {columns.map((column) => (
-                <div key={column} className="flex justify-between items-center gap-4">
-                  <span className="text-sm font-medium text-gray-600">
-                    {column}
-                  </span>
-                  <span className="text-sm text-gray-900 font-medium text-right">
-                    {row[column]}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {columns.map((column) => (
+              <div key={column} className="flex justify-between text-sm">
+                <span className="font-medium text-gray-600">{column}:</span>
+                <span className="text-gray-800">{row[column]}</span>
+              </div>
+            ))}
           </div>
         ))}
       </div>
