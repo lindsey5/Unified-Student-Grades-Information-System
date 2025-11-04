@@ -17,14 +17,12 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const StudentCountChart = () => {
     const [selectedCourse, setSelectedCourse] = useState<string>("all");
 
-    // Fetch students count per year (optionally filtered by course)
     const { data, loading } = useFetch(
         selectedCourse === "all"
         ? "/api/students/count"
         : `/api/students/count?course=${selectedCourse}`
     );
 
-    // Fetch courses for the dropdown
     const { data: coursesData } = useFetch("/api/courses");
 
     const chartData = useMemo(() => {
@@ -41,10 +39,10 @@ const StudentCountChart = () => {
                 data.data.year3,
                 data.data.year4,
             ],
-            backgroundColor: "#10b981", // 🌿 Emerald green
-            borderColor: "#059669", // darker emerald border
+            backgroundColor: "#10b981", 
+            borderColor: "#059669", 
             borderWidth: 1,
-            borderRadius: 6, // smooth rounded bars
+            borderRadius: 6, 
             },
         ],
         };

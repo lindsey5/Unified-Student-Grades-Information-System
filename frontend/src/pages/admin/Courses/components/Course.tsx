@@ -16,6 +16,7 @@ interface AddDepartmentModalProps {
 
 const CourseModal = ({ isOpen, onClose, course }: AddDepartmentModalProps) => {
   const [courseName, setCourseName] = useState<string>("");
+  const [courseCode, setCourseCode] = useState<string>('');
   const { data } = useFetch("/api/departments");
   const [department, setDepartment] = useState<string | "">("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ const CourseModal = ({ isOpen, onClose, course }: AddDepartmentModalProps) => {
   useEffect(() => {
     setCourseName(course?.name || "");
     setDepartment(course?.department?._id || "");
+    setCourseCode(course?.code || "");
   }, [course]);
 
   const handleAddDepartment = async () => {
@@ -45,9 +47,10 @@ const CourseModal = ({ isOpen, onClose, course }: AddDepartmentModalProps) => {
       setLoading(true);
 
       const response = !course
-        ? await postData("/api/courses", { name: courseName, department })
+        ? await postData("/api/courses", { name: courseName, code: courseCode, department })
         : await updateData(`/api/courses/${course._id}`, {
             name: courseName,
+            code: courseCode,
             department,
           });
 
@@ -76,6 +79,14 @@ const CourseModal = ({ isOpen, onClose, course }: AddDepartmentModalProps) => {
           label="Course Name"
           value={courseName}
           onChange={(e) => setCourseName(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+
+        <EmeraldTextField
+          label="Course Code"
+          value={courseCode}
+          onChange={(e) => setCourseCode(e.target.value)}
           fullWidth
           margin="normal"
         />

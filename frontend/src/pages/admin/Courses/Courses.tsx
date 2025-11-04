@@ -94,10 +94,11 @@ const Courses = () => {
             </div>
         ) : data?.courses?.length > 0 ? (
             <EmeraldTable
-            columns={["#", "Course", "Department", "Created At", "Actions"]}
+            columns={["#", "Course Name", "Course Code", "Department", "Created At", "Actions"]}
             data={data.courses.map((course: Course, index: number) => ({
                 "#": index + 1,
-                Course: course.name,
+                "Course Name": course.name,
+                "Course Code" : course.code,
                 Department: course.department.name,
                 "Created At": formatDateTime(course.createdAt),
                 Actions: (

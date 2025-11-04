@@ -5,7 +5,7 @@ import { uniqueErrorHandler } from "../utils/errorHandler";
 
 export const createCourse = async (req: Request, res : Response) => {
     try{
-        const { name, department } = req.body;
+        const { name, department, code } = req.body;
         if(!name){
             res.status(400).json({ message: "Course name is required" });
             return;
@@ -14,18 +14,43 @@ export const createCourse = async (req: Request, res : Response) => {
             res.status(400).json({ message: "Department is required" });
             return;
         }
-        let course = await Course.findOne({ name, department, status: 'inactive' });
+        if(!code){
+            res.status(400).json({ message: "Course code is required" });
+            return;
+        }
+
+        const isNameExist = await Course.findOne({ name,  status: 'active' });
+        if(isNameExist){
+            res.status(409).json({ message: 'Course name already exists'});
+            return;
+        }
+
+        const isCodeExist = await Course.findOne({ code,  status: 'active'});
+        if(isCodeExist){
+            res.status(409).json({ message: 'Course code already exists'});
+            return;
+        }
+
+        let course = await Course.findOne({ 
+            $or: [
+                { name },
+                { code }
+            ],
+            department, 
+            status: 'inactive' 
+        });
         if(course){
+            course.name = name;
+            course.code = code;
             course.status = 'active';
             course = await course.save();
         }else{
-            course = await Course.create({ name, department }); 
+            course = await Course.create({ name, code, department }); 
         }
         
         res.status(201).json({ success: true , course});
 
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Course already exists");
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
@@ -71,14 +96,15 @@ export const deleteCourse = async (req : Request, res : Response) => {
 export const editCourse = async (req : Request, res : Response) => {
     try{
         const { id } = req.params;
-        const { name, department } = req.body;
+        const { name, department, code } = req.body;
         const course = await Course.findById(id);
         if(!course){
             res.status(404).json({ message: "Course not found" });
             return;
         }
-        course.name = name || course.name;
-        course.department = department || course.department;
+        course.name = name;
+        course.department = department;
+        course.code = code;
         await course.save();
         res.status(200).json({ success: true, course });
     }catch(error : any){

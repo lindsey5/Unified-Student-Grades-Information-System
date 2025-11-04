@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import StudentSubject from "../model/StudentSubject";
 import { getStudentSubjectById } from "../services/studentSubjectService";
 import { AuthenticatedRequest } from "../types/types";
+import mongoose from "mongoose";
 
 export const createStudentSubject = async (req :Request, res : Response) => {
     try{   

@@ -1,6 +1,7 @@
 import { TotalCoursesCard, TotalDepartmentsCard, TotalInstuctorsCard, TotalStudentCard } from "./components/DashboardCard";
 import RecentStudentsTable from "./components/RecentStudentsTable";
 import StudentCountChart from "./components/StudentCountChart";
+import StudentRankingTable from "./components/StudentRanking";
 
 const AdminDashboard = () => {
     return (
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Chart */}
+        <StudentRankingTable />
         <StudentCountChart />
         <RecentStudentsTable />
         </div>

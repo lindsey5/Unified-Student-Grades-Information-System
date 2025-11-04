@@ -60,7 +60,7 @@ export const editDepartment = async (req : Request, res : Response) => {
         const { id } = req.params;
         const { name, image } = req.body;
 
-        const isExist = await Department.findOne({ name, status: 'active' });
+        const isExist = await Department.findOne({ name, _id: { $ne: id},  status: 'active' });
         if(isExist){
             res.status(409).json({ message: 'Deparment name already exists'});
             return;
@@ -72,9 +72,9 @@ export const editDepartment = async (req : Request, res : Response) => {
             return;
         }
 
-        let uploadedImage;
+        let uploadedImage : any = department.image;
 
-        if(image && department.image !== image) {
+        if(image && department.image.imageUrl !== image) {
             uploadedImage = await uploadImage(image);
             await deleteImage(department.image.imagePublicId);
         }

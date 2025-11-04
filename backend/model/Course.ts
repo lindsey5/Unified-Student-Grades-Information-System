@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface ICourse extends Document {
   name: string;
+  code: string;
   department: Types.ObjectId;
   status: 'active' | 'inactive';
 }
@@ -14,6 +15,11 @@ const CourseSchema: Schema<ICourse> = new Schema(
       required: true,
       unique: true,
       trim: true,
+    },
+    code: {
+      type: String,
+      required: true,
+      unique: true,
     },
     department: {
       type: Schema.Types.ObjectId,

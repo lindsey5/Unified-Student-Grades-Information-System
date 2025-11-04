@@ -5,6 +5,7 @@ import { sendStudentEmail } from "../services/emailService";
 import { uniqueErrorHandler } from "../utils/errorHandler";
 import mongoose from "mongoose";
 import { AuthenticatedRequest } from "../types/types";
+import StudentSubject from "../model/StudentSubject";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -236,3 +237,88 @@ export const changeStudentPassword = async (req : AuthenticatedRequest , res : R
         res.status(500).json({ message: error.message || "Server Error" });
     }
 }
+
+export const getOverallStudentRankings = async (req: Request, res: Response) => {
+    try {
+        const courseId = req.query.course
+        ? new mongoose.Types.ObjectId(req.query.course as string)
+        : null;
+
+        const pipeline: any[] = [
+        {
+            $match: {
+            midtermGrade: { $gt: 0 },
+            finalGrade: { $gt: 0 },
+            },
+        },
+
+        {
+            $addFields: {
+            finalComputedGrade: {
+                $divide: [{ $add: ["$midtermGrade", "$finalGrade"] }, 2],
+            },
+            },
+        },
+
+        {
+            $group: {
+            _id: "$student_id",
+            gwa: { $avg: "$finalComputedGrade" },       
+            lowestGrade: { $max: "$finalComputedGrade" },  
+            countSubjects: { $sum: 1 },
+            },
+        },
+
+        {
+            $match: {
+            lowestGrade: { $lt: 2.25 }, 
+            gwa: { $lte: 2.25 },   
+            },
+        },
+        { $sort: { gwa: 1 } },
+        {
+            $lookup: {
+            from: "students",
+            localField: "_id",
+            foreignField: "_id",
+            as: "student",
+            },
+        },
+        { $unwind: "$student" },
+        ];
+
+        if (courseId) {
+        pipeline.push({
+            $match: {
+            "student.course": courseId,
+            },
+        });
+        }
+
+        pipeline.push({
+        $match: {
+            "student.status": "Active",
+        },
+        });
+
+        pipeline.push({
+        $project: {
+            _id: "$student._id",
+            student_id: "$student.student_id",
+            firstname: "$student.firstname",
+            lastname: "$student.lastname",
+            year_level: '$student.year_level',
+            gwa: 1,
+            lowestGrade: 1,
+            countSubjects: 1,
+        },
+        });
+
+        const rankings = await StudentSubject.aggregate(pipeline);
+
+        res.status(200).json({ success: true, rankings });
+    } catch (error: any) {
+        console.error("Error fetching student rankings:", error);
+        res.status(500).json({ success: false, message: error.message || "Server Error" });
+    }
+};

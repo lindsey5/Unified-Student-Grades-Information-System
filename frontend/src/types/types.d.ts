@@ -9,6 +9,7 @@ interface Department {
 interface Course {
     _id?: string;
     name: string;
+    code: string;
     department: Department;
     status?: 'active' | 'inactive';
     createdAt?: string;
