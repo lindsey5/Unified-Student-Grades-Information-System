@@ -43,8 +43,12 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`z-50 fixed inset-y-0 left-0 w-60 bg-emerald-700 text-white flex flex-col p-4 shadow-lg transform transition-transform duration-300
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:flex`}
+        className={`
+            z-5
+          fixed inset-y-0 left-0 bg-emerald-700 text-white flex flex-col p-4 shadow-lg
+          w-60 transform lg:translate-x-0 transition-transform duration-300
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0
+        `}
       >
         {/* Title with Icon */}
         <div className="flex items-center justify-center gap-2 mb-8">

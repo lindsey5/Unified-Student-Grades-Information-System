@@ -6,7 +6,7 @@ const AdminLayout = () => {
 
     return (
         <AdminContextProvider>
-        <main className="flex w-full min-h-screen">
+        <main className="w-full md:pl-60">
             <Sidebar />
             <Outlet />
         </main>

@@ -11,20 +11,20 @@ const Home = () => {
     return (
         <main>
             <div className="hidden lg: hidden lg:block">
-                <Parallax ref={parallax} pages={3.5}>
+                <Parallax ref={parallax} pages={3.2}>
                     <ParallaxLayer className="z-10" offset={0}>
                         <Navbar />
                         <div className="pt-20">
                             <HeroSection />
                         </div>
                     </ParallaxLayer>
-                    <ParallaxLayer offset={0.3} speed={-0.3}>
+                    <ParallaxLayer offset={0.3} speed={-0.2}>
                             <img className="w-full h-screen" src="/illustration.png" />
                     </ParallaxLayer>
-                    <ParallaxLayer offset={1.3}>
+                    <ParallaxLayer offset={1.2}>
                         <CoursesSection />
                     </ParallaxLayer>
-                    <ParallaxLayer offset={2.3}>
+                    <ParallaxLayer offset={2.2} speed={0.5}>
                         <About />
                     </ParallaxLayer>
                 </Parallax>

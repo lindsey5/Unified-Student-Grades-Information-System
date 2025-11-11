@@ -4,10 +4,10 @@ import { scrollToSection } from "../../../utils/utils";
 const Navbar = () => {
   return (
     <nav className="fixed inset-x-0 top-0 border-b border-gray-200 shadow-b-lg bg-white px-10 py-5 md:px-20 md:py-5 flex justify-between items-center z-50">
-      <div className="flex items-center gap-2">
+      <a href="/" className="flex items-center gap-2">
         <Leaf className="text-emerald-600 w-6 h-6" />
         <h1 className="text-emerald-600 text-2xl font-bold">Evergreen College</h1>
-      </div>
+      </a>
       <ul className="hidden lg:flex space-x-8 font-semibold text-emerald-600 text-lg">
         <li 
             className="cursor-pointer hover:opacity-70 transition-colors"
@@ -17,7 +17,7 @@ const Navbar = () => {
         </li>
         <li 
             className="cursor-pointer hover:opacity-70 transition-colors"
-            onClick={() => scrollToSection('courses')}
+            onClick={() => window.location.href = '/courses'}
         >
           Courses
         </li>

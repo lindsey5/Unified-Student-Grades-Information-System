@@ -20,7 +20,7 @@ export const sendStudentEmail = async (student: IStudent, password: string) => {
     `;
 
     const emailData = {
-      sender: { name: 'Your School Name', email: process.env.EMAIL_USER },
+      sender: { name: 'Evergreen College', email: process.env.EMAIL_USER },
       to: [{ email: student.email, name: `${student.firstname} ${student.lastname}` }],
       subject: 'Student Account Information',
       htmlContent,

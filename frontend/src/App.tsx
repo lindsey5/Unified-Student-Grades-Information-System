@@ -14,12 +14,14 @@ import Grades from './pages/student/Grades'
 import StudentSecurity from './pages/student/StudentSecurity'
 import Admins from './pages/admin/Admins/Admins'
 import Home from './pages/Home/Home'
+import CoursesPage from './pages/Home/Courses'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route index element={<Home />} />
+        <Route path='courses' element={<CoursesPage />} />
         <Route path='login' element={<LoginPage />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
