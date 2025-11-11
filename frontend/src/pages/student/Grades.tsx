@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { CircularProgress } from "@mui/material";
 import { Navigate } from "react-router-dom";
@@ -51,6 +51,16 @@ const Grades = () => {
         [semestersData]
     );
 
+    const totalGWA = useMemo(() => {
+      if(!subjectsData?.studentSubjects) return 0
+
+      const filteredSubjects = subjectsData.studentSubjects.filter((subject : StudentSubject) => subject.midtermGrade && subject.finalGrade)
+
+        return (filteredSubjects.reduce((acc: number, subject: StudentSubject) => 
+          acc +((subject.midtermGrade + subject.finalGrade) / 2), 0) 
+        / filteredSubjects.length).toFixed(2)
+    }, [subjectsData]); 
+
     return (
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5 bg-gradient-to-br from-emerald-50 to-teal-50">
         {/* Header */}
@@ -89,6 +99,7 @@ const Grades = () => {
                 <CircularProgress sx={{ color: "#10b981" }} />
             </div>
             ) : subjectsData?.studentSubjects?.length > 0 ? (
+              <>
             <EmeraldTable
                 columns={[
                 "Code",
@@ -122,6 +133,10 @@ const Grades = () => {
                 })) || []
                 }
             />
+            <div className="w-full text-right font-semibold text-emerald-700 mb-2">
+              Total GWA: {totalGWA}
+            </div>
+            </>
             ) : (
             <div className="w-full flex justify-center items-center h-40 text-gray-500">
                 No subjects found for this semester.

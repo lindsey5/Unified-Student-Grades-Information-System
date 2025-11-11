@@ -2,7 +2,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import useFetch from "../../../hooks/useFetch";
 import SemesterModal from "./components/SemesterModal";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
 import { deleteData } from "../../../utils/api";
 import { X } from "lucide-react";
@@ -121,6 +121,15 @@ const StudentGrades = () => {
         }
     };
 
+    const totalGWA = useMemo(() => {
+      if(!subjectsData?.studentSubjects) return 0
+    
+      const filteredSubjects = subjectsData.studentSubjects.filter((subject : StudentSubject) => subject.midtermGrade && subject.finalGrade)
+      return (filteredSubjects.reduce((acc: number, subject: StudentSubject) => 
+        acc +((subject.midtermGrade + subject.finalGrade) / 2), 0) 
+      / filteredSubjects.length).toFixed(2)
+    }, [subjectsData]); 
+
     return (
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Header */}
@@ -167,50 +176,42 @@ const StudentGrades = () => {
                 <CircularProgress sx={{ color: "#10b981" }} />
             </div>
             ) : subjectsData?.studentSubjects?.length > 0 ? (
-            <EmeraldTable
-                columns={[
-                "Code",
-                "Subject",
-                "Room",
-                "Time",
-                "Units",
-                "Hours",
-                "Instructor",
-                "Section",
-                "Mid Term",
-                "Final",
-                "GWA",
-                "Actions",
-                ]}
-                data={
-                subjectsData?.studentSubjects.map((subject: StudentSubject) => ({
-                    Code: subject.subject.code,
-                    Subject: subject.subject.name,
-                    Room: subject.room,
-                    Time: subject.time,
-                    Units: subject.units,
-                    Hours: subject.hours,
-                    Instructor: `${subject.instructor.firstname} ${subject.instructor.lastname}`,
-                    Section: subject.section,
-                    "Mid Term": subject.midtermGrade,
-                    Final: subject.finalGrade,
-                    GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
-                    Actions: (
-                    <div className="flex gap-3">
-                        <EditButton
-                        onClick={() => {
-                            setIsSubjectModalOpen(true);
-                            setSelectedSubject(subject);
-                        }}
-                        />
-                        <DeleteButton
-                        onClick={() => handleDelete(subject._id as string)}
-                        />
-                    </div>
-                    ),
-                })) || []
-                }
-            />
+              <>
+              <EmeraldTable
+                  columns={["Code", "Subject", "Room", "Time", "Units", "Hours", "Instructor", "Section", "Mid Term", "Final", "GWA", "Actions"]}
+                  data={
+                  subjectsData?.studentSubjects.map((subject: StudentSubject) => ({
+                      Code: subject.subject.code,
+                      Subject: subject.subject.name,
+                      Room: subject.room,
+                      Time: subject.time,
+                      Units: subject.units,
+                      Hours: subject.hours,
+                      Instructor: `${subject.instructor.firstname} ${subject.instructor.lastname}`,
+                      Section: subject.section,
+                      "Mid Term": subject.midtermGrade,
+                      Final: subject.finalGrade,
+                      GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
+                      Actions: (
+                      <div className="flex gap-3">
+                          <EditButton
+                          onClick={() => {
+                              setIsSubjectModalOpen(true);
+                              setSelectedSubject(subject);
+                          }}
+                          />
+                          <DeleteButton
+                          onClick={() => handleDelete(subject._id as string)}
+                          />
+                      </div>
+                      ),
+                  })) || []
+                  }
+              />
+              <div className="w-full text-right font-semibold text-emerald-700 mb-2">
+                Total GWA: {totalGWA}
+              </div>
+            </>
             ) : (
             <div className="w-full flex justify-center items-center h-40 text-gray-500">
                 No subjects found for this semester.

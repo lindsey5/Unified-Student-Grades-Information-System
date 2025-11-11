@@ -11,7 +11,7 @@ const Home = () => {
     return (
         <main>
             <div className="hidden lg: hidden lg:block">
-                <Parallax ref={parallax} pages={3.3}>
+                <Parallax ref={parallax} pages={3.5}>
                     <ParallaxLayer className="z-10" offset={0}>
                         <Navbar />
                         <div className="pt-20">
@@ -24,13 +24,13 @@ const Home = () => {
                     <ParallaxLayer offset={1.3}>
                         <CoursesSection />
                     </ParallaxLayer>
-                    <ParallaxLayer offset={2}>
+                    <ParallaxLayer offset={2.3}>
                         <About />
                     </ParallaxLayer>
                 </Parallax>
             </div>
 
-            <div className="lg:hidden pt-20">
+            <div className="relative lg:hidden pt-20">
                 <Navbar />
                 <div className="relative">
                 <HeroSection />

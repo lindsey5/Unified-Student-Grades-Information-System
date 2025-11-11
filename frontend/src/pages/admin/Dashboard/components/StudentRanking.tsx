@@ -9,22 +9,22 @@ const StudentRankingTable = () => {
     
     return (
         <div className="flex flex-col gap-5 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold text-emerald-700">Student Rankings</h1>
-                <div className="flex items-center gap-4">
-                    <label className="text-sm font-medium">Filter by Course:</label>
-                    <select
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+                <label className="text-sm font-medium">Filter by Course:</label>
+                <select
                     value={selectedCourse}
                     onChange={(e) => setSelectedCourse(e.target.value)}
                     className="px-3 py-2 border rounded-md text-sm"
-                    >
+                >
                     <option value="all">All Courses</option>
-                    {coursesData?.courses.map((course: Course) => (
-                        <option key={course._id} value={course._id}>
+                    {coursesData?.courses?.map((course: Course) => (
+                    <option key={course._id} value={course._id}>
                         {course.name}
-                        </option>
+                    </option>
                     ))}
-                    </select>
+                </select>
                 </div>
             </div>
             <EmeraldTable 

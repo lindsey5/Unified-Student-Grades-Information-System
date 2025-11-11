@@ -1,5 +1,6 @@
 import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
+import { scrollToSection } from "../../../utils/utils";
 
 const HeroSection = () => {
   return (
@@ -29,12 +30,12 @@ const HeroSection = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a
-            href="#courses"
-            className="rounded-md hover:opacity-80 px-8 py-3 bg-emerald-700 text-white font-medium transition"
+          <button
+            onClick={() => scrollToSection('courses')}
+            className="cursor-pointer rounded-md hover:opacity-80 px-8 py-3 bg-emerald-700 text-white font-medium transition"
           >
             Explore Courses
-          </a>
+          </button>
         </div>
       </motion.div>
     </section>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   LayoutDashboard,
   Building2,
@@ -8,44 +9,75 @@ import {
   Shield,
   IdCard,
   LogOutIcon,
+  Menu,
+  X,
 } from "lucide-react";
 import { logout } from "../../../utils/auth";
 import { SidebarButton } from "../../../components/Button";
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const menuItems = [
+    { icon: <LayoutDashboard size={20} />, label: "Dashboard", to: "/admin" },
+    { icon: <Building2 size={20} />, label: "Departments", to: "/admin/departments" },
+    { icon: <BookOpen size={20} />, label: "Courses", to: "/admin/courses" },
+    { icon: <GraduationCap size={20} />, label: "Students", to: "/admin/students" },
+    { icon: <UserCheck size={20} />, label: "Instructors", to: "/admin/instructors" },
+    { icon: <BookMarked size={20} />, label: "Subjects", to: "/admin/subjects" },
+    { icon: <Shield size={20} />, label: "Admins", to: "/admin/admins" },
+    { icon: <IdCard size={20} />, label: "Registrars", to: "/admin/registrars" },
+  ];
+
   return (
-    <aside className="fixed inset-y-0 left-0 w-60 bg-emerald-700 text-white flex flex-col p-4 shadow-lg">
-      {/* Title with Icon */}
-      <div className="flex items-center justify-center gap-2 mb-8">
-        <GraduationCap size={28} className="text-white" />
-        <h1 className="text-lg font-semibold leading-tight text-center">
-          Unified Student Grades
-          <br />
-          <span className="text-sm font-normal text-emerald-200">
-            Information System
-          </span>
-        </h1>
+    <>
+      {/* Mobile Hamburger */}
+      <div className="md:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 bg-emerald-700 text-white rounded-lg shadow-lg"
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* Sidebar buttons */}
-      <nav className="flex flex-col gap-2">
-        <SidebarButton icon={<LayoutDashboard size={20} />} label="Dashboard" to="/admin" />
-        <SidebarButton icon={<Building2 size={20} />} label="Departments" to="/admin/departments" />
-        <SidebarButton icon={<BookOpen size={20} />} label="Courses" to="/admin/courses" />
-        <SidebarButton icon={<GraduationCap size={20} />} label="Students" to="/admin/students" />
-        <SidebarButton icon={<UserCheck size={20} />} label="Instructors" to="/admin/instructors" />
-        <SidebarButton icon={<BookMarked size={20} />} label="Subjects" to="/admin/subjects" />
-        <SidebarButton icon={<Shield size={20} />} label="Admins" to="/admin/admins" />
-        <SidebarButton icon={<IdCard size={20} />} label="Registrars" to="/admin/registrars" />
-        <button 
-          className="hover:bg-emerald-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer"
-          onClick={async () => await logout()}
-        >
-          <LogOutIcon />
-          Logout
-        </button>
-      </nav>
-    </aside>
+      {/* Sidebar */}
+      <aside
+        className={`z-50 fixed inset-y-0 left-0 w-60 bg-emerald-700 text-white flex flex-col p-4 shadow-lg transform transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:flex`}
+      >
+        {/* Title with Icon */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <GraduationCap size={28} className="text-white" />
+          <h1 className="text-lg font-semibold leading-tight text-center">
+            Unified Student Grades
+            <br />
+            <span className="text-sm font-normal text-emerald-200">
+              Information System
+            </span>
+          </h1>
+        </div>
+
+        {/* Sidebar buttons */}
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
+          {menuItems.map((item) => (
+            <SidebarButton
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              to={item.to}
+            />
+          ))}
+          <button
+            className="hover:bg-emerald-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer mt-auto"
+            onClick={async () => await logout()}
+          >
+            <LogOutIcon />
+            Logout
+          </button>
+        </nav>
+      </aside>
+    </>
   );
 };
 
