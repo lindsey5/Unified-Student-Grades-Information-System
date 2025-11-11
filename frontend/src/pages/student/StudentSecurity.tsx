@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Shield,
   Lock,
   User,
 } from 'lucide-react';
 import { EmeraldTextField, PasswordInput } from '../../components/Textfield';
-import useFetch from '../../hooks/useFetch';
 import { errorAlert, successAlert } from '../../utils/swal';
 import { postData } from '../../utils/api';
 import { CircularProgress } from '@mui/material';
+import { StudentContext } from '../../contexts/StudentContext';
 
 interface ShowPasswords {
     current: boolean;
@@ -26,7 +26,7 @@ const StudentSecurity: React.FC = () => {
         confirm: false,
     });
 
-    const { data : studentRes, loading : studentLoading } = useFetch(`/api/students/me`);
+    const { student, loading : studentLoading } = useContext(StudentContext);
 
     const handlePasswordChange = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -98,38 +98,38 @@ const StudentSecurity: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                     <EmeraldTextField 
                         label="Student ID"
-                        value={studentRes?.student.student_id}
+                        value={student?.student_id}
                         disabled
                     />
                     <EmeraldTextField
                         label="Email"
-                        value={studentRes?.student.email}
+                        value={student?.email}
                         disabled
                         />
                         <EmeraldTextField
                             label="Full Name"
-                            value={`${studentRes?.student.firstname} ${studentRes?.student.middlename} ${studentRes?.student.lastname}`}
+                            value={`${student?.firstname} ${student?.middlename} ${student?.lastname}`}
                             disabled
                         />
                         <EmeraldTextField
                             label="Gender"
-                            value={studentRes?.student.gender}
+                            value={student?.gender}
                             disabled
                         />
 
                         <EmeraldTextField
                             label="Course"
-                            value={studentRes?.student.course.name}
+                            value={student?.course.name}
                             disabled
                         />
                         <EmeraldTextField
                             label="Year Level"
-                            value={studentRes?.student.year_level}
+                            value={student?.year_level}
                             disabled
                         />
                         <EmeraldTextField
                             label="Status"
-                            value={studentRes?.student.status}
+                            value={student?.status}
                             disabled
                         />
                 </div>

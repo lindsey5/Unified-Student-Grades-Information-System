@@ -189,8 +189,8 @@ const StudentGrades = () => {
                       Hours: subject.hours,
                       Instructor: `${subject.instructor.firstname} ${subject.instructor.lastname}`,
                       Section: subject.section,
-                      "Mid Term": subject.midtermGrade,
-                      Final: subject.finalGrade,
+                      "Mid Term": subject.midtermGrade.toFixed(2),
+                      Final: subject.finalGrade.toFixed(2),
                       GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
                       Actions: (
                       <div className="flex gap-3">

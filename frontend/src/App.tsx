@@ -15,6 +15,7 @@ import StudentSecurity from './pages/student/StudentSecurity'
 import Admins from './pages/admin/Admins/Admins'
 import Home from './pages/Home/Home'
 import CoursesPage from './pages/Home/Courses'
+import StudentRankings from './pages/student/Rankings'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path='student' element={<StudentLayout />}>
           <Route index element={<Grades />} />
           <Route path='security' element={<StudentSecurity />} />
+          <Route path='ranking' element={<StudentRankings />} />
         </Route>
       </Routes>
     </BrowserRouter>

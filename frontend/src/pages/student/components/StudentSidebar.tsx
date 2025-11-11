@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookOpen, GraduationCap, LogOutIcon, ShieldAlert, Menu, X } from "lucide-react";
+import { BookOpen, GraduationCap, LogOutIcon, ShieldAlert, Menu, X, Trophy } from "lucide-react";
 import { logout } from "../../../utils/auth";
 import { SidebarButton } from "../../../components/Button";
 
@@ -44,6 +44,7 @@ const StudentSidebar = () => {
         <nav className="flex flex-col gap-2">
           <SidebarButton icon={<BookOpen size={20} />} label="Your Grades" to="/student" />
           <SidebarButton icon={<ShieldAlert size={20} />} label="Security" to="/student/security" />
+          <SidebarButton icon={<Trophy size={20} />} label="Ranking" to="/student/ranking" />
           <button
             className="hover:bg-emerald-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer"
             onClick={async () => await logout()}
