@@ -1,21 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import Sidebar from "../pages/admin/components/Sidebar"
-import useFetch from "../hooks/useFetch"
+import { AdminContextProvider } from "../contexts/AdminContext";
 
 const AdminLayout = () => {
-    const { data :adminRes, loading } = useFetch('/api/admins');
-
-    if(!loading && !adminRes?.admin){
-        return (
-            <Navigate to="/"/>
-        )
-    }
 
     return (
+        <AdminContextProvider>
         <main className="flex w-full min-h-screen pl-60">
             <Sidebar />
             <Outlet />
         </main>
+        </AdminContextProvider>
     )
 }
 

@@ -194,10 +194,7 @@ const StudentGrades = () => {
                     Section: subject.section,
                     "Mid Term": subject.midtermGrade,
                     Final: subject.finalGrade,
-                    GWA: (
-                    (subject.midtermGrade + subject.finalGrade) /
-                    2
-                    ).toFixed(2),
+                    GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
                     Actions: (
                     <div className="flex gap-3">
                         <EditButton

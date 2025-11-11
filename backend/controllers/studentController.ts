@@ -228,6 +228,11 @@ export const changeStudentPassword = async (req : AuthenticatedRequest , res : R
             res.status(404).json({ error: 'Student not found.'});
             return;
         }
+        if (student.password === req.body.newPassword) {
+            res.status(400).json({ message: "New password cannot be the same as your current password."});
+            return;
+        }
+
         student.password = req.body.newPassword;
         await student.save();
 

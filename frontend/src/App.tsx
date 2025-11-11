@@ -13,12 +13,14 @@ import StudentLayout from './layouts/StudentLayout'
 import Grades from './pages/student/Grades'
 import StudentSecurity from './pages/student/StudentSecurity'
 import Admins from './pages/admin/Admins/Admins'
+import Home from './pages/Home/Home'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<LoginPage />} />
+        <Route index element={<Home />} />
+        <Route path='login' element={<LoginPage />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path='departments' element={<Departments />} />
