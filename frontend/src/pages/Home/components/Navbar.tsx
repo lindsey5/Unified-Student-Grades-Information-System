@@ -1,9 +1,13 @@
 import { Leaf, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { scrollToSection } from "../../../utils/utils";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -22,7 +26,13 @@ const Navbar = () => {
       <ul className="hidden lg:flex space-x-8 font-semibold text-emerald-600 text-lg">
         <li
           className="cursor-pointer hover:opacity-70 transition-colors"
-          onClick={() => scrollToSection("home")}
+          onClick={() => {
+            if(pathname === '/courses'){
+              navigate('/')
+              return;
+            }
+            scrollToSection('home')
+          }}
         >
           Home
         </li>
@@ -34,7 +44,13 @@ const Navbar = () => {
         </li>
         <li
           className="cursor-pointer hover:opacity-70 transition-colors"
-          onClick={() => scrollToSection("about")}
+          onClick={() => {
+            if(pathname === '/courses'){
+              navigate('/')
+              return;
+            }
+            scrollToSection('about')
+          }}
         >
           About
         </li>
