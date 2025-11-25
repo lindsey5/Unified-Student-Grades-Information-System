@@ -2,6 +2,7 @@ import useFetch from "../../hooks/useFetch";
 import DepartmentCard from "../../components/Home/DepartmentCard";
 import Navbar from "../../components/Home/Navbar";
 import useProtection from "../../hooks/useProtection";
+import Footer from "../../components/ui/Footer";
 
 const CoursesPage = () => {
     useProtection();
@@ -10,7 +11,7 @@ const CoursesPage = () => {
     if(!loading && departmentsRes?.departments.length < 1) return;
 
     return (
-        <main className="pt-20">
+        <main>
             <Navbar />
             <div id="courses" className="min-h-screen py-10 px-5 md:py-20 md:px-10 bg-gradient-to-r from-emerald-50 to-white">
                 <h1 className="text-center text-5xl font-light text-emerald-700 mb-8 tracking-wide">Courses Offered</h1>
@@ -20,6 +21,7 @@ const CoursesPage = () => {
                     ))}
                 </div>
             </div>
+            <Footer />
         </main>
     )
 }

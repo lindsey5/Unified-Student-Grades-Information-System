@@ -71,7 +71,7 @@ const StudentSecurity: React.FC = () => {
     }
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
+        <div className="w-full min-h-screen p-6">
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="bg-white rounded-lg shadow-md p-6 mb-6 border-l-4 border-emerald-500">

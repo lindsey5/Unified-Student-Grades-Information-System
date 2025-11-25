@@ -39,18 +39,29 @@ const EmeraldTable = ({
         </table>
       </div>
 
-      <div className="block md:hidden divide-y divide-gray-200">
+      <div className="block md:hidden p-4 space-y-4">
         {data.map((row, index) => (
           <div
             key={index}
-            className="p-4 hover:bg-gray-50 transition flex flex-col gap-2"
+            className="bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-200"
           >
-            {columns.map((column) => (
-              <div key={column} className="flex justify-between text-sm">
-                <span className="font-medium text-gray-600">{column}:</span>
-                <span className="text-gray-800">{row[column]}</span>
-              </div>
-            ))}
+            <div className="space-y-3">
+              {columns.map((column) => (
+                <div key={column} className="flex items-start justify-between gap-3">
+                  <span className="font-semibold text-emerald-700 text-xs uppercase tracking-wide flex-shrink-0">
+                    {column}
+                  </span>
+                  <span className="text-gray-900 text-sm text-right font-medium">
+                    {row[column]}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-3 border-t border-emerald-100">
+              <span className="text-xs text-emerald-600 font-medium">
+                Item {index + 1} of {data.length}
+              </span>
+            </div>
           </div>
         ))}
       </div>

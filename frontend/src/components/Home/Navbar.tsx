@@ -12,110 +12,125 @@ const Navbar = () => {
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
+  const navItems = [
+    {
+      label: "Home",
+      onClick: () => {
+        if (pathname === "/courses") {
+          navigate("/");
+          return;
+        }
+        scrollToSection("home");
+      },
+    },
+    {
+      label: "Courses",
+      onClick: () => (window.location.href = "/courses"),
+    },
+    {
+      label: "About",
+      onClick: () => {
+        if (pathname === "/courses") {
+          navigate("/");
+        }
+        scrollToSection("about");
+      },
+    },
+  ];
+
   return (
-    <nav className="fixed inset-x-0 top-0 border-b border-gray-200 bg-white shadow-sm px-6 md:px-10 py-8 flex justify-between items-center z-50">
-      {/* Logo */}
-      <a href="/" className="flex items-center gap-2">
-        <Leaf className="text-emerald-600 w-6 h-6" />
-        <h1 className="text-emerald-600 text-xl md:text-2xl font-bold">
-          Evergreen College
-        </h1>
-      </a>
+    <>
+    <nav className="fixed inset-x-0 top-0 bg-white/95 backdrop-blur-sm shadow-md z-50 border-b border-emerald-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-3 group">
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-700 p-2.5 rounded-xl shadow-lg group-hover:shadow-emerald-200 transition-all duration-300">
+              <Leaf className="text-white w-6 h-6" />
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-emerald-700 text-xl font-bold tracking-tight">
+                Evergreen College
+              </h1>
+              <p className="text-emerald-600 text-xs font-medium">
+                Excellence in Education
+              </p>
+            </div>
+            <div className="block sm:hidden">
+              <h1 className="text-emerald-700 text-lg font-bold">Evergreen</h1>
+            </div>
+          </a>
 
-      {/* Desktop Menu */}
-      <ul className="hidden lg:flex space-x-8 font-semibold text-emerald-600 text-lg">
-        <li
-          className="cursor-pointer hover:opacity-70 transition-colors"
-          onClick={() => {
-            if(pathname === '/courses'){
-              navigate('/')
-              return;
-            }
-            scrollToSection('home')
-          }}
-        >
-          Home
-        </li>
-        <li
-          className="cursor-pointer hover:opacity-70 transition-colors"
-          onClick={() => (window.location.href = "/courses")}
-        >
-          Courses
-        </li>
-        <li
-          className="cursor-pointer hover:opacity-70 transition-colors"
-          onClick={() => {
-            if(pathname === '/courses'){
-              navigate('/')
-              return;
-            }
-            scrollToSection('about')
-          }}
-        >
-          About
-        </li>
-      </ul>
+          {/* Desktop Menu */}
+          <ul className="hidden lg:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <li key={item.label}>
+                <button
+                  onClick={item.onClick}
+                  className="cursor-pointer px-5 py-2.5 text-emerald-700 font-semibold rounded-lg hover:bg-emerald-50 hover:text-emerald-800 transition-all duration-200"
+                >
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
 
-      {/* Right side (user + login) */}
-      <div className="hidden lg:flex space-x-2 items-center font-medium">
-        <User className="bg-emerald-600 text-white p-3 w-12 h-12 rounded-full" />
-        <a
-          href="/login"
-          className="text-lg text-emerald-600 hover:opacity-70 transition-colors"
-        >
-          Log In
-        </a>
+          {/* Desktop Login */}
+          <div className="hidden lg:flex items-center gap-3">
+            <a
+              href="/login"
+              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-emerald-800 shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              <User size={18} />
+              <span>Log In</span>
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="lg:hidden p-2 text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+          >
+            {menuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu Button */}
-      <button
-        onClick={toggleMenu}
-        className="lg:hidden text-emerald-600 focus:outline-none"
-      >
-        {menuOpen ? <X size={28} /> : <Menu size={28} />}
-      </button>
-
-      {/* Mobile Menu (slide-down) */}
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-md lg:hidden">
-          <ul className="flex flex-col items-center space-y-4 py-6 text-emerald-600 font-semibold text-lg">
-            <li
-              className="cursor-pointer hover:opacity-70 transition-colors"
-              onClick={() => {
-                scrollToSection("home");
-                closeMenu();
-              }}
-            >
-              Home
-            </li>
-            <li
-              className="cursor-pointer hover:opacity-70 transition-colors"
-              onClick={() => {
-                window.location.href = "/courses";
-                closeMenu();
-              }}
-            >
-              Courses
-            </li>
-            <li
-              className="cursor-pointer hover:opacity-70 transition-colors"
-              onClick={() => {
-                scrollToSection("about");
-                closeMenu();
-              }}
-            >
-              About
-            </li>
-            <li
-              className="cursor-pointer hover:opacity-70 transition-colors"
-              onClick={() => window.location.href = '/login'}
-            >
-              Login
-            </li>
-          </ul>
+        <div className="lg:hidden bg-gradient-to-b from-emerald-50 to-white border-t border-emerald-100 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <ul className="space-y-2">
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => {
+                      item.onClick();
+                      closeMenu();
+                    }}
+                    className="w-full text-left px-4 py-3 text-emerald-700 font-semibold rounded-lg hover:bg-white hover:shadow-sm transition-all duration-200"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+              <li className="pt-4 border-t border-emerald-200">
+                <a
+                  href="/login"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-emerald-800 shadow-md transition-all duration-200"
+                  onClick={closeMenu}
+                >
+                  <User size={18} />
+                  <span>Log In</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       )}
     </nav>
+    <div className="h-16"></div>
+    </>
   );
 };
 

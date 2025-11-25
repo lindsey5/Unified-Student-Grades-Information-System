@@ -9,6 +9,7 @@ import { X } from "lucide-react";
 import SubjectModal from "../components/ui/StudentSubjectModal";
 import EmeraldTable from "../components/Table";
 import { CircularProgress } from "@mui/material";
+import { GradeStatusChip } from "../components/Chip";
 
 const StudentGradesInfoHeader = memo(
   ({ id, semester }: { id: string; semester: Semester }) => {
@@ -178,7 +179,7 @@ const StudentGrades = () => {
             ) : subjectsData?.studentSubjects?.length > 0 ? (
               <>
               <EmeraldTable
-                  columns={["Code", "Subject", "Room", "Time", "Units", "Hours", "Instructor", "Section", "Mid Term", "Final", "GWA", "Actions"]}
+                  columns={["Code", "Subject", "Room", "Time", "Units", "Hours", "Instructor", "Section", "Mid Term", "Final", "GWA", "Status", "Actions"]}
                   data={
                   subjectsData?.studentSubjects.map((subject: StudentSubject) => ({
                       Code: subject.subject.code,
@@ -192,6 +193,7 @@ const StudentGrades = () => {
                       "Mid Term": subject.midtermGrade.toFixed(2),
                       Final: subject.finalGrade.toFixed(2),
                       GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
+                      Status: <GradeStatusChip size="sm" grade={(subject.midtermGrade + subject.finalGrade) /2}/>,
                       Actions: (
                       <div className="flex gap-3">
                           <EditButton

@@ -3,6 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import { CircularProgress } from "@mui/material";
 import { Navigate } from "react-router-dom";
 import EmeraldTable from "../../components/Table";
+import { GradeStatusChip } from "../../components/Chip";
 
 const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
     const { data: studentData, loading } = useFetch(`/api/students/me`);
@@ -62,7 +63,7 @@ const Grades = () => {
     }, [subjectsData]); 
 
     return (
-        <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5 bg-gradient-to-br from-emerald-50 to-teal-50">
+        <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Header */}
         <GradesInfoHeader semester={selectedSemester as Semester}/>
 
@@ -100,6 +101,9 @@ const Grades = () => {
             </div>
             ) : subjectsData?.studentSubjects?.length > 0 ? (
               <>
+            <div className="block md:hidden w-full text-left font-semibold text-emerald-700 mb-2">
+              Total GWA: {totalGWA}
+            </div>
             <EmeraldTable
                 columns={[
                 "Code",
@@ -113,6 +117,7 @@ const Grades = () => {
                 "Mid Term",
                 "Final",
                 "GWA",
+                "Status"
                 ]}
                 data={
                 subjectsData?.studentSubjects.map((subject: StudentSubject) => ({
@@ -126,14 +131,12 @@ const Grades = () => {
                     Section: subject.section,
                     "Mid Term": subject.midtermGrade.toFixed(2),
                     Final: subject.finalGrade.toFixed(2),
-                    GWA: (
-                    (subject.midtermGrade + subject.finalGrade) /
-                    2
-                    ).toFixed(2)
+                    GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
+                    Status: <GradeStatusChip size="sm" grade={(subject.midtermGrade + subject.finalGrade) /2}/>
                 })) || []
                 }
             />
-            <div className="w-full text-right font-semibold text-emerald-700 mb-2">
+            <div className="md:block hidden w-full text-right font-semibold text-emerald-700 mb-2">
               Total GWA: {totalGWA}
             </div>
             </>

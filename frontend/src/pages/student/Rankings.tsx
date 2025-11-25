@@ -13,7 +13,7 @@ const StudentRankings = () => {
     const { student } = useContext(StudentContext);
 
     return (
-        <div className="w-full h-screen bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
+        <div className="w-full h-screen p-6">
             <div className="w-full flex justify-between items-center flex-wrap mb-10">
                 <h1 className="text-2xl font-bold text-emerald-700">Student Rankings</h1>
                 <div className="w-[400px]">
