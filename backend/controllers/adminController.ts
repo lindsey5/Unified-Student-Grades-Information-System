@@ -33,7 +33,7 @@ export const getAdmin = async (req : AuthenticatedRequest, res : Response) => {
 
 export const getAllAdmins = async (req : AuthenticatedRequest, res : Response) => {
     try{
-        const admins = await Admin.find({ _id: { $ne: req.user_id }});
+        const admins = await Admin.find({ _id: { $ne: req.user_id }, status: 'active'});
 
         res.status(200).json({ success: true, admins });
         

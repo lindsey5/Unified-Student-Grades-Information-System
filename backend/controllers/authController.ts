@@ -10,7 +10,7 @@ const maxAge = 1 * 24 * 60 * 60;
 export const adminLogin = async (req : Request, res : Response) => {
     try{
         const { email, password } = req.body;
-        const admin = await Admin.findOne({ email });
+        const admin = await Admin.findOne({ email, status: 'active' });
         
         if(!admin){
             res.status(404).json({ message: "Email not found"})

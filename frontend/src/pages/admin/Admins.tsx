@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { AddButton, EditButton } from "../../components/Button";
+import { AddButton, DeleteButton, EditButton } from "../../components/Button";
 import AdminModal from "../../components/Admins/Modals/AdminModal";
 import useFetch from "../../hooks/useFetch";
 import EmeraldTable from "../../components/Table";
 import { CircularProgress } from "@mui/material";
 import { formatDateTime } from "../../utils/dateUtils";
+import { confirmDialog, errorAlert } from "../../utils/swal";
+import { deleteData } from "../../utils/api";
 
 const Admins = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -21,6 +23,20 @@ const Admins = () => {
         setIsModalOpen(false);
         setSelectedAdmin(undefined);
     };
+
+    const handleDelete = async (id : string) => {
+        if(await confirmDialog('Confirm', 'Are you sure do you want to delete this admin?')){
+            const response = await deleteData(`/api/admins/${id}`);
+
+            if(!response.success){
+                await errorAlert('Failed', response.message || 'Something went wrong.')
+                return;
+            }
+
+            window.location.reload();
+        }
+
+    }
 
     return (
         <div className="w-full min-h-screen p-6 flex flex-col gap-5">
@@ -48,7 +64,10 @@ const Admins = () => {
                 Lastname: admin.lastname,
                 Email: admin.email,
                 "Created At": formatDateTime(admin.createdAt),
-                Action: <EditButton onClick={() => handleEdit(admin)} />,
+                Action: <div className="flex items-center gap-4">
+                    <EditButton onClick={() => handleEdit(admin)} />
+                    <DeleteButton onClick={() => handleDelete(admin._id)}/>
+                </div>,
                 })) || []
             }
             />

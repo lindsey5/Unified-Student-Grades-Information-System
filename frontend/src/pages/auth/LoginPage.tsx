@@ -119,11 +119,11 @@ const LoginPage = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
+                {userType ==='student' && <div className="flex items-center justify-between text-sm">
                     <button type='button' className="text-emerald-600 hover:text-emerald-700 font-medium bg-transparent border-none cursor-pointer">
                     Forgot password?
                     </button>
-                </div>
+                </div>}
 
                 <button
                     type='submit'

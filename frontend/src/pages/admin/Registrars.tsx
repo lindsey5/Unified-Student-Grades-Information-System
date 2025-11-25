@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { AddButton, EditButton } from "../../components/Button";
+import { AddButton, DeleteButton, EditButton } from "../../components/Button";
 import useFetch from "../../hooks/useFetch";
 import { useDebounce } from "../../hooks/useDebounce";
 import { SearchField } from "../../components/Textfield";
 import { CircularProgress } from "@mui/material";
 import EmeraldTable from "../../components/Table";
 import RegistrarModal from "../../components/Admins/Modals/RegistrarModal";
+import { confirmDialog, errorAlert } from "../../utils/swal";
+import { deleteData } from "../../utils/api";
 
 const Registrars = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -23,6 +25,20 @@ const Registrars = () => {
     const handleEdit = (registrar : Registrar) => {
         setOpenModal(true);
         setSelectedRegistrar(registrar)
+    }
+
+    const handleDelete = async (id : string) => {
+        if(await confirmDialog('Confirm', 'Are you sure do you want to delete this admin?')){
+            const response = await deleteData(`/api/registrars/${id}`);
+
+            if(!response.success){
+                await errorAlert('Failed', response.message || 'Something went wrong.')
+                return;
+            }
+
+            window.location.reload();
+        }
+
     }
 
     return (
@@ -69,7 +85,10 @@ const Registrars = () => {
                     Lastname: r.lastname,
                     Email: r.email,
                     "Created By": `${r.createdBy.firstname} ${r.createdBy.lastname}`,
-                    Action: <EditButton onClick={() => handleEdit(r)} />,
+                    Action: <div className="flex items-center gap-4">
+                        <EditButton onClick={() => handleEdit(r)} />
+                        <DeleteButton onClick={() => handleDelete(r._id || '')}/>
+                    </div>,
                 })) || []
                 }
             />

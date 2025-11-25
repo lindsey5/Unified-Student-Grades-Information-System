@@ -28,16 +28,21 @@ const StudentSidebar = () => {
         `}
       >
         {/* Title with Icon */}
-        <div className="flex items-center justify-center gap-2 mb-8 text-center">
-          <GraduationCap size={28} className="text-white" />
-          <div>
-            <h1 className="text-lg font-semibold leading-tight">
-              Unified Student Grades
-            </h1>
-            <span className="text-sm font-normal text-emerald-200">
-              Information System
+        <div className="flex flex-col items-center justify-center gap-2 mb-8">
+            <div className="flex items-center gap-2">
+                <GraduationCap size={28} className="text-white" />
+                <h1 className="text-lg font-semibold leading-tight text-center">
+                    Unified Student Grades
+                    <br />
+                    <span className="text-sm font-normal text-emerald-200">
+                        Information System
+                    </span>
+                </h1>
+            </div>
+
+            <span className="text-sm font-medium bg-emerald-600 px-3 py-1 rounded-full text-white shadow">
+                Student
             </span>
-          </div>
         </div>
 
         {/* Sidebar buttons */}

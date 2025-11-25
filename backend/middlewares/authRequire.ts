@@ -34,7 +34,7 @@ export const requireAuth = (...allowedRoles: string[]) => {
             for (const role of allowedRoles) {
                 if (role === "admin") {
                     const admin = await Admin.findById(req.user_id);
-                    if (admin) {
+                    if (admin && admin.status === 'active') {
                         isAuthorized = true;
                         break;
                     }
