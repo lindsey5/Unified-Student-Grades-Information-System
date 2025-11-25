@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { AddButton, DeleteButton, EditButton } from "../../components/Button";
-import SubjectModal from "../../components/Admins/Modals/SubjectModal";
-import useFetch from "../../hooks/useFetch";
-import EmeraldTable from "../../components/Table";
-import { formatDateTime } from "../../utils/dateUtils";
+import { AddButton, DeleteButton, EditButton } from "../components/Button";
+import SubjectModal from "../components/ui/SubjectModal";
+import useFetch from "../hooks/useFetch";
+import EmeraldTable from "../components/Table";
+import { formatDateTime } from "../utils/dateUtils";
 import { Pagination, CircularProgress } from "@mui/material";
-import { SearchField } from "../../components/Textfield";
+import { SearchField } from "../components/Textfield";
 
 const Subjects = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

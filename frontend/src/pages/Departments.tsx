@@ -1,11 +1,11 @@
 import { useState } from "react";
-import AddDepartmentModal from "../../components/Admins/Modals/DepartmentModal";
-import useFetch from "../../hooks/useFetch";
-import { formatDateTime } from "../../utils/dateUtils";
-import { AddButton, DeleteButton, EditButton } from "../../components/Button";
-import { confirmDialog, successAlert, errorAlert } from "../../utils/swal";
-import { deleteData } from "../../utils/api";
-import EmeraldTable from "../../components/Table";
+import AddDepartmentModal from "../components/ui/DepartmentModal";
+import useFetch from "../hooks/useFetch";
+import { formatDateTime } from "../utils/dateUtils";
+import { AddButton, DeleteButton, EditButton } from "../components/Button";
+import { confirmDialog, successAlert, errorAlert } from "../utils/swal";
+import { deleteData } from "../utils/api";
+import EmeraldTable from "../components/Table";
 import { CircularProgress } from "@mui/material"; // Spinner
 
 const Departments = () => {

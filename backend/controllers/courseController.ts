@@ -65,7 +65,13 @@ export const getAllCourses = async (req : Request, res : Response) => {
         }
 
         if(searchTerm){
-            filter = { ...filter, name: { $regex: searchTerm, $options: 'i' } };
+            filter = { ...filter, 
+                $or: [
+                    { name: { $regex: searchTerm, $options: 'i' } }, 
+                    { code: { $regex: searchTerm, $options: 'i' } }
+                ]
+
+             };
         }
 
         const courses = await Course.find(filter).populate('department').sort({ name: 1 });

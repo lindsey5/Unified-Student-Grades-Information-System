@@ -1,12 +1,12 @@
 import { Modal, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField } from "../../Textfield";
-import { confirmDialog, errorAlert } from "../../../utils/swal";
-import { postData, updateData } from "../../../utils/api";
-import LoadingScreen from "../../LoadingScreen";
-import useFetch from "../../../hooks/useFetch";
-import { EmeraldSelect } from "../../Select";
+import { EmeraldTextField } from "../Textfield";
+import { confirmDialog, errorAlert } from "../../utils/swal";
+import { postData, updateData } from "../../utils/api";
+import LoadingScreen from "../LoadingScreen";
+import useFetch from "../../hooks/useFetch";
+import { EmeraldSelect } from "../Select";
 
 interface AddDepartmentModalProps {
   isOpen: boolean;

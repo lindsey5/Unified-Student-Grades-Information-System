@@ -1,10 +1,10 @@
 import { Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Upload, Check } from "lucide-react";
-import { EmeraldTextField } from "../../Textfield";
-import { confirmDialog, errorAlert } from "../../../utils/swal";
-import { postData, updateData } from "../../../utils/api";
-import LoadingScreen from "../../LoadingScreen";
+import { EmeraldTextField } from "../Textfield";
+import { confirmDialog, errorAlert } from "../../utils/swal";
+import { postData, updateData } from "../../utils/api";
+import LoadingScreen from "../LoadingScreen";
 
 interface AddDepartmentModalProps {
   isOpen: boolean;

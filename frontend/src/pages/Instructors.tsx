@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { AddButton, EditButton } from "../../components/Button";
-import InstructorModal from "../../components/Admins/Modals/InstructorModal";
-import useFetch from "../../hooks/useFetch";
-import { useDebounce } from "../../hooks/useDebounce";
-import { SearchField } from "../../components/Textfield";
-import { EmeraldSelect } from "../../components/Select";
+import { AddButton, EditButton } from "../components/Button";
+import InstructorModal from "../components/Admins/Modals/InstructorModal";
+import useFetch from "../hooks/useFetch";
+import { useDebounce } from "../hooks/useDebounce";
+import { SearchField } from "../components/Textfield";
+import { EmeraldSelect } from "../components/Select";
 import { MenuItem, Pagination, CircularProgress } from "@mui/material";
-import EmeraldTable from "../../components/Table";
-import { formatDate } from "../../utils/dateUtils";
+import EmeraldTable from "../components/Table";
+import { formatDate } from "../utils/dateUtils";
 
 const Instructors = () => {
     const [page, setPage] = useState(1);

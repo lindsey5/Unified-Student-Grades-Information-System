@@ -1,15 +1,15 @@
 import { useState } from "react";
-import useFetch from "../../hooks/useFetch";
-import { formatDateTime } from "../../utils/dateUtils";
-import { AddButton, DeleteButton, EditButton } from "../../components/Button";
-import CourseModal from "../../components/Admins/Modals/Course";
-import { SearchField } from "../../components/Textfield";
-import { useDebounce } from "../../hooks/useDebounce";
-import { EmeraldSelect } from "../../components/Select";
+import useFetch from "../hooks/useFetch";
+import { formatDateTime } from "../utils/dateUtils";
+import { AddButton, DeleteButton, EditButton } from "../components/Button";
+import CourseModal from "../components/ui/Course";
+import { SearchField } from "../components/Textfield";
+import { useDebounce } from "../hooks/useDebounce";
+import { EmeraldSelect } from "../components/Select";
 import { MenuItem, CircularProgress } from "@mui/material"; 
-import { deleteData } from "../../utils/api";
-import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
-import EmeraldTable from "../../components/Table";
+import { deleteData } from "../utils/api";
+import { confirmDialog, errorAlert, successAlert } from "../utils/swal";
+import EmeraldTable from "../components/Table";
 
 const Courses = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

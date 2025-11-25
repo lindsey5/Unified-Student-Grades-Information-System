@@ -6,9 +6,9 @@ const router = Router();
 
 router.get('/', getAllDepartments);
 router.get('/total', requireAuth('admin', 'registrar'), getTotalDepartments);
-router.post('/', requireAuth('admin'), createDepartment);
-router.put('/:id', requireAuth('admin'), editDepartment);
-router.delete('/:id', requireAuth('admin'), deleteDepartment);
+router.post('/', requireAuth('admin', 'registrar'), createDepartment);
+router.put('/:id', requireAuth('admin', 'registrar'), editDepartment);
+router.delete('/:id', requireAuth('admin', 'registrar'), deleteDepartment);
 
 const departmentRoutes = router;
 

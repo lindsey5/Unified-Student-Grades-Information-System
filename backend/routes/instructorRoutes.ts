@@ -4,7 +4,7 @@ import { requireAuth } from "../middlewares/authRequire";
 
 const router = Router();
 
-router.post('/', requireAuth('admin'), createInstructor);
+router.post('/', requireAuth('admin', 'registrar'), createInstructor);
 router.get('/', requireAuth('admin', 'registrar'), getAllInstructors);
 router.get('/total', requireAuth('admin', 'registrar'), getTotalInstructors);
 

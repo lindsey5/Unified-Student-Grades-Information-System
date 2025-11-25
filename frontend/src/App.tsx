@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import AdminLayout from './layouts/AdminLayout'
-import Departments from './pages/admin/Departments'
-import Courses from './pages/admin/Courses'
+import Departments from './pages/Departments'
+import Courses from './pages/Courses'
 import Students from './pages/Students'
 import Student from './pages/Student'
-import Subjects from './pages/admin/Subjects'
+import Subjects from './pages/Subjects'
 import StudentGrades from './pages/StudentGrades'
-import Instructors from './pages/admin/Instructors'
+import Instructors from './pages/Instructors'
 import LoginPage from './pages/auth/LoginPage'
 import StudentLayout from './layouts/StudentLayout'
 import Grades from './pages/student/Grades'
@@ -46,11 +46,14 @@ function App() {
         </Route>
         <Route path='registrar' element={<RegistrarLayout />}>
           <Route index element={<Dashboard />}/>
+          <Route path='departments' element={<Departments />} />
+          <Route path='courses' element={<Courses />} />
           <Route path='students' element={<Students role="registrar" />}/>
           <Route path='student/:id' element={<Student role="registrar" />} />
           <Route path='student' element={<Student role="registrar" />}/>
           <Route path='grades/:id' element={<StudentGrades />} />
           <Route path='subjects' element={<Subjects />} />
+          <Route path='instructors' element={<Instructors />} />
         </Route>
       </Routes>
     </BrowserRouter>
