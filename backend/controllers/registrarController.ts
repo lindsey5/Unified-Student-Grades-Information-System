@@ -27,8 +27,9 @@ export const getRegistrars = async (req : Request, res : Response) => {
         let filter : any = { };
         if(searchTerm){
             filter.$or = [
-                { name: { $regex: searchTerm, $options: 'i' } },
-                { code: { $regex: searchTerm, $options: 'i' } },
+                { firstname: { $regex: searchTerm, $options: 'i' } },
+                { lastname: { $regex: searchTerm, $options: 'i' } },
+                { email: { $regex: searchTerm, $options: 'i' } },
             ]
         }
 
