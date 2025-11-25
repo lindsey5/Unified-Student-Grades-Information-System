@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Course from "../model/Course";
 import mongoose from "mongoose";
-import { uniqueErrorHandler } from "../utils/errorHandler";
 
 export const createCourse = async (req: Request, res : Response) => {
     try{
@@ -85,6 +84,8 @@ export const deleteCourse = async (req : Request, res : Response) => {
             res.status(404).json({ message: "Course not found" });
             return;
         }
+
+        
         course.status = 'inactive';
         await course.save();
         res.status(200).json({ success: true, message: "Course deleted successfully" });
@@ -102,13 +103,25 @@ export const editCourse = async (req : Request, res : Response) => {
             res.status(404).json({ message: "Course not found" });
             return;
         }
+
+        const isNameExist = await Course.findOne({ name,  status: 'active', _id: { $ne: id } });
+        if(isNameExist){
+            res.status(409).json({ message: 'Course name already exists'});
+            return;
+        }
+
+        const isCodeExist = await Course.findOne({ code,  status: 'active', _id: { $ne: id }});
+        if(isCodeExist){
+            res.status(409).json({ message: 'Course code already exists'});
+            return;
+        }
+
         course.name = name;
         course.department = department;
         course.code = code;
         await course.save();
         res.status(200).json({ success: true, course });
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Course already exists");
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
@@ -119,7 +132,6 @@ export const getTotalCourses = async (req : Request, res : Response) =>{
         res.status(200).json({ success: true, total });
 
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Course already exists");
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }

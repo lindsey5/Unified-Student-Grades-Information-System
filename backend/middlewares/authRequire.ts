@@ -3,59 +3,77 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import Admin from '../model/Admin';
 import Student from '../model/Student';
 import { AuthenticatedRequest } from '../types/types';
+import Registrar from '../model/Registrar';
 
 interface DecodedToken extends JwtPayload {
     id: string;
 }
 
-export const studentRequireAuth = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const token = req.cookies?.jwt;
+export const requireAuth = (...allowedRoles: string[]) => {
+    return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+        const token = req.cookies?.jwt;
 
-    if (!token) {
-        res.status(401).json({ success: false, message: 'Access Denied: No Token Provided' });
-        return;
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
-
-        req.user_id = decoded.id;
-
-        const user = await Student.findById(req.user_id);
-        if (!user) {
-            res.status(401).json({ success: false, message: "Student doesn't exist." });
-            return;
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Access Denied: No Token Provided"
+            });
         }
 
-        next();
-    } catch (error: any) {
-        console.log(error);
-        res.status(403).json({ error: error.message });
-    }
-};
+        try {
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET as string
+            ) as DecodedToken;
 
-export const adminRequireAuth = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const token = req.cookies?.jwt;
+            req.user_id = decoded.id;
 
-    if (!token) {
-        res.status(401).json({ success: false, message: 'Access Denied: No Token Provided' });
-        return;
-    }
+            // ROLE CHECKING LOGIC
+            let isAuthorized = false;
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+            for (const role of allowedRoles) {
+                if (role === "admin") {
+                    const admin = await Admin.findById(req.user_id);
+                    if (admin) {
+                        isAuthorized = true;
+                        break;
+                    }
+                }
 
-        req.user_id = decoded.id;
+                if (role === "student") {
+                    const student = await Student.findById(req.user_id);
+                    if (student) {
+                        isAuthorized = true;
+                        break;
+                    }
+                }
 
-        const user = await Admin.findById(req.user_id);
-        if (!user) {
-            res.status(401).json({ success: false, message: "Admin doesn't exist." });
-            return;
+                if (role === "registrar") {
+                    const registrar = await Registrar.findById(req.user_id);
+                    if (registrar) {
+                        isAuthorized = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isAuthorized) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Access Denied: You Do Not Have Permission"
+                });
+            }
+
+            next();
+
+        } catch (error: any) {
+            console.log(error);
+            return res.status(403).json({
+                success: false,
+                message: "Invalid or Expired Token",
+                error: error.message
+            });
         }
-
-        next();
-    } catch (error: any) {
-        console.log(error);
-        res.status(403).json({ error: error.message });
-    }
+    };
 };
+

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import StudentSidebar from "../pages/student/components/StudentSidebar"
+import StudentSidebar from "../components/Student/StudentSidebar"
 import { StudentContextProvider } from "../contexts/StudentContext"
 
 const StudentLayout = () => {

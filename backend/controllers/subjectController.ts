@@ -4,6 +4,20 @@ import { uniqueErrorHandler } from "../utils/errorHandler";
 
 export const createSubject = async (req : Request, res : Response) => {
     try{
+        const isNameExist = await Subject.findOne({ name: req.body.name, status: 'active' });
+
+        if(isNameExist){
+            res.status(409).json({ message: 'Subject name already exists.'})
+            return;
+        }
+
+        const isCodeExist = await Subject.findOne({ code: req.body.code, status: 'active'});
+
+        if(isCodeExist){
+            res.status(409).json({ message: 'Subject code already exists.'});
+            return;
+        }
+
         let subject = await Subject.findOne({ name: req.body.name, status: 'inactive' })
         if(subject){
             subject.status = 'active'
@@ -16,7 +30,6 @@ export const createSubject = async (req : Request, res : Response) => {
         
         res.status(201).json({ success: true , subject});
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Subject already exists.")
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
@@ -63,6 +76,21 @@ export const editSubject = async (req : Request, res : Response) => {
             res.status(404).json({ message: "Course not found" });
             return;
         }
+
+        const isNameExist = await Subject.findOne({ _id: { $ne: id}, name: req.body.name, status: 'active' });
+
+        if(isNameExist){
+            res.status(409).json({ message: 'Subject name already exists.'})
+            return;
+        }
+
+        const isCodeExist = await Subject.findOne({  _id: { $ne: id}, code: req.body.code, status: 'active'});
+
+        if(isCodeExist){
+            res.status(409).json({ message: 'Subject code already exists.'});
+            return;
+        }
+
         subject.name = name || subject.name;
         subject.code = code || subject.code;
         await subject.save();

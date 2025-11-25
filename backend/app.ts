@@ -11,6 +11,7 @@ import semesterRoutes from './routes/semesterRoutes';
 import studentSubjectRoutes from './routes/studentSubjectRoutes';
 import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
+import registrarRoutes from './routes/registrarRoutes';
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/instructors', instructorRoutes);
 app.use('/api/semesters', semesterRoutes);
 app.use('/api/student-subjects', studentSubjectRoutes);
+app.use('/api/registrars', registrarRoutes);
 app.use('/api/admins', adminRoutes);
 app.use('/api/auth', authRoutes);
 

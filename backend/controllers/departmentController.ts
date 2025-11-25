@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Department from "../model/Department";
 import { deleteImage, uploadImage } from "../services/cloudinaryService";
-import { uniqueErrorHandler } from "../utils/errorHandler";
 
 export const createDepartment = async (req : Request, res : Response) => {
     try{
@@ -32,6 +31,7 @@ export const createDepartment = async (req : Request, res : Response) => {
 
         department = await Department.findOne({ name, status: 'inactive' });
         if(department){
+            await deleteImage(department.image.imagePublicId);
             department.status = 'active';
             department.image = uploadedImage;
             department = await department.save();
@@ -91,7 +91,6 @@ export const editDepartment = async (req : Request, res : Response) => {
 
         res.status(200).json({ success: true, department });
     }catch(error : any){
-        uniqueErrorHandler(error, res, "Department already exists");
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }

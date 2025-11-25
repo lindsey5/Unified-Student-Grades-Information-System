@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import Sidebar from "../pages/admin/components/Sidebar"
+import Sidebar from "../components/Admins/ui/Sidebar"
 import { AdminContextProvider } from "../contexts/AdminContext";
 
 const AdminLayout = () => {

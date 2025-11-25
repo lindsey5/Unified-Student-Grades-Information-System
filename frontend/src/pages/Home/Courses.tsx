@@ -1,8 +1,10 @@
 import useFetch from "../../hooks/useFetch";
-import DepartmentCard from "./components/DepartmentCard";
-import Navbar from "./components/Navbar";
+import DepartmentCard from "../../components/Home/DepartmentCard";
+import Navbar from "../../components/Home/Navbar";
+import useProtection from "../../hooks/useProtection";
 
 const CoursesPage = () => {
+    useProtection();
     const { data  : departmentsRes, loading } = useFetch('/api/departments');
 
     if(!loading && departmentsRes?.departments.length < 1) return;

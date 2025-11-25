@@ -3,12 +3,14 @@ import { User, Lock, UserCircle, Shield, GraduationCap } from 'lucide-react';
 import { postData } from '../../utils/api';
 import { errorAlert, successAlert } from '../../utils/swal';
 import { useNavigate } from 'react-router-dom';
+import useProtection from '../../hooks/useProtection';
 
 const LoginPage = () => {
     const [userType, setUserType] = useState('student');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    useProtection();
 
     const userTypes = [
         { id: 'student', label: 'Student', icon: GraduationCap },

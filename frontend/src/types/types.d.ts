@@ -86,3 +86,12 @@ interface Option {
   label: string;
   value: any;
 }
+
+interface Registrar {
+    _id?: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    createdBy: Admin;
+}
