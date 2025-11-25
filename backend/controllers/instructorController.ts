@@ -13,7 +13,7 @@ export const createInstructor = async (req : Request, res : Response) => {
 
 export const getAllInstructors = async (req : Request, res: Response) => {
     try{
-        const { page, limit, searchTerm, department } = req.query;
+        const { page, limit, searchTerm, department, status } = req.query;
         const pageNumber = parseInt(page as string) || 1;
         const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
@@ -27,6 +27,8 @@ export const getAllInstructors = async (req : Request, res: Response) => {
         }
 
         if(department && department !== 'All') query.department = department;
+
+        if(status && status !== 'All') query.status = status;
 
         const instructors = await Instructor
             .find(query)
@@ -55,6 +57,31 @@ export const getTotalInstructors = async (req : Request, res :Response) =>{
         const total = await Instructor.countDocuments({ status: 'active' });
 
         res.status(200).json({ success: true, total });
+
+    }catch(err : any){
+        console.log(err)
+        res.status(500).json({ message: err.message || 'Server Error' })
+    }
+}
+
+export const editInstructor = async (req : Request, res : Response) => {
+    try{
+
+        const instructor = await Instructor.findById(req.params.id);
+
+        if(!instructor){
+            res.status(404).json({ message: 'Instructor not found.' });
+            return;
+        }
+
+        instructor.firstname = req.body.firstname;
+        instructor.lastname = req.body.lastname;
+        instructor.department = req.body.department;
+        instructor.status = req.body.status;
+
+        await instructor.save();
+
+        res.status(200).json({ success: true, message: 'Instructor successfully updated.'})
 
     }catch(err : any){
         console.log(err)

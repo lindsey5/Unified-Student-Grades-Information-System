@@ -42,7 +42,10 @@ const Subjects = () => {
         <div className="w-full sm:w-1/2">
             <SearchField
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+                setSearchTerm(e.target.value)
+                setPage(1)
+            }}
             placeholder="Search by subject or code..."
             />
         </div>

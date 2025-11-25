@@ -16,9 +16,10 @@ const Instructors = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchDebounce = useDebounce(searchTerm, 500);
     const [selectedInstructor, setSelectedInstructor] = useState<Instructor>();
+    const [status, setStatus] = useState('All');
 
     const { data: instructorsData, loading } = useFetch(
-        `/api/instructors?page=${page}&limit=${50}&searchTerm=${searchDebounce}&department=${department}`
+        `/api/instructors?page=${page}&limit=${50}&status=${status}&searchTerm=${searchDebounce}&department=${department}`
     );
     const { data: departmentsData } = useFetch("/api/departments");
 
@@ -52,6 +53,18 @@ const Instructors = () => {
                 value={searchTerm}
                 placeholder="Search by firstname or lastname"
             />
+            </div>
+            <div className="w-full md:w-64">
+            <EmeraldSelect
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                displayEmpty
+                label="Status"
+            >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+            </EmeraldSelect>
             </div>
             <div className="w-full md:w-64">
             <EmeraldSelect

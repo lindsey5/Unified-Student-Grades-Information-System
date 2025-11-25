@@ -32,7 +32,7 @@ export const getRegistrars = async (req : Request, res : Response) => {
             ]
         }
 
-        const registrars = await Registrar.find(filter);
+        const registrars = await Registrar.find(filter).populate('createdBy');
 
         res.status(200).json({ success: true, registrars });
 

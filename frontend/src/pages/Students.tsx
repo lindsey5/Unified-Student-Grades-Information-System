@@ -64,7 +64,10 @@ const Students = ({ role } : { role : string}) => {
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="w-full md:w-1/2">
             <SearchField
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                    setSearchTerm(e.target.value)
+                    setPage(1)
+                }}
                 value={searchTerm}
                 placeholder="Search by student id, firstname, lastname or email..."
             />
@@ -72,7 +75,10 @@ const Students = ({ role } : { role : string}) => {
             <div className="w-full md:w-64">
             <EmeraldSelect
                 value={seleectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
+                onChange={(e) => {
+                    setSelectedStatus(e.target.value)
+                    setPage(1)
+                }}
                 displayEmpty
                 label="Status"
             >
@@ -84,7 +90,10 @@ const Students = ({ role } : { role : string}) => {
             <div className="w-full md:w-64">
             <EmeraldSelect
                 value={selectedCourse}
-                onChange={(e) => setSelectedCourse(e.target.value)}
+                onChange={(e) => {
+                    setSelectedCourse(e.target.value)
+                    setPage(1)
+                }}
                 displayEmpty
                 label="Course"
             >

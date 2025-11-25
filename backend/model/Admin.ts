@@ -6,6 +6,7 @@ export interface IAdmin extends Document {
   lastname: string;
   email: string;
   password: string;
+  status: 'active' | 'deleted';
 }
 
 // Define the schema
@@ -24,7 +25,6 @@ const AdminSchema: Schema<IAdmin> = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -33,6 +33,12 @@ const AdminSchema: Schema<IAdmin> = new Schema(
       required: true,
       minlength: 6,
     },
+    status: {
+      type: String,
+      enum: ['active', 'deleted'],
+      required: true,
+      default: 'active'
+    }
   },
   { timestamps: true }
 );

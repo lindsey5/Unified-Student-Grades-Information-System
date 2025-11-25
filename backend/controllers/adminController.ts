@@ -4,6 +4,12 @@ import { AuthenticatedRequest } from "../types/types";
 
 export const createAdmin = async (req : Request, res : Response) => {
     try{
+        const isExists = await Admin.findOne({ email: req.body.email, status: 'active' });
+
+        if(isExists){
+            res.status(409).json({ message: 'Email already exists.'})
+            return;
+        }
 
         const admin = await Admin.create(req.body);
 
@@ -38,14 +44,44 @@ export const getAllAdmins = async (req : AuthenticatedRequest, res : Response) =
 
 export const deleteAdmin = async (req : Request, res : Response) =>{
     try{
-        const admin  = await Admin.findOneAndDelete({ _id: req.params.id });
+        const admin  = await Admin.findById({ _id: req.params.id });
         if(!admin){
             res.status(404).json({ message: 'Admin not found.'});
             return;
         }
+
+        admin.status = 'deleted';
+        await admin.save();
+
         res.status(200).json({ success: true, message: 'Admin successfully deleted.'})
 
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const editAdmin = async (req : Request, res : Response) => {
+    try{
+        const isExists = await Admin.findOne({ email: req.body.email, status: 'active', _id: { $ne: req.params.id } });
+
+        if(isExists){
+            res.status(409).json({ message: 'Email already exists.'})
+            return;
+        }
+
+        const admin = await Admin.findById(req.params.id);
+
+        if(!admin){
+            res.status(404).json({ message: "Admin not found."})
+            return;
+        }
+        admin.set(req.body);
+
+        await admin.save();
+
+        res.status(200).json({ success: true, message: 'Admin successfully updated.'})
+
+    }catch(err : any){
+        res.status(500).json({ message: err.message || "Server Error" });   
     }
 }
