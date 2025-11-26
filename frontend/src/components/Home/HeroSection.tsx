@@ -37,6 +37,11 @@ const HeroSection = () => {
           </button>
         </div>
       </motion.div>
+      <img
+        src="/illustration.png"
+        alt="Evergreen illustration"
+        className="absolute bottom-0 w-full max-h-[500px] object-cover opacity-90"
+      />
     </section>
   );
 };
