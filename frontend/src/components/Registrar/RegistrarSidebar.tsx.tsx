@@ -11,7 +11,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { logout } from "../../utils/auth";
-import { SidebarButton } from "../Button";
+import { NavigationButton } from "../Button";
 
 const RegistrarSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -68,11 +68,11 @@ const RegistrarSidebar = () => {
             {/* Sidebar buttons */}
             <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
             {menuItems.map((item) => (
-                <SidebarButton
-                key={item.label}
-                icon={item.icon}
-                label={item.label}
-                to={item.to}
+                <NavigationButton
+                    key={item.label}
+                    icon={item.icon}
+                    label={item.label}
+                    to={item.to}
                 />
             ))}
             <button

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BookOpen, LogOutIcon, ShieldAlert, Menu, X, Trophy, Leaf } from "lucide-react";
 import { logout } from "../../utils/auth";
-import { SidebarButton } from "../Button";
+import { NavigationButton } from "../Button";
 
 const StudentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +32,9 @@ const StudentHeader = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-2">
-              <SidebarButton icon={<BookOpen size={20} />} label="Your Grades" to="/student" />
-              <SidebarButton icon={<Trophy size={20} />} label="Ranking" to="/student/ranking" />
-              <SidebarButton icon={<ShieldAlert size={20} />} label="Security" to="/student/security" />
+              <NavigationButton icon={<BookOpen size={20} />} label="Your Grades" to="/student" />
+              <NavigationButton icon={<Trophy size={20} />} label="Ranking" to="/student/ranking" />
+              <NavigationButton icon={<ShieldAlert size={20} />} label="Security" to="/student/security" />
               
               <div className="mx-2 h-8 w-px bg-emerald-500"></div>
               
@@ -71,9 +71,9 @@ const StudentHeader = () => {
                 </span>
               </div>
               
-              <SidebarButton icon={<BookOpen size={20} />} label="Your Grades" to="/student" />
-              <SidebarButton icon={<Trophy size={20} />} label="Ranking" to="/student/ranking" />
-              <SidebarButton icon={<ShieldAlert size={20} />} label="Security" to="/student/security" />
+              <NavigationButton icon={<BookOpen size={20} />} label="Your Grades" to="/student" />
+              <NavigationButton icon={<Trophy size={20} />} label="Ranking" to="/student/ranking" />
+              <NavigationButton icon={<ShieldAlert size={20} />} label="Security" to="/student/security" />
               
               <button
                 className="hover:bg-emerald-900 flex items-center gap-3 py-2.5 px-3 rounded-lg transition cursor-pointer w-full mt-4"

@@ -46,6 +46,7 @@ const StudentSubjectSchema: Schema<IStudentSubject> = new Schema(
       type: String,
       required: true,
       trim: true,
+      match: [/^(0?[1-9]|1[0-2]):[0-5]\d\s?(AM|PM)$/i, "Invalid time format (expected HH:MM AM/PM)"],
     },
     units: {
       type: Number,

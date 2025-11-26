@@ -16,27 +16,25 @@ const Navbar = () => {
     {
       label: "Home",
       onClick: () => {
-        if (pathname === "/courses") {
-          navigate("/");
-          return;
+        if (pathname !== "/") {
+          navigate("/", { state: { scrollTo: "home" } });
+        } else {
+          scrollToSection("home");
         }
-        scrollToSection("home");
       },
-    },
-    {
-      label: "Courses",
-      onClick: () => (window.location.href = "/courses"),
     },
     {
       label: "About",
       onClick: () => {
-        if (pathname === "/courses") {
-          navigate("/");
+        if (pathname !== "/") {
+          navigate("/", { state: { scrollTo: "about" } });
+        } else {
+          scrollToSection("about");
         }
-        scrollToSection("about");
       },
     },
   ];
+
 
   return (
     <>
@@ -48,7 +46,7 @@ const Navbar = () => {
             <div className="bg-gradient-to-br from-emerald-500 to-emerald-700 p-2.5 rounded-xl shadow-lg group-hover:shadow-emerald-200 transition-all duration-300">
               <Leaf className="text-white w-6 h-6" />
             </div>
-            <div className="hidden sm:block">
+            <div>
               <h1 className="text-emerald-700 text-xl font-bold tracking-tight">
                 Evergreen College
               </h1>
@@ -56,27 +54,23 @@ const Navbar = () => {
                 Excellence in Education
               </p>
             </div>
-            <div className="block sm:hidden">
-              <h1 className="text-emerald-700 text-lg font-bold">Evergreen</h1>
-            </div>
           </a>
-
-          {/* Desktop Menu */}
-          <ul className="hidden lg:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <button
-                  onClick={item.onClick}
-                  className="cursor-pointer px-5 py-2.5 text-emerald-700 font-semibold rounded-lg hover:bg-emerald-50 hover:text-emerald-800 transition-all duration-200"
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
-          </ul>
 
           {/* Desktop Login */}
           <div className="hidden lg:flex items-center gap-3">
+            <ul className="hidden lg:flex items-center space-x-1">
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={item.onClick}
+                    className="cursor-pointer px-5 py-2.5 text-emerald-700 font-semibold rounded-lg hover:bg-emerald-50 hover:text-emerald-800 transition-all duration-200"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+
             <a
               href="/login"
               className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-emerald-800 shadow-md hover:shadow-lg transition-all duration-200"
@@ -108,7 +102,7 @@ const Navbar = () => {
                       item.onClick();
                       closeMenu();
                     }}
-                    className="w-full text-left px-4 py-3 text-emerald-700 font-semibold rounded-lg hover:bg-white hover:shadow-sm transition-all duration-200"
+                    className="cursor-pointer w-full text-left px-4 py-3 text-emerald-700 font-semibold rounded-lg hover:bg-emerald-200 hover:shadow-sm transition-all duration-200"
                   >
                     {item.label}
                   </button>
@@ -129,7 +123,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-    <div className="h-16"></div>
+    <div className="h-20"></div>
     </>
   );
 };

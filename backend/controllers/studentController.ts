@@ -244,86 +244,99 @@ export const changeStudentPassword = async (req : AuthenticatedRequest , res : R
 }
 
 export const getOverallStudentRankings = async (req: Request, res: Response) => {
-    try {
-        const courseId = req.query.course
-        ? new mongoose.Types.ObjectId(req.query.course as string)
-        : null;
+  try {
+    const courseId = req.query.course
+      ? new mongoose.Types.ObjectId(req.query.course as string)
+      : null;
 
-        const pipeline: any[] = [
-        {
-            $match: {
-            midtermGrade: { $gt: 0 },
-            finalGrade: { $gt: 0 },
-            },
-        },
+    // Pagination params
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
 
-        {
-            $addFields: {
-            finalComputedGrade: {
-                $divide: [{ $add: ["$midtermGrade", "$finalGrade"] }, 2],
-            },
-            },
-        },
-
-        {
-            $group: {
-            _id: "$student_id",
-            gwa: { $avg: "$finalComputedGrade" },       
-            lowestGrade: { $max: "$finalComputedGrade" },  
-            countSubjects: { $sum: 1 },
-            },
-        },
-
-        {
-            $match: {
-            lowestGrade: { $lt: 2.25 }, 
-            gwa: { $lte: 2.25 },   
-            },
-        },
-        { $sort: { gwa: 1 } },
-        {
-            $lookup: {
-            from: "students",
-            localField: "_id",
-            foreignField: "_id",
-            as: "student",
-            },
-        },
-        { $unwind: "$student" },
-        ];
-
-        if (courseId) {
-        pipeline.push({
-            $match: {
-            "student.course": courseId,
-            },
-        });
-        }
-
-        pipeline.push({
+    const pipeline: any[] = [
+      {
         $match: {
-            "student.status": "Active",
+          midtermGrade: { $gt: 0 },
+          finalGrade: { $gt: 0 },
         },
-        });
-
-        pipeline.push({
-        $project: {
-            _id: "$student._id",
-            student_id: "$student.student_id",
-            firstname: "$student.firstname",
-            lastname: "$student.lastname",
-            year_level: '$student.year_level',
-            gwa: 1,
-            lowestGrade: 1,
-            countSubjects: 1,
+      },
+      {
+        $addFields: {
+          finalComputedGrade: {
+            $divide: [{ $add: ["$midtermGrade", "$finalGrade"] }, 2],
+          },
         },
-        });
+      },
+      {
+        $group: {
+          _id: "$student_id",
+          gwa: { $avg: "$finalComputedGrade" },
+          lowestGrade: { $max: "$finalComputedGrade" },
+          countSubjects: { $sum: 1 },
+        },
+      },
+      {
+        $match: {
+          lowestGrade: { $lt: 2.25 },
+          gwa: { $lte: 2.25 },
+        },
+      },
+      { $sort: { gwa: 1 } },
+      {
+        $lookup: {
+          from: "students",
+          localField: "_id",
+          foreignField: "_id",
+          as: "student",
+        },
+      },
+      { $unwind: "$student" },
+    ];
 
-        const rankings = await StudentSubject.aggregate(pipeline);
-
-        res.status(200).json({ success: true, rankings });
-    } catch (error: any) {
-        console.error("Error fetching student rankings:", error);
-        res.status(500).json({ success: false, message: error.message || "Server Error" });
+    if (courseId) {
+      pipeline.push({
+        $match: {
+          "student.course": courseId,
+        },
+      });
     }
+
+    pipeline.push({
+      $match: {
+        "student.status": "Active",
+      },
+    });
+
+    pipeline.push({
+      $project: {
+        _id: "$student._id",
+        student_id: "$student.student_id",
+        firstname: "$student.firstname",
+        lastname: "$student.lastname",
+        year_level: "$student.year_level",
+        gwa: 1,
+        lowestGrade: 1,
+        countSubjects: 1,
+      },
+    });
+
+    // Add pagination
+    pipeline.push({ $skip: skip });
+    pipeline.push({ $limit: limit });
+
+    const rankings = await StudentSubject.aggregate(pipeline);
+
+    const countPipeline = [...pipeline];
+    countPipeline.pop(); // remove $limit
+    countPipeline.pop(); // remove $skip
+    countPipeline.push({ $count: "total" });
+    const totalCountResult = await StudentSubject.aggregate(countPipeline);
+    const total = totalCountResult[0]?.total || 0;
+
+    res.status(200).json({ success: true, rankings, page, total, totalPage: Math.ceil(total / limit) });
+  } catch (error: any) {
+    console.error("Error fetching student rankings:", error);
+    res.status(500).json({ success: false, message: error.message || "Server Error" });
+  }
 };

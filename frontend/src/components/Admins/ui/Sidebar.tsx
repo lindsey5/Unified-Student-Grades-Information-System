@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { logout } from "../../../utils/auth";
-import { SidebarButton } from "../../Button";
+import { NavigationButton } from "../../Button";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +71,7 @@ const Sidebar = () => {
         {/* Sidebar buttons */}
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
           {menuItems.map((item) => (
-            <SidebarButton
+            <NavigationButton
               key={item.label}
               icon={item.icon}
               label={item.label}

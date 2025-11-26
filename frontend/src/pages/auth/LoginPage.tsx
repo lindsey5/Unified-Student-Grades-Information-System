@@ -37,7 +37,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-emerald-100 to-teal-100 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-100 to-white flex items-center justify-center p-4">
         <div className="w-full max-w-md">
             {/* Card */}
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">

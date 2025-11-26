@@ -43,13 +43,13 @@ export const AddButton = ({ onClick, label = "Add" }: ButtonProps) => {
   );
 };
 
-interface SidebarButtonProps {
+interface NavigationButtonProps {
   icon: ReactNode;
   label: string;
   to: string;
 }
 
-export const SidebarButton = ({ icon, label, to }: SidebarButtonProps) => {
+export const NavigationButton = ({ icon, label, to }: NavigationButtonProps) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
