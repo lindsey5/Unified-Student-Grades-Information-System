@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
+import { grades } from "../constants/grade";
 
 export interface IStudentSubject extends Document {
   student_id: Types.ObjectId;
@@ -12,6 +13,7 @@ export interface IStudentSubject extends Document {
   instructor: Types.ObjectId;
   midtermGrade: number;
   finalGrade: number;
+  isFinalized: boolean;
 }
 
 const StudentSubjectSchema: Schema<IStudentSubject> = new Schema(
@@ -63,11 +65,17 @@ const StudentSubjectSchema: Schema<IStudentSubject> = new Schema(
     midtermGrade: {
       type: Number,
       default: 0,
+      enum: grades
     },
     finalGrade: {
       type: Number,
       default: 0,
+      enum: grades
     },
+    isFinalized: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

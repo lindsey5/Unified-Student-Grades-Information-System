@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle, Slash, GraduationCap, XCircle } from "lucide-react";
+import { CheckCircle, Slash, GraduationCap, XCircle, AlertCircle } from "lucide-react";
 
 type Status = "Active" | "Inactive" | "Graduated";
 
@@ -52,25 +52,34 @@ type GradeStatusChipProps = {
 };
 
 export const GradeStatusChip = ({ grade, size = "md" }: GradeStatusChipProps) => {
-    const isPassed = grade <= 3.0;
+  const isIncomplete = grade === 0;
 
-    const statusConfig = isPassed
-        ? {
-            bg: "bg-emerald-50",
-            border: "border-emerald-200",
-            text: "text-emerald-700",
-            icon: CheckCircle,
-            label: "Passed",
-            dotColor: "bg-emerald-500",
-        }
-        : {
-            bg: "bg-red-50",
-            border: "border-red-200",
-            text: "text-red-700",
-            icon: XCircle,
-            label: "Failed",
-            dotColor: "bg-red-500",
-        };
+  const statusConfig = isIncomplete
+    ? {
+        bg: "bg-yellow-50",
+        border: "border-yellow-200",
+        text: "text-yellow-700",
+        icon: AlertCircle,
+        label: "INC",
+        dotColor: "bg-yellow-500",
+      }
+    : grade <= 3.0
+    ? {
+        bg: "bg-emerald-50",
+        border: "border-emerald-200",
+        text: "text-emerald-700",
+        icon: CheckCircle,
+        label: "Passed",
+        dotColor: "bg-emerald-500",
+      }
+    : {
+        bg: "bg-red-50",
+        border: "border-red-200",
+        text: "text-red-700",
+        icon: XCircle,
+        label: "Failed",
+        dotColor: "bg-red-500",
+      };
 
     const sizeConfig = {
         sm: {

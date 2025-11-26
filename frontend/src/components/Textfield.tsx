@@ -13,7 +13,7 @@ export const EmeraldTextField = styled((props: TextFieldProps) => (
       borderColor: "#059669", // emerald-600
     },
     "&.Mui-focused fieldset": {
-      borderColor: "rgba(0, 185, 127, 1)", // emerald-700
+      borderColor: "#00b97fff", // emerald-700
     },
   },
   "& .MuiInputLabel-root.Mui-focused": {

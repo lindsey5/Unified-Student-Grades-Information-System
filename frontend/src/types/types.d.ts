@@ -67,6 +67,7 @@ interface StudentSubject {
     instructor: Instructor;
     midtermGrade: number;
     finalGrade: number;
+    isFinalized: boolean;
 }
 
 interface Admin {

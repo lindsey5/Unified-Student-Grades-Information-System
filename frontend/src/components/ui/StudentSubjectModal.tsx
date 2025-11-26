@@ -1,4 +1,4 @@
-import { Chip, Modal } from "@mui/material";
+import { Chip, MenuItem, Modal } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { EmeraldTextField, SearchDropdown } from "../Textfield";
@@ -7,6 +7,9 @@ import { postData, updateData } from "../../utils/api";
 import LoadingScreen from "../LoadingScreen";
 import useFetch from "../../hooks/useFetch";
 import { useDebounce } from "../../hooks/useDebounce";
+import { EmeraldSelect } from "../Select";
+import { grades } from "../../contants/grades";
+import { EmeraldCheckBox } from "../Checkbox";
 
 interface StudentSubjectModalProps {
     isOpen: boolean;
@@ -209,25 +212,32 @@ const StudentSubjectModal = ({
 
             </div>
 
-            {studentSubject && <div className="w-full grid grid-cols-2 gap-3">
-                <EmeraldTextField
-                    label="Midterm Grade"
-                    value={subject?.midtermGrade || ""}
-                    type="number"
-                    fullWidth
-                    onChange={(e) => handleChange("midtermGrade", Number(e.target.value))}
-                    placeholder="Enter Midterm Grade"
-                />
+            {studentSubject && <>
+                <div className="w-full grid grid-cols-2 gap-3">
+                    <EmeraldSelect
+                        value={subject?.midtermGrade}
+                        disabled={studentSubject?.isFinalized}
+                        onChange={(e) => handleChange("midtermGrade", Number(e.target.value))}
+                        displayEmpty
+                        label="Midterm Grade"
+                    >
+                        {grades.map(grade => <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>)}
+                    </EmeraldSelect>
 
-                <EmeraldTextField
-                    label="Final Grade"
-                    fullWidth
-                    value={subject?.finalGrade || ""}
-                    type="number"
-                    onChange={(e) => handleChange("finalGrade", Number(e.target.value))}
-                    placeholder="Enter Final Grade"
-                />
-            </div>}
+                    <EmeraldSelect
+                        value={subject?.finalGrade}
+                        disabled={studentSubject?.isFinalized}
+                        onChange={(e) => handleChange("finalGrade", Number(e.target.value))}
+                        displayEmpty
+                        label="Final Grade"
+                    >
+                        {grades.map(grade => <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>)}
+                    </EmeraldSelect>
+                </div>
+                {!studentSubject.isFinalized && <div className="flex justify-end">
+                    <EmeraldCheckBox label="Finalized Grades" checked={subject?.isFinalized || false} onChange={(e) => handleChange("isFinalized", e.target.checked)}/>
+                </div>}
+            </>}
             {/* Actions */}
             <div className="w-full flex justify-end gap-2 mt-6">
             <button
