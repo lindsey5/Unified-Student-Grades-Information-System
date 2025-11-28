@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AddButton, EditButton } from "../components/Button";
-import InstructorModal from "../components/Admins/Modals/InstructorModal";
+import InstructorModal from "../components/ui/Modals/InstructorModal";
 import useFetch from "../hooks/useFetch";
 import { useDebounce } from "../hooks/useDebounce";
 import { SearchField } from "../components/Textfield";

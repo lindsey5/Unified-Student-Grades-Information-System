@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AddButton, DeleteButton, EditButton } from "../../components/Button";
-import AdminModal from "../../components/Admins/Modals/AdminModal";
+import AdminModal from "../../components/ui/Modals/AdminModal";
 import useFetch from "../../hooks/useFetch";
 import EmeraldTable from "../../components/Table";
 import { CircularProgress } from "@mui/material";

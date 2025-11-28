@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { RegistrarContext } from "../contexts/RegistrarContext";
-import RegistrarProfileSettings from "../components/Registrar/RegistrarProfileSettings";
+import ProfileSettings from "../components/ui/ProfileSettings";
 
 const RegistrarProfile = () => {
     const { registrar } = useContext(RegistrarContext);
@@ -23,7 +23,7 @@ const RegistrarProfile = () => {
                         <p>{registrar?.email}</p>
                     </div>
                 </div>
-                <RegistrarProfileSettings registrar={registrar}/>
+                <ProfileSettings<Registrar> user={registrar as Registrar} apiUrl="/api/registrars"/>
             </div>
         </div>
         </div>

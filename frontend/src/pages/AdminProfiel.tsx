@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AdminContext } from "../contexts/AdminContext";
-import AdminProfileSettings from "../components/Admins/ui/AdminProfileSettings";
+import ProfileSettings from "../components/ui/ProfileSettings";
 
 const AdminProfile = () => {
     const { admin } = useContext(AdminContext);
@@ -23,7 +23,7 @@ const AdminProfile = () => {
                         <p>{admin?.email}</p>
                     </div>
                 </div>
-                <AdminProfileSettings admin={admin}/>
+                <ProfileSettings<Admin> user={admin as Admin} apiUrl="/api/admins"/>
             </div>
         </div>
         </div>

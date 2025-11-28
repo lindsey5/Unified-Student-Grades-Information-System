@@ -5,7 +5,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { SearchField } from "../../components/Textfield";
 import { CircularProgress } from "@mui/material";
 import EmeraldTable from "../../components/Table";
-import RegistrarModal from "../../components/Admins/Modals/RegistrarModal";
+import RegistrarModal from "../../components/ui/Modals/RegistrarModal";
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { deleteData } from "../../utils/api";
 

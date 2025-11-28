@@ -89,7 +89,7 @@ interface Option {
 }
 
 interface Registrar {
-    _id?: string;
+    _id: string;
     firstname: string;
     lastname: string;
     email: string;
