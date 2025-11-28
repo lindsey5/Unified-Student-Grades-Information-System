@@ -1,11 +1,17 @@
 import { useState } from "react";
 import EmeraldTable from "../Table"
 import useFetch from "../../hooks/useFetch"
+import { Pagination } from "@mui/material";
 
 const StudentRankingTable = () => {
     const [selectedCourse, setSelectedCourse] = useState<string>('all');
-    const { data } = useFetch(`/api/students/ranking?course=${selectedCourse === 'all' ? '' : selectedCourse}`);
+    const [page, setPage] = useState(1);
+    const { data } = useFetch(`/api/students/ranking?page=${page}&limit=50&course=${selectedCourse === 'all' ? '' : selectedCourse}`);
     const { data: coursesData } = useFetch("/api/courses");
+    
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
     
     return (
         <div className="flex flex-col gap-5 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
@@ -39,6 +45,15 @@ const StudentRankingTable = () => {
                     'GWA' : ranking.gwa
                 })) || []}
             />
+            {/* Pagination */}
+            {data?.rankings.length > 0 && (
+                    <Pagination
+                    page={page}
+                    count={data?.totalPages || 1}
+                    onChange={handleChange}
+                    color="primary"
+                />
+            )}
         </div>
     )
 }

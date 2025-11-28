@@ -7,7 +7,7 @@ export const createAdmin = async (req : Request, res : Response) => {
         const isExists = await Admin.findOne({ email: req.body.email, status: 'active' });
 
         if(isExists){
-            res.status(409).json({ message: 'Email already exists.'})
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'})
             return;
         }
 
@@ -65,7 +65,7 @@ export const editAdmin = async (req : Request, res : Response) => {
         const isExists = await Admin.findOne({ email: req.body.email, status: 'active', _id: { $ne: req.params.id } });
 
         if(isExists){
-            res.status(409).json({ message: 'Email already exists.'})
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'})
             return;
         }
 

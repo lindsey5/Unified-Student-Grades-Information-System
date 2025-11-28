@@ -107,14 +107,14 @@ const AdminModal = ({ isOpen, onClose, admin }: AdminModalProps) => {
             margin="normal"
             />
 
-            <EmeraldTextField
-            label={admin ? "New Password (optional)" : "Password"}
+            {!admin && <EmeraldTextField
+            label={"Password"}
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
             margin="normal"
-            />
+            />}
 
             <div className="flex justify-end gap-2 mt-4">
             <button

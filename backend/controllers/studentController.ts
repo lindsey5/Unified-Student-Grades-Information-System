@@ -12,7 +12,7 @@ export const createStudent = async (req : Request, res : Response) => {
 
         const isExist = await Student.findOne({ email: req.body.email });
         if(isExist){
-            res.status(409).json({ message: 'Email already exists'});
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'});
             return;
         }
 
@@ -97,7 +97,7 @@ export const editStudent = async (req : Request, res : Response) => {
         
         const isExist = await Student.findOne({ email: req.body.email, _id: { $ne: id} });
         if(isExist){
-            res.status(409).json({ message: 'Email already exists'});
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'});
             return;
         }
 
@@ -334,7 +334,7 @@ export const getOverallStudentRankings = async (req: Request, res: Response) => 
     const totalCountResult = await StudentSubject.aggregate(countPipeline);
     const total = totalCountResult[0]?.total || 0;
 
-    res.status(200).json({ success: true, rankings, page, total, totalPage: Math.ceil(total / limit) });
+    res.status(200).json({ success: true, rankings, page, total, totalPages: Math.ceil(total / limit) });
   } catch (error: any) {
     console.error("Error fetching student rankings:", error);
     res.status(500).json({ success: false, message: error.message || "Server Error" });

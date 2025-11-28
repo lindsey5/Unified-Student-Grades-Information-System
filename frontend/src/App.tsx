@@ -18,6 +18,7 @@ import CoursesPage from './pages/Home/Courses'
 import StudentRankings from './pages/student/Rankings'
 import Registrars from './pages/admin/Registrars'
 import RegistrarLayout from './layouts/RegistrarLayout'
+import RegistrarProfile from './pages/RegistrarProfile'
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path='grades/:id' element={<StudentGrades />} />
           <Route path='subjects' element={<Subjects />} />
           <Route path='instructors' element={<Instructors />} />
+          <Route path='profile' element={<RegistrarProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>

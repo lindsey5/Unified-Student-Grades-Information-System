@@ -9,6 +9,7 @@ import {
   Building2,
   BookOpen,
   UserCheck,
+  User,
 } from "lucide-react";
 import { logout } from "../../utils/auth";
 import { NavigationButton } from "../Button";
@@ -23,7 +24,8 @@ const RegistrarSidebar = () => {
         { icon: <UserCheck size={20} />, label: "Instructors", to: "/registrar/instructors" },
         { icon: <GraduationCap size={20} />, label: "Students", to: "/registrar/students" },
         { icon: <BookMarked size={20} />, label: "Subjects", to: "/registrar/subjects" },
-    ];
+        { icon: <User size={20} />, label: "Profile", to: "/registrar/profile" }, 
+    ]
 
     return (
         <>
