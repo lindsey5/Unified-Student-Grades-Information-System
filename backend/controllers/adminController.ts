@@ -85,3 +85,29 @@ export const editAdmin = async (req : Request, res : Response) => {
         res.status(500).json({ message: err.message || "Server Error" });   
     }
 }
+
+export const editAdminProfile = async (req : AuthenticatedRequest, res : Response) => {
+    try{
+        const isExists = await Admin.findOne({ email: req.body.email, status: 'active', _id: { $ne: req.user_id } });
+
+        if(isExists){
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'})
+            return;
+        }
+
+        const admin = await Admin.findById(req.user_id);
+
+        if(!admin){
+            res.status(404).json({ message: "Admin not found."})
+            return;
+        }
+        admin.set(req.body);
+
+        await admin.save();
+
+        res.status(200).json({ success: true, message: 'Your profile successfully updated.'})
+
+    }catch(err : any){
+        res.status(500).json({ message: err.message || "Server Error" });   
+    }
+}

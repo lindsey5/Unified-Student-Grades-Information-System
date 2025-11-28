@@ -100,3 +100,34 @@ export const editRegistrar = async (req : AuthenticatedRequest, res : Response) 
         res.status(500).json({ message: err.message || 'Server Error.'});
     }
 }
+
+export const editRegistrarThroughParams = async (req : Request, res : Response) => {
+    try{
+        const { email, firstname ,lastname, password } = req.body;
+        const registrar = await Registrar.findById(req.params.id);
+
+        if(!registrar){
+            res.status(404).json({ message: 'Registrar not found.'})
+            return;
+        }
+
+        const isEmailExist = await Registrar.findOne({ email, _id: { $ne: req.params.id }});
+
+        if(isEmailExist){
+            res.status(409).json({ message: 'Please use a different email — this one is taken.'});
+            return;
+        }
+
+        registrar.email = email || registrar.email;
+        registrar.firstname = firstname || registrar.firstname;
+        registrar.lastname = lastname || registrar.lastname;
+        if(password) registrar.password = password;
+
+        await registrar.save();
+        
+        res.status(200).json({ success: true, message: "Registrar updated successfully.",});
+
+    }catch(err : any){
+        res.status(500).json({ message: err.message || 'Server Error.'});
+    }
+}

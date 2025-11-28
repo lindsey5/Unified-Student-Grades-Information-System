@@ -65,7 +65,7 @@ const RegistrarModal = ({ isOpen, onClose, registrar }: AdminModalProps) => {
             : await postData("/api/registrars", payload);
 
         if (!response.success) {
-            errorAlert("Error", response.message || "Error saving admin.");
+            errorAlert("Error", response.message || "Error saving registrar.");
             setLoading(false);
             return;
         }

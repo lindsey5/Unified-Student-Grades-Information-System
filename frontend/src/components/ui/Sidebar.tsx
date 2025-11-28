@@ -1,33 +1,19 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
-  LayoutDashboard,
-  Building2,
-  BookOpen,
-  UserCheck,
-  BookMarked,
   GraduationCap,
-  Shield,
-  IdCard,
   LogOutIcon,
   Menu,
   X,
 } from "lucide-react";
-import { logout } from "../../../utils/auth";
-import { NavigationButton } from "../../Button";
+import { logout } from "../../utils/auth";
+import { NavigationButton } from "../Button";
 
-const Sidebar = () => {
+const Sidebar = ({ menuItems, user } : { 
+    menuItems: { icon : ReactNode, label: string, to: string }[];
+    user: 'Admin' | 'Registrar'
+}
+) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const menuItems = [
-    { icon: <LayoutDashboard size={20} />, label: "Dashboard", to: "/admin" },
-    { icon: <Building2 size={20} />, label: "Departments", to: "/admin/departments" },
-    { icon: <BookOpen size={20} />, label: "Courses", to: "/admin/courses" },
-    { icon: <GraduationCap size={20} />, label: "Students", to: "/admin/students" },
-    { icon: <UserCheck size={20} />, label: "Instructors", to: "/admin/instructors" },
-    { icon: <BookMarked size={20} />, label: "Subjects", to: "/admin/subjects" },
-    { icon: <Shield size={20} />, label: "Admins", to: "/admin/admins" },
-    { icon: <IdCard size={20} />, label: "Registrars", to: "/admin/registrars" },
-  ];
 
   return (
     <>
@@ -64,7 +50,7 @@ const Sidebar = () => {
             </div>
 
             <span className="text-sm font-medium bg-emerald-600 px-3 py-1 rounded-full text-white shadow">
-                Admin
+            {user}
             </span>
         </div>
 

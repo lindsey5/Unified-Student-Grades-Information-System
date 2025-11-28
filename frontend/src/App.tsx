@@ -19,6 +19,7 @@ import StudentRankings from './pages/student/Rankings'
 import Registrars from './pages/admin/Registrars'
 import RegistrarLayout from './layouts/RegistrarLayout'
 import RegistrarProfile from './pages/RegistrarProfile'
+import AdminProfile from './pages/AdminProfiel'
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path='instructors' element={<Instructors />} />
           <Route path='admins' element={<Admins />} />
           <Route path='registrars' element={<Registrars />} />
+          <Route path='profile' element={<AdminProfile />} />
         </Route>
         <Route path='student' element={<StudentLayout />}>
           <Route index element={<Grades />} />
