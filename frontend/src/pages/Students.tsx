@@ -3,11 +3,11 @@ import useFetch from "../hooks/useFetch";
 import { AddButton, DeleteButton, EditButton } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { MenuItem, Pagination, CircularProgress } from "@mui/material";
-import EmeraldTable from "../components/Table";
+import RedTable from "../components/Table";
 import { useDebounce } from "../hooks/useDebounce";
 import { useState } from "react";
 import { SearchField } from "../components/Textfield";
-import { EmeraldSelect } from "../components/Select";
+import { RedSelect } from "../components/Select";
 import { confirmDialog, errorAlert, successAlert } from "../utils/swal";
 import { deleteData } from "../utils/api";
 import StatusChip from "../components/Chip";
@@ -57,7 +57,7 @@ const Students = ({ role } : { role : string}) => {
     return (
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-emerald-700">Students</h1>
+            <h1 className="text-2xl font-bold text-red-700">Students</h1>
             <AddButton onClick={() => navigate(`/${role}/student`)} label="Add Student" />
         </div>
 
@@ -73,7 +73,7 @@ const Students = ({ role } : { role : string}) => {
             />
             </div>
             <div className="w-full md:w-64">
-            <EmeraldSelect
+            <RedSelect
                 value={seleectedStatus}
                 onChange={(e) => {
                     setSelectedStatus(e.target.value)
@@ -85,10 +85,10 @@ const Students = ({ role } : { role : string}) => {
                 <MenuItem value="Active">Active</MenuItem>
                 <MenuItem value="Graduated">Graduated</MenuItem>
                 <MenuItem value="Inactive">Inactive</MenuItem>
-            </EmeraldSelect>
+            </RedSelect>
             </div>
             <div className="w-full md:w-64">
-            <EmeraldSelect
+            <RedSelect
                 value={selectedCourse}
                 onChange={(e) => {
                     setSelectedCourse(e.target.value)
@@ -103,18 +103,18 @@ const Students = ({ role } : { role : string}) => {
                     {c.name}
                 </MenuItem>
                 ))}
-            </EmeraldSelect>
+            </RedSelect>
             </div>
         </div>
 
         {/* Loading State */}
         {loading ? (
             <div className="w-full flex justify-center items-center h-64">
-            <CircularProgress sx={{ color: "#10b981" }} /> {/* Emerald Spinner */}
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : (
             <>
-            <EmeraldTable
+            <RedTable
                 columns={[
                 "Fullname",
                 "Student ID",

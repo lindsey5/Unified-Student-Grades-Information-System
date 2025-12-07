@@ -1,7 +1,7 @@
 import { Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Upload, Check } from "lucide-react";
-import { EmeraldTextField } from "../Textfield";
+import { RedTextField } from "../Textfield";
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { postData, updateData } from "../../utils/api";
 import LoadingScreen from "../LoadingScreen";
@@ -36,13 +36,17 @@ const DepartmentModal = ({ isOpen, onClose, department }: AddDepartmentModalProp
   const handleAddDepartment = async () => {
     const action = department ? "update" : "add";
 
-    // 👇 confirmDialog now has a title + submessage
-    if (await confirmDialog(
-      "Are you sure?", 
-      `Do you really want to ${action} this department?`
-    )) {
+    if (
+      await confirmDialog(
+        "Are you sure?",
+        `Do you really want to ${action} this department?`
+      )
+    ) {
       if (!departmentName || !image) {
-        errorAlert("Missing Information", "Please provide both department name and image.");
+        errorAlert(
+          "Missing Information",
+          "Please provide both department name and image."
+        );
         return;
       }
 
@@ -50,7 +54,10 @@ const DepartmentModal = ({ isOpen, onClose, department }: AddDepartmentModalProp
 
       const response = !department
         ? await postData("/api/departments", { name: departmentName, image })
-        : await updateData(`/api/departments/${department._id}`, { name: departmentName, image });
+        : await updateData(`/api/departments/${department._id}`, {
+            name: departmentName,
+            image,
+          });
 
       if (!response.success) {
         errorAlert("Error", response.message || "Failed to save department.");
@@ -62,19 +69,18 @@ const DepartmentModal = ({ isOpen, onClose, department }: AddDepartmentModalProp
     }
   };
 
-
   return (
     <Modal open={isOpen} onClose={onClose} sx={{ zIndex: 1 }}>
       <div className="absolute top-1/2 left-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-5">
         <LoadingScreen loading={loading} />
 
         {/* Title */}
-        <h2 className="text-lg font-semibold text-emerald-700 mb-4">
+        <h2 className="text-lg font-semibold text-red-700 mb-4">
           {department ? "Edit Department" : "Add Department"}
         </h2>
 
         {/* Department Name */}
-        <EmeraldTextField
+        <RedTextField
           label="Department Name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
@@ -93,7 +99,7 @@ const DepartmentModal = ({ isOpen, onClose, department }: AddDepartmentModalProp
           />
           <label
             htmlFor="upload-image"
-            className="flex items-center justify-center gap-2 px-4 py-2 border rounded-md cursor-pointer text-emerald-700 hover:bg-emerald-50 transition"
+            className="flex items-center justify-center gap-2 px-4 py-2 border rounded-md cursor-pointer text-red-700 hover:bg-red-50 transition"
           >
             <Upload size={18} />
             <span>Upload Image</span>
@@ -121,7 +127,7 @@ const DepartmentModal = ({ isOpen, onClose, department }: AddDepartmentModalProp
           </button>
           <button
             onClick={handleAddDepartment}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
           >
             <Check size={18} />
             Save

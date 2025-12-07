@@ -11,7 +11,7 @@ export const EditButton = ({ onClick, label = "Edit" }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="cursor-pointer flex items-center gap-1.5 px-2.5 py-1.5 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 border border-gray-200 rounded-lg transition-all"
+      className="cursor-pointer flex items-center gap-1.5 px-2.5 py-1.5 text-gray-700 hover:bg-gray-100 hover:text-red-600 border border-gray-200 rounded-lg transition-all"
     >
       <Pencil size={15} />
       <span className="text-sm">{label}</span>
@@ -35,7 +35,7 @@ export const AddButton = ({ onClick, label = "Add" }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="cursor-pointer flex items-center gap-2 py-2 px-4 mb-4 bg-emerald-600 text-white rounded-lg shadow-sm hover:bg-emerald-700 hover:shadow-md transition-all"
+      className="cursor-pointer flex items-center gap-2 py-2 px-4 mb-4 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 hover:shadow-md transition-all"
     >
       <Plus size={18} />
       <span className="text-sm font-medium">{label}</span>
@@ -57,7 +57,7 @@ export const NavigationButton = ({ icon, label, to }: NavigationButtonProps) => 
     <Link
       to={to}
       className={`flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer
-        ${isActive ? "bg-emerald-600 text-white" : "hover:bg-emerald-800"}`}
+        ${isActive ? "bg-red-600 text-white" : "hover:bg-red-800"}`}
     >
       {icon}
       <span>{label}</span>

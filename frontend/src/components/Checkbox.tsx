@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
 
-export const EmeraldCheckBox = ({
+export const RedCheckBox = ({
   label,
   checked,
   onChange,
@@ -11,19 +11,19 @@ export const EmeraldCheckBox = ({
 }) => {
   return (
     <FormControlLabel
-        control={(
-            <Checkbox 
-                checked={checked} 
-                onChange={onChange} 
-                sx={{
-                    color: "#059669",
-                    "&.Mui-checked": {
-                    color: "#059669", // checked color
-                    },
-                }}
-            />
-        )}
-        label={label}
+      control={
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          sx={{
+            color: "#dc2626", // red-600
+            "&.Mui-checked": {
+              color: "#b91c1c", // red-700 when checked
+            },
+          }}
+        />
+      }
+      label={label}
     />
   );
 };

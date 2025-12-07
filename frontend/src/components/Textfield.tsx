@@ -4,23 +4,23 @@ import { InputAdornment } from "@mui/material";
 import { Eye, EyeOff, Search } from "lucide-react";
 import { useState } from "react";
 
-// Create a styled TextField with emerald theme
-export const EmeraldTextField = styled((props: TextFieldProps) => (
+export const RedTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
 ))({
   "& .MuiOutlinedInput-root": {
     "&:hover fieldset": {
-      borderColor: "#059669", // emerald-600
+      borderColor: "#dc2626", // red-600
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#00b97fff", // emerald-700
+      borderColor: "#b91c1c", // red-700
     },
   },
   "& .MuiInputLabel-root.Mui-focused": {
-    color: "#059669", // emerald-600
+    color: "#dc2626", // red-600
   },
 });
 
+/* 🔍 SEARCH FIELD */
 interface SearchFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,9 +28,14 @@ interface SearchFieldProps {
   fullWidth?: boolean;
 }
 
-export const SearchField = ({ value, onChange, placeholder = "Search...", fullWidth = true }: SearchFieldProps) => {
+export const SearchField = ({
+  value,
+  onChange,
+  placeholder = "Search...",
+  fullWidth = true,
+}: SearchFieldProps) => {
   return (
-    <EmeraldTextField
+    <RedTextField
       value={value}
       onChange={onChange}
       placeholder={placeholder}
@@ -38,7 +43,7 @@ export const SearchField = ({ value, onChange, placeholder = "Search...", fullWi
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Search size={18} className="text-emerald-600" />
+            <Search size={18} className="text-red-600" />
           </InputAdornment>
         ),
       }}
@@ -46,8 +51,14 @@ export const SearchField = ({ value, onChange, placeholder = "Search...", fullWi
   );
 };
 
+/* 🔽 SEARCH DROPDOWN */
+interface Option {
+  label: string;
+  value: any;
+}
+
 interface SearchDropdownProps {
-  onSelect: (value: any) => void; 
+  onSelect: (value: any) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   options: Option[];
@@ -61,27 +72,28 @@ export const SearchDropdown = ({
   onSelect,
   value,
   placeholder,
-  isLoading
+  isLoading,
 }: SearchDropdownProps) => {
   const [focus, setFocus] = useState<boolean>(false);
 
   return (
     <div className="w-full relative">
-      <EmeraldTextField
+      <RedTextField
         fullWidth
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         onFocus={() => setFocus(true)}
-        onBlur={() => setTimeout(() => setFocus(false), 200)} 
+        onBlur={() => setTimeout(() => setFocus(false), 200)}
       />
+
       {value && focus && (
         <div className="absolute inset-x-0 mt-1 border border-gray-200 bg-white z-50 rounded-md shadow max-h-[300px] overflow-y-auto">
           {options.length > 0 ? (
             options.map((option, idx) => (
               <div
                 key={idx}
-                className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-3 py-2 hover:bg-red-50 cursor-pointer transition"
                 onClick={() => onSelect(option.value)}
               >
                 {option.label}
@@ -98,6 +110,7 @@ export const SearchDropdown = ({
   );
 };
 
+/* 🔐 PASSWORD INPUT (RED THEME) */
 interface PasswordInputProps {
   label: string;
   value: string;
@@ -121,11 +134,13 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
     <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
     <div className="relative">
       <input
-        type={visible ? 'text' : 'password'}
+        type={visible ? "text" : "password"}
         value={value}
         onChange={onChange}
         required
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg 
+                   focus:ring-2 focus:ring-red-500 focus:border-red-500 
+                   outline-none transition-all"
         placeholder={placeholder}
       />
       <button

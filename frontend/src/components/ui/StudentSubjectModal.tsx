@@ -1,15 +1,15 @@
 import { Chip, MenuItem, Modal } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField, SearchDropdown } from "../Textfield";
+import { RedTextField, SearchDropdown } from "../Textfield";
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { postData, updateData } from "../../utils/api";
 import LoadingScreen from "../LoadingScreen";
 import useFetch from "../../hooks/useFetch";
 import { useDebounce } from "../../hooks/useDebounce";
-import { EmeraldSelect } from "../Select";
+import { RedSelect } from "../Select";
 import { grades } from "../../contants/grades";
-import { EmeraldCheckBox } from "../Checkbox";
+import { RedCheckBox } from "../Checkbox";
 
 interface StudentSubjectModalProps {
     isOpen: boolean;
@@ -40,7 +40,6 @@ const StudentSubjectModal = ({
     const [instructorSearch, setInstructorSearch] = useState<string>("");
     const instructorSearchDebounce = useDebounce(instructorSearch, 500);
 
-    // Fetch subjects & instructors
     const { data: subjectsData, loading: subjectsLoading } = useFetch(`/api/subjects?searchTerm=${subjectSearchDebounce}`);
     const { data: instructorsData, loading: instructorsLoading } = useFetch(`/api/instructors?searchTerm=${instructorSearchDebounce}`);
 
@@ -52,47 +51,49 @@ const StudentSubjectModal = ({
         const isEdit = Boolean(subject?._id);
 
         if (
-        await confirmDialog(
-            "Are you sure?",
-            `Do you really want to ${isEdit ? "update" : "add"} this subject?`
-        )
+            await confirmDialog(
+                "Are you sure?",
+                `Do you really want to ${isEdit ? "update" : "add"} this subject?`
+            )
         ) {
-        if (
-            !subject?.subject ||
-            !subject?.section ||
-            !subject?.instructor ||
-            !subject?.time ||
-            !subject?.room ||
-            !subject?.units ||
-            !subject?.hours
-        ) {
-            errorAlert("Missing Information", "Please fill in all required fields.");
-            return;
-        }
+            if (
+                !subject?.subject ||
+                !subject?.section ||
+                !subject?.instructor ||
+                !subject?.time ||
+                !subject?.room ||
+                !subject?.units ||
+                !subject?.hours
+            ) {
+                errorAlert("Missing Information", "Please fill in all required fields.");
+                return;
+            }
 
-        setLoading(true);
+            setLoading(true);
 
-        const payload = {
-            ...subject,
-            student_id: studentId,
-            instructor: subject.instructor._id,
-            subject: subject.subject._id,
-            room: Number(subject?.room),
-            semester: semester?._id,
-            midtermGrade: Number(subject?.midtermGrade || 0),
-            finalGrade: Number(subject?.finalGrade || 0),
-        };
+            const payload = {
+                ...subject,
+                student_id: studentId,
+                instructor: subject.instructor._id,
+                subject: subject.subject._id,
+                room: Number(subject?.room),
+                semester: semester?._id,
+                midtermGrade: Number(subject?.midtermGrade || 0),
+                finalGrade: Number(subject?.finalGrade || 0),
+            };
 
-        const response = isEdit ? await updateData(`/api/student-subjects/${subject._id}`, payload) : await postData("/api/student-subjects", payload);
+            const response = isEdit
+                ? await updateData(`/api/student-subjects/${subject._id}`, payload)
+                : await postData("/api/student-subjects", payload);
 
-        setLoading(false);
+            setLoading(false);
 
-        if (!response.success) {
-            errorAlert("Error", response.message || `Failed to ${isEdit ? "update" : "save"} subject.`);
-            return;
-        }
+            if (!response.success) {
+                errorAlert("Error", response.message || `Failed to ${isEdit ? "update" : "save"} subject.`);
+                return;
+            }
 
-        window.location.reload();
+            window.location.reload();
         }
     };
 
@@ -104,157 +105,172 @@ const StudentSubjectModal = ({
 
     return (
         <Modal open={isOpen} onClose={onClose} sx={{ zIndex: 1 }}>
-        <div className="items-start flex flex-col gap-4 absolute top-1/2 left-1/2 w-[600px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-6">
-            <LoadingScreen loading={loading} />
+            <div className="items-start flex flex-col gap-4 absolute top-1/2 left-1/2 w-[600px] -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-6">
+                
+                <LoadingScreen loading={loading} />
 
-            {/* Title */}
-            <h2 className="text-lg font-semibold text-emerald-700">
-            {isEdit ? "Edit Subject" : "Add Subject"}
-            </h2>
+                {/* Title */}
+                <h2 className="text-lg font-semibold text-red-700">
+                    {isEdit ? "Edit Subject" : "Add Subject"}
+                </h2>
 
-            <h1>
-            Semester: {semester?.term} - {semester?.schoolYear}
-            </h1>
+                <h1>
+                    Semester: {semester?.term} - {semester?.schoolYear}
+                </h1>
 
-            {/* subject selection */}
-            {!subject?.subject && (
-            <SearchDropdown
-                value={subjectSearch}
-                isLoading={subjectsLoading}
-                placeholder="Search subject"
-                onChange={(e) => setSubjectSearch(e.target.value)}
-                onSelect={(value) => handleChange("subject", value)}
-                options={
-                subjectsData?.subjects.map((s: Subject) => ({
-                    label: `${s.code} - ${s.name}`,
-                    value: s,
-                })) || []
-                }
-            />
-            )}
+                {/* Subject selection */}
+                {!subject?.subject && (
+                    <SearchDropdown
+                        value={subjectSearch}
+                        isLoading={subjectsLoading}
+                        placeholder="Search subject"
+                        onChange={(e) => setSubjectSearch(e.target.value)}
+                        onSelect={(value) => handleChange("subject", value)}
+                        options={
+                            subjectsData?.subjects.map((s: Subject) => ({
+                                label: `${s.code} - ${s.name}`,
+                                value: s,
+                            })) || []
+                        }
+                    />
+                )}
 
-            {subject?.subject && (
-            <div className="flex gap-5 items-center">
-                <h1 className="text-gray-500">Subject:</h1>
-                <Chip
-                onDelete={() => setSubject((prev) => ({ ...prev!, subject: undefined }))}
-                label={`${subject.subject.code} - ${subject.subject.name}`}
-                />
-            </div>
-            )}
+                {subject?.subject && (
+                    <div className="flex gap-5 items-center">
+                        <h1 className="text-gray-500">Subject:</h1>
+                        <Chip
+                            onDelete={() => setSubject((prev) => ({ ...prev!, subject: undefined }))}
+                            label={`${subject.subject.code} - ${subject.subject.name}`}
+                        />
+                    </div>
+                )}
 
-            {/* instructor selection */}
-            {!subject?.instructor && (
-            <SearchDropdown
-                value={instructorSearch}
-                isLoading={instructorsLoading}
-                placeholder="Search instructor"
-                onChange={(e) => setInstructorSearch(e.target.value)}
-                onSelect={(value) => handleChange("instructor", value)}
-                options={
-                instructorsData?.instructors.map((i: Instructor) => ({
-                    label: `${i.firstname} ${i.lastname} - ${i.department.name}`,
-                    value: i,
-                })) || []
-                }
-            />
-            )}
+                {/* Instructor selection */}
+                {!subject?.instructor && (
+                    <SearchDropdown
+                        value={instructorSearch}
+                        isLoading={instructorsLoading}
+                        placeholder="Search instructor"
+                        onChange={(e) => setInstructorSearch(e.target.value)}
+                        onSelect={(value) => handleChange("instructor", value)}
+                        options={
+                            instructorsData?.instructors.map((i: Instructor) => ({
+                                label: `${i.firstname} ${i.lastname} - ${i.department.name}`,
+                                value: i,
+                            })) || []
+                        }
+                    />
+                )}
 
-            {subject?.instructor && (
-            <div className="flex gap-5 items-center">
-                <h1 className="text-gray-500">Instructor:</h1>
-                <Chip
-                onDelete={() => setSubject((prev) => ({ ...prev!, instructor: undefined }))}
-                label={`${subject.instructor.firstname} ${subject.instructor.lastname} - ${subject.instructor.department.name}`}
-                />
-            </div>
-            )}
+                {subject?.instructor && (
+                    <div className="flex gap-5 items-center">
+                        <h1 className="text-gray-500">Instructor:</h1>
+                        <Chip
+                            onDelete={() => setSubject((prev) => ({ ...prev!, instructor: undefined }))}
+                            label={`${subject.instructor.firstname} ${subject.instructor.lastname} - ${subject.instructor.department.name}`}
+                        />
+                    </div>
+                )}
 
-            {/* Form Grid */}
-            <div className="w-full grid grid-cols-2 items-center gap-3">
-            <EmeraldTextField
-                label="Time"
-                value={subject?.time}
-                onChange={(e) => handleChange("time", e.target.value)}
-                placeholder="e.g. 9:00 AM"
-            />
+                {/* Form Grid */}
+                <div className="w-full grid grid-cols-2 items-center gap-3">
+                    <RedTextField
+                        label="Time"
+                        value={subject?.time}
+                        onChange={(e) => handleChange("time", e.target.value)}
+                        placeholder="e.g. 9:00 AM"
+                    />
 
-            <EmeraldTextField
-                label="Room"
-                value={subject?.room || ""}
-                type="number"
-                onChange={(e) => handleChange("room", Number(e.target.value))}
-                placeholder="e.g. 203"
-            />
+                    <RedTextField
+                        label="Room"
+                        value={subject?.room || ""}
+                        type="number"
+                        onChange={(e) => handleChange("room", Number(e.target.value))}
+                        placeholder="e.g. 203"
+                    />
 
-            <EmeraldTextField
-                label="Units"
-                value={subject?.units || ""}
-                type="number"
-                onChange={(e) => handleChange("units", Number(e.target.value))}
-                placeholder="e.g. 3"
-            />
+                    <RedTextField
+                        label="Units"
+                        value={subject?.units || ""}
+                        type="number"
+                        onChange={(e) => handleChange("units", Number(e.target.value))}
+                        placeholder="e.g. 3"
+                    />
 
-            <EmeraldTextField
-                label="Hours"
-                value={subject?.hours || ""}
-                type="number"
-                onChange={(e) => handleChange("hours", Number(e.target.value))}
-                placeholder="e.g. 6"
-            />
+                    <RedTextField
+                        label="Hours"
+                        value={subject?.hours || ""}
+                        type="number"
+                        onChange={(e) => handleChange("hours", Number(e.target.value))}
+                        placeholder="e.g. 6"
+                    />
 
-            <EmeraldTextField
-                label="Section"
-                value={subject?.section || ""}
-                onChange={(e) => handleChange("section", e.target.value)}
-                placeholder="e.g. BSIS-4A"
-            />
-
-            </div>
-
-            {studentSubject && <>
-                <div className="w-full grid grid-cols-2 gap-3">
-                    <EmeraldSelect
-                        value={subject?.midtermGrade}
-                        disabled={studentSubject?.isFinalized}
-                        onChange={(e) => handleChange("midtermGrade", Number(e.target.value))}
-                        displayEmpty
-                        label="Midterm Grade"
-                    >
-                        {grades.map(grade => <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>)}
-                    </EmeraldSelect>
-
-                    <EmeraldSelect
-                        value={subject?.finalGrade}
-                        disabled={studentSubject?.isFinalized}
-                        onChange={(e) => handleChange("finalGrade", Number(e.target.value))}
-                        displayEmpty
-                        label="Final Grade"
-                    >
-                        {grades.map(grade => <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>)}
-                    </EmeraldSelect>
+                    <RedTextField
+                        label="Section"
+                        value={subject?.section || ""}
+                        onChange={(e) => handleChange("section", e.target.value)}
+                        placeholder="e.g. BSIS-4A"
+                    />
                 </div>
-                {!studentSubject.isFinalized && <div className="flex justify-end">
-                    <EmeraldCheckBox label="Finalized Grades" checked={subject?.isFinalized || false} onChange={(e) => handleChange("isFinalized", e.target.checked)}/>
-                </div>}
-            </>}
-            {/* Actions */}
-            <div className="w-full flex justify-end gap-2 mt-6">
-            <button
-                onClick={onClose}
-                className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition cursor-pointer"
-            >
-                Cancel
-            </button>
-            <button
-                onClick={handleSaveSubject}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
-            >
-                <Check size={18} />
-                {isEdit ? "Update" : "Save"}
-            </button>
+
+                {studentSubject && (
+                    <>
+                        <div className="w-full grid grid-cols-2 gap-3">
+                            <RedSelect
+                                value={subject?.midtermGrade}
+                                disabled={studentSubject?.isFinalized}
+                                onChange={(e) => handleChange("midtermGrade", Number(e.target.value))}
+                                displayEmpty
+                                label="Midterm Grade"
+                            >
+                                {grades.map((grade) => (
+                                    <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>
+                                ))}
+                            </RedSelect>
+
+                            <RedSelect
+                                value={subject?.finalGrade}
+                                disabled={studentSubject?.isFinalized}
+                                onChange={(e) => handleChange("finalGrade", Number(e.target.value))}
+                                displayEmpty
+                                label="Final Grade"
+                            >
+                                {grades.map((grade) => (
+                                    <MenuItem value={grade}>{grade.toFixed(2)}</MenuItem>
+                                ))}
+                            </RedSelect>
+                        </div>
+
+                        {!studentSubject.isFinalized && (
+                            <div className="flex justify-end">
+                                <RedCheckBox
+                                    label="Finalized Grades"
+                                    checked={subject?.isFinalized || false}
+                                    onChange={(e) => handleChange("isFinalized", e.target.checked)}
+                                />
+                            </div>
+                        )}
+                    </>
+                )}
+
+                {/* Actions */}
+                <div className="w-full flex justify-end gap-2 mt-6">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition cursor-pointer"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        onClick={handleSaveSubject}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
+                    >
+                        <Check size={18} />
+                        {isEdit ? "Update" : "Save"}
+                    </button>
+                </div>
             </div>
-        </div>
         </Modal>
     );
 };

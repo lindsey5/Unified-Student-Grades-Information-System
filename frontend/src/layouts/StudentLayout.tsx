@@ -1,17 +1,16 @@
-import { Outlet } from "react-router-dom"
-import StudentHeader from "../components/Student/StudentHeader"
-import { StudentContextProvider } from "../contexts/StudentContext"
+import { Outlet } from "react-router-dom";
+import StudentHeader from "../components/Student/StudentHeader";
+import { StudentContextProvider } from "../contexts/StudentContext";
 
 const StudentLayout = () => {
-
     return (
         <StudentContextProvider>
-            <main className="w-full lg:px-30 bg-gradient-to-br from-emerald-50 to-teal-50">
+            <main className="w-full lg:px-30 bg-gradient-to-br from-red-50 to-red-100">
                 <StudentHeader />
                 <Outlet />
             </main>
         </StudentContextProvider>
-    )
-}
+    );
+};
 
-export default StudentLayout
+export default StudentLayout;

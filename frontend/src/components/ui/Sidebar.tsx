@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from "react";
 import {
-  GraduationCap,
   LogOutIcon,
   Menu,
   X,
@@ -21,7 +20,7 @@ const Sidebar = ({ menuItems, user } : {
       <div className="md:hidden fixed top-4 right-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-emerald-700 text-white rounded-lg shadow-lg"
+          className="p-2 bg-red-700 text-white rounded-lg shadow-lg"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -30,8 +29,7 @@ const Sidebar = ({ menuItems, user } : {
       {/* Sidebar */}
       <aside
         className={`
-            z-5
-          fixed inset-y-0 left-0 bg-emerald-700 text-white flex flex-col p-4 shadow-lg
+          fixed inset-y-0 left-0 bg-red-700 text-white flex flex-col p-4 shadow-lg
           w-60 transform lg:translate-x-0 transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0
         `}
@@ -39,18 +37,18 @@ const Sidebar = ({ menuItems, user } : {
         {/* Title with Icon */}
         <div className="flex flex-col items-center justify-center gap-2 mb-8">
             <div className="flex items-center gap-2">
-                <GraduationCap size={28} className="text-white" />
+                <img className="w-15 h-15" src="/logo.png" alt="" />
                 <h1 className="text-lg font-semibold leading-tight text-center">
                     Unified Student Grades
                     <br />
-                    <span className="text-sm font-normal text-emerald-200">
+                    <span className="text-sm font-normal text-red-200">
                         Information System
                     </span>
                 </h1>
             </div>
 
-            <span className="text-sm font-medium bg-emerald-600 px-3 py-1 rounded-full text-white shadow">
-            {user}
+            <span className="text-sm font-medium bg-red-600 px-3 py-1 rounded-full text-white shadow">
+              {user}
             </span>
         </div>
 
@@ -64,8 +62,9 @@ const Sidebar = ({ menuItems, user } : {
               to={item.to}
             />
           ))}
+
           <button
-            className="hover:bg-emerald-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer mt-auto"
+            className="hover:bg-red-800 flex items-center gap-3 py-2 px-3 rounded-lg transition cursor-pointer mt-auto"
             onClick={async () => await logout()}
           >
             <LogOutIcon />

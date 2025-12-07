@@ -19,7 +19,8 @@ import StudentRankings from './pages/student/Rankings'
 import Registrars from './pages/admin/Registrars'
 import RegistrarLayout from './layouts/RegistrarLayout'
 import RegistrarProfile from './pages/RegistrarProfile'
-import AdminProfile from './pages/AdminProfiel'
+import AdminProfile from './pages/AdminProfile'
+import ForgotPassword from './pages/auth/ForgotPassword'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path='courses' element={<CoursesPage />} />
         <Route path='login' element={<LoginPage />} />
+        <Route path='forgot-password' element={<ForgotPassword />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path='departments' element={<Departments />} />

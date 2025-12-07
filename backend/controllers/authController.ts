@@ -4,6 +4,9 @@ import { createToken, verifyPassword } from "../utils/authUtils";
 import Student from "../model/Student";
 import Registrar from "../model/Registrar";
 import { AuthenticatedRequest } from "../types/types";
+import { sendResetEmail } from "../services/emailService";
+import ResetToken from "../model/ResetToken";
+import crypto from 'crypto'
 
 const maxAge = 1 * 24 * 60 * 60; 
 
@@ -129,6 +132,35 @@ export const getUser = async (req : AuthenticatedRequest, res : Response) => {
 
         res.status(404).json({ message: "No user found."})
 
+    }catch(err : any){
+        res.status(500).json({ message: err.message || 'Server Error' });
+    }
+}
+
+export const forgotPassword = async (req : Request, res : Response) => {
+    try{
+        const student = await Student.findById(req.body.email);
+
+        if(!student){
+            res.status(404).json({ message: 'Email doesn\'t exists.'});
+            return;
+        }
+
+        await ResetToken.findOneAndDelete({ student_id: student._id });
+
+        // Create reset token
+        const token = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        await ResetToken.create({ 
+            student_id: student._id, 
+            resetPasswordToken: hashedToken,
+            resetPasswordExpire: Date.now() + 5 * 60 * 1000
+        })
+
+        await sendResetEmail(student.email, token);
+
+        res.status(200).json({ success: true, message: 'A password reset link has been sent to your email. Please check your inbox.' });
     }catch(err : any){
         res.status(500).json({ message: err.message || 'Server Error' });
     }

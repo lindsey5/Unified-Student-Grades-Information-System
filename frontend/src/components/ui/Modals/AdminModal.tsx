@@ -1,7 +1,7 @@
 import { Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField } from "../../Textfield";
+import { RedTextField } from "../../Textfield";
 import { confirmDialog, errorAlert } from "../../../utils/swal";
 import { postData, updateData } from "../../../utils/api";
 import LoadingScreen from "../../LoadingScreen";
@@ -30,108 +30,109 @@ const AdminModal = ({ isOpen, onClose, admin }: AdminModalProps) => {
         const action = admin ? "update" : "add";
 
         if (
-        await confirmDialog(
-            "Confirm Action",
-            `Do you want to ${action} this admin?`
-        )
+            await confirmDialog(
+                "Confirm Action",
+                `Do you want to ${action} this admin?`
+            )
         ) {
-        if (!firstname || !lastname || !email) {
-            return errorAlert("Missing Fields", "Please fill in all fields.");
-        }
+            if (!firstname || !lastname || !email) {
+                return errorAlert("Missing Fields", "Please fill in all fields.");
+            }
 
-        // Password is required only on create
-        if (!admin && !password) {
-            return errorAlert(
-            "Password Missing",
-            "Password is required for new admins."
-            );
-        }
+            if (!admin && !password) {
+                return errorAlert(
+                    "Password Missing",
+                    "Password is required for new admins."
+                );
+            }
 
-        setLoading(true);
+            setLoading(true);
 
-        const payload: any = {
-            firstname,
-            lastname,
-            email,
-        };
+            const payload: any = {
+                firstname,
+                lastname,
+                email,
+            };
 
-        // Add password if creating new admin or editing and user provided a new one
-        if (password) {
-            payload.password = password;
-        }
+            if (password) {
+                payload.password = password;
+            }
 
-        const response = admin
-            ? await updateData(`/api/admins/${admin._id}`, payload)
-            : await postData("/api/admins", payload);
+            const response = admin
+                ? await updateData(`/api/admins/${admin._id}`, payload)
+                : await postData("/api/admins", payload);
 
-        if (!response.success) {
-            errorAlert("Error", response.message || "Error saving admin.");
-            setLoading(false);
-            return;
-        }
+            if (!response.success) {
+                errorAlert("Error", response.message || "Error saving admin.");
+                setLoading(false);
+                return;
+            }
 
-        window.location.reload(); // Refresh after success
+            window.location.reload();
         }
     };
 
     return (
         <Modal open={isOpen} onClose={onClose} sx={{ zIndex: 1 }}>
-        <div className="absolute top-1/2 left-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-5">
-            <LoadingScreen loading={loading} />
+            <div className="absolute top-1/2 left-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-5">
+                <LoadingScreen loading={loading} />
 
-            <h2 className="text-lg font-semibold text-emerald-700 mb-4">
-            {admin ? "Edit Admin" : "Add Admin"}
-            </h2>
+                <h2 className="text-lg font-semibold text-red-700 mb-4">
+                    {admin ? "Edit Admin" : "Add Admin"}
+                </h2>
 
-            <EmeraldTextField
-            label="Firstname"
-            value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
-            fullWidth
-            margin="normal"
-            />
+                <RedTextField
+                    label="Firstname"
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                />
 
-            <EmeraldTextField
-            label="Lastname"
-            value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
-            fullWidth
-            margin="normal"
-            />
+                <RedTextField
+                    label="Lastname"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                />
 
-            <EmeraldTextField
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            margin="normal"
-            />
+                <RedTextField
+                    label="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                />
 
-            {!admin && <EmeraldTextField
-            label={"Password"}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            margin="normal"
-            />}
+                {!admin && (
+                    <RedTextField
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                    />
+                )}
 
-            <div className="flex justify-end gap-2 mt-4">
-            <button
-                onClick={onClose}
-                className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition cursor-pointer"
-            >
-                Cancel
-            </button>
-            <button
-                onClick={handleSaveAdmin}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
-            >
-                <Check size={18} />
-                Save
-            </button>
+                <div className="flex justify-end gap-2 mt-4">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition cursor-pointer"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        onClick={handleSaveAdmin}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
+                    >
+                        <Check size={18} />
+                        Save
+                    </button>
+                </div>
             </div>
-        </div>
         </Modal>
     );
 };

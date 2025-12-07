@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { RegistrarContext } from "../contexts/RegistrarContext";
+import { AdminContext } from "../contexts/AdminContext";
 import ProfileSettings from "../components/ui/ProfileSettings";
 
-const RegistrarProfile = () => {
-    const { registrar } = useContext(RegistrarContext);
+const AdminProfile = () => {
+    const { admin } = useContext(AdminContext);
 
     return (
         <div className="w-full min-h-screen p-6 bg-red-50 flex flex-col items-center gap-6">
@@ -17,19 +17,19 @@ const RegistrarProfile = () => {
                 <div className="flex-1 flex flex-col gap-4 bg-white border border-red-200 rounded-xl shadow-md p-6">
                     <div className="flex gap-3 mb-5 items-center">
                         <div className="w-18 h-18 flex items-center justify-center bg-red-700 text-white rounded-full text-4xl font-semibold shadow">
-                            {`${registrar?.firstname.charAt(0)}${registrar?.lastname.charAt(0)}`}
+                            {`${admin?.firstname.charAt(0)}${admin?.lastname.charAt(0)}`}
                         </div>
                         <div>
-                            <p className="text-gray-900 font-medium">{`${registrar?.firstname} ${registrar?.lastname}`}</p>
-                            <p className="text-gray-500">{registrar?.email}</p>
+                            <p className="text-gray-900 font-medium">{`${admin?.firstname} ${admin?.lastname}`}</p>
+                            <p className="text-gray-500">{admin?.email}</p>
                         </div>
                     </div>
 
-                    <ProfileSettings<Registrar> user={registrar as Registrar} apiUrl="/api/registrars"/>
+                    <ProfileSettings<Admin> user={admin as Admin} apiUrl="/api/admins"/>
                 </div>
             </div>
         </div>
     );
 };
 
-export default RegistrarProfile;
+export default AdminProfile;

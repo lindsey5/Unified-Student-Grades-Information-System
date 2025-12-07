@@ -1,8 +1,8 @@
 import { Modal, MenuItem } from "@mui/material";
 import { memo, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField } from "../Textfield";
-import { EmeraldSelect } from "../Select";
+import { RedTextField } from "../Textfield";
+import { RedSelect } from "../Select";           
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { postData } from "../../utils/api";
 import LoadingScreen from "../LoadingScreen";
@@ -10,7 +10,7 @@ import LoadingScreen from "../LoadingScreen";
 interface SemesterModalProps {
   isOpen: boolean;
   onClose: () => void;
-  student: Student; 
+  student: Student;
 }
 
 const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
@@ -28,7 +28,6 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
         return;
       }
 
-      // Validate school year format
       if (!/^\d{4}-\d{4}$/.test(schoolYear)) {
         errorAlert("Invalid Format", "School year must be in the format YYYY-YYYY (e.g., 2025-2026).");
         return;
@@ -62,12 +61,12 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
         <LoadingScreen loading={loading} />
 
         {/* Title */}
-        <h2 className="text-lg font-semibold text-emerald-700 mb-4">
+        <h2 className="text-lg font-semibold text-red-700 mb-4">
           Add Semester
         </h2>
 
         {/* School Year */}
-        <EmeraldTextField
+        <RedTextField
           label="School Year (e.g., 2025-2026)"
           value={schoolYear}
           onChange={(e) => setSchoolYear(e.target.value)}
@@ -76,7 +75,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
         />
 
         {/* Term */}
-        <EmeraldSelect
+        <RedSelect
           label="Term"
           value={term}
           onChange={(e) => setTerm(e.target.value as "1st" | "2nd" | "Summer")}
@@ -84,17 +83,17 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
           <MenuItem value="1st">1st</MenuItem>
           <MenuItem value="2nd">2nd</MenuItem>
           <MenuItem value="Summer">Summer</MenuItem>
-        </EmeraldSelect>
+        </RedSelect>
 
         {/* Enrollment Status */}
-        <EmeraldSelect
+        <RedSelect
           label="Enrollment Status"
           value={enrollmentStatus}
           onChange={(e) => setEnrollmentStatus(e.target.value as "Regular" | "Irregular")}
         >
           <MenuItem value="Regular">Regular</MenuItem>
           <MenuItem value="Irregular">Irregular</MenuItem>
-        </EmeraldSelect>
+        </RedSelect>
 
         {/* Actions */}
         <div className="flex justify-end gap-2 mt-4">
@@ -106,7 +105,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
           </button>
           <button
             onClick={handleSaveSemester}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
           >
             <Check size={18} />
             Save

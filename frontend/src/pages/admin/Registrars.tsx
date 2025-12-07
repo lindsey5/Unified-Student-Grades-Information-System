@@ -4,7 +4,7 @@ import useFetch from "../../hooks/useFetch";
 import { useDebounce } from "../../hooks/useDebounce";
 import { SearchField } from "../../components/Textfield";
 import { CircularProgress } from "@mui/material";
-import EmeraldTable from "../../components/Table";
+import RedTable from "../../components/Table";
 import RegistrarModal from "../../components/ui/Modals/RegistrarModal";
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { deleteData } from "../../utils/api";
@@ -45,7 +45,7 @@ const Registrars = () => {
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Header */}
         <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-emerald-700">School Registrars</h1>
+            <h1 className="text-2xl font-bold text-red-700">School Registrars</h1>
             <AddButton onClick={() => setOpenModal(true)} label="Add Registrar" />
         </div>
 
@@ -63,7 +63,7 @@ const Registrars = () => {
         {/* Loading, No Data, or Table */}
         {loading ? (
             <div className="w-full flex justify-center items-center h-64">
-            <CircularProgress sx={{ color: "#10b981" }} />
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : registrarsData?.registrars?.length === 0 ? (
             <div className="w-full flex justify-center items-center h-64 text-gray-500">
@@ -71,7 +71,7 @@ const Registrars = () => {
             </div>
         ) : (
             <>
-            <EmeraldTable
+            <RedTable
                 columns={[
                 "Firstname",
                 "Lastname",

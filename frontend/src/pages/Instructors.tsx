@@ -4,9 +4,9 @@ import InstructorModal from "../components/ui/Modals/InstructorModal";
 import useFetch from "../hooks/useFetch";
 import { useDebounce } from "../hooks/useDebounce";
 import { SearchField } from "../components/Textfield";
-import { EmeraldSelect } from "../components/Select";
+import { RedSelect } from "../components/Select";
 import { MenuItem, Pagination, CircularProgress } from "@mui/material";
-import EmeraldTable from "../components/Table";
+import RedTable from "../components/Table";
 import { formatDate } from "../utils/dateUtils";
 
 const Instructors = () => {
@@ -41,7 +41,7 @@ const Instructors = () => {
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Header */}
         <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-emerald-700">Instructors</h1>
+            <h1 className="text-2xl font-bold text-red-700">Instructors</h1>
             <AddButton onClick={() => setIsModalOpen(true)} label="Add Instructor" />
         </div>
 
@@ -55,7 +55,7 @@ const Instructors = () => {
             />
             </div>
             <div className="w-full md:w-64">
-            <EmeraldSelect
+            <RedSelect
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
                 displayEmpty
@@ -64,10 +64,10 @@ const Instructors = () => {
                 <MenuItem value="All">All</MenuItem>
                 <MenuItem value="active">Active</MenuItem>
                 <MenuItem value="inactive">Inactive</MenuItem>
-            </EmeraldSelect>
+            </RedSelect>
             </div>
             <div className="w-full md:w-64">
-            <EmeraldSelect
+            <RedSelect
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 displayEmpty
@@ -79,14 +79,14 @@ const Instructors = () => {
                     {d.name}
                 </MenuItem>
                 ))}
-            </EmeraldSelect>
+            </RedSelect>
             </div>
         </div>
 
         {/* Loading, No Data, or Table */}
         {loading ? (
             <div className="w-full flex justify-center items-center h-64">
-            <CircularProgress sx={{ color: "#10b981" }} />
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : instructorsData?.instructors?.leng6th === 0 ? (
             <div className="w-full flex justify-center items-center h-64 text-gray-500">
@@ -94,7 +94,7 @@ const Instructors = () => {
             </div>
         ) : (
             <>
-            <EmeraldTable
+            <RedTable
                 columns={[
                 "Firstname",
                 "Lastname",

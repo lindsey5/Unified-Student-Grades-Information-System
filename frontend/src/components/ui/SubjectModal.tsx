@@ -1,7 +1,7 @@
 import { Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField } from "../Textfield";
+import { RedTextField } from "../Textfield"; // ⬅️ use your red textfield
 import { confirmDialog, errorAlert } from "../../utils/swal";
 import { postData, updateData } from "../../utils/api";
 import LoadingScreen from "../LoadingScreen";
@@ -67,12 +67,12 @@ const SubjectModal = ({ isOpen, onClose, subject }: AddSubjectModalProps) => {
         <LoadingScreen loading={loading} />
 
         {/* Title */}
-        <h2 className="text-lg font-semibold text-emerald-700 mb-4">
+        <h2 className="text-lg font-semibold text-red-700 mb-4">
           {subject ? "Edit Subject" : "Add Subject"}
         </h2>
 
         {/* Subject Name */}
-        <EmeraldTextField
+        <RedTextField
           label="Subject Name"
           value={subjectName}
           onChange={(e) => setSubjectName(e.target.value)}
@@ -81,7 +81,7 @@ const SubjectModal = ({ isOpen, onClose, subject }: AddSubjectModalProps) => {
         />
 
         {/* Subject Code */}
-        <EmeraldTextField
+        <RedTextField
           label="Subject Code"
           value={subjectCode}
           onChange={(e) => setSubjectCode(e.target.value)}
@@ -97,9 +97,10 @@ const SubjectModal = ({ isOpen, onClose, subject }: AddSubjectModalProps) => {
           >
             Cancel
           </button>
+
           <button
             onClick={handleSaveSubject}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
           >
             <Check size={18} />
             Save

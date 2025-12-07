@@ -17,8 +17,8 @@ export const confirmDialog = async (
     showCancelButton: true,
     confirmButtonText: confirmText,
     cancelButtonText: cancelText,
-    confirmButtonColor: '#059669', // emerald-600
-    cancelButtonColor: '#6b7280',  // gray-500 
+    confirmButtonColor: '#ef4444', // red-500
+    cancelButtonColor: '#6b7280',  // gray-500
   });
 
   return result.isConfirmed === true;
@@ -29,7 +29,7 @@ export const successAlert = async (title: string, text: string) => {
     icon: 'success',
     title,
     text,
-    confirmButtonColor: '#059669', // emerald-600
+    confirmButtonColor: '#ef4444', // red-500
   });
 };
 
@@ -38,6 +38,6 @@ export const errorAlert = async (title: string, text: string) => {
     icon: 'error',
     title,
     text,
-    confirmButtonColor: '#059669', // emerald-600
+    confirmButtonColor: '#ef4444', // red-500
   });
 };

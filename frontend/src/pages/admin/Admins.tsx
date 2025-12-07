@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AddButton, DeleteButton, EditButton } from "../../components/Button";
 import AdminModal from "../../components/ui/Modals/AdminModal";
 import useFetch from "../../hooks/useFetch";
-import EmeraldTable from "../../components/Table";
+import RedTable from "../../components/Table";
 import { CircularProgress } from "@mui/material";
 import { formatDateTime } from "../../utils/dateUtils";
 import { confirmDialog, errorAlert } from "../../utils/swal";
@@ -42,21 +42,21 @@ const Admins = () => {
         <div className="w-full min-h-screen p-6 flex flex-col gap-5">
         {/* Header */}
         <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-emerald-700">Admins</h1>
+            <h1 className="text-2xl font-bold text-red-700">Admins</h1>
             <AddButton onClick={() => setIsModalOpen(true)} label="Add Admin" />
         </div>
 
         {/* Loading / Table */}
         {loading ? (
             <div className="w-full flex justify-center items-center h-64">
-            <CircularProgress sx={{ color: "#10b981"  }} />
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : data?.admins?.length === 0 ? (
             <div className="text-gray-500 w-full h-64 flex items-center justify-center">
             No admins found
             </div>
         ) : (
-            <EmeraldTable
+            <RedTable
             columns={["Firstname", "Lastname", "Email", "Created At", "Action"]}
             data={
                 data?.admins?.map((admin: Admin) => ({

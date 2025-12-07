@@ -3,13 +3,13 @@ import useFetch from "../hooks/useFetch";
 import { formatDateTime } from "../utils/dateUtils";
 import { AddButton, DeleteButton, EditButton } from "../components/Button";
 import CourseModal from "../components/ui/Course";
-import { SearchField } from "../components/Textfield";
+import { SearchField } from "../components/Textfield"; 
 import { useDebounce } from "../hooks/useDebounce";
-import { EmeraldSelect } from "../components/Select";
+import { RedSelect } from "../components/Select";
 import { MenuItem, CircularProgress } from "@mui/material"; 
 import { deleteData } from "../utils/api";
 import { confirmDialog, errorAlert, successAlert } from "../utils/swal";
-import EmeraldTable from "../components/Table";
+import RedTable from "../components/Table"; 
 
 const Courses = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,7 +55,7 @@ const Courses = () => {
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Page Title */}
         <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h1 className="text-2xl font-bold text-emerald-700">Courses</h1>
+            <h1 className="text-2xl font-bold text-red-700">Courses</h1>
             <AddButton onClick={() => setIsModalOpen(true)} label="Add Course" />
         </div>
 
@@ -72,7 +72,7 @@ const Courses = () => {
 
             {/* Department Select */}
             <div className="w-full sm:w-1/3">
-            <EmeraldSelect
+            <RedSelect
                 label="Department"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
@@ -83,17 +83,17 @@ const Courses = () => {
                     {dept.name}
                 </MenuItem>
                 ))}
-            </EmeraldSelect>
+            </RedSelect>
             </div>
         </div>
 
         {/* Courses Table / Loading / Empty */}
         {loading ? (
             <div className="w-full flex justify-center items-center py-10">
-            <CircularProgress sx={{ color: "#10b981" }} />
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : data?.courses?.length > 0 ? (
-            <EmeraldTable
+            <RedTable
             columns={["#", "Course Name", "Course Code", "Department", "Created At", "Actions"]}
             data={data.courses.map((course: Course, index: number) => ({
                 "#": index + 1,

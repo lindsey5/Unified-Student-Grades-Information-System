@@ -1,4 +1,4 @@
-import EmeraldTable from "../Table"
+import RedTable from "../Table"
 import useFetch from "../../hooks/useFetch"
 
 const RecentStudentsTable = () => {
@@ -6,8 +6,8 @@ const RecentStudentsTable = () => {
     
     return (
         <div className="flex flex-col gap-5 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
-            <h1 className="text-2xl font-bold text-emerald-700">Recent Created Students</h1>
-            <EmeraldTable 
+            <h1 className="text-2xl font-bold text-red-700">Recent Created Students</h1>
+            <RedTable 
                 classname="h-[500px] overflow-y-auto"
                 columns={['Student ID', 'Fullname', 'Course', 'Year Level']}
                 data={data?.recentStudents.map((student : Student) => ({

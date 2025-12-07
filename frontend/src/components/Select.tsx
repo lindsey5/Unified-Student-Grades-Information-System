@@ -6,38 +6,38 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export type EmeraldSelectProps = SelectProps<any> & {
+export type RedSelectProps = SelectProps<any> & {
   label?: string;
 };
 
-// Styled Select with emerald theme
-const StyledSelect = styled((props: SelectProps) => <Select {...props} />)({
+// Styled Select with red theme
+const StyledRedSelect = styled((props: SelectProps) => <Select {...props} />)({
   "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#d1d5db", // default (gray-300)
+    borderColor: "#d1d5db", // gray-300
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#059669", // emerald-600
+    borderColor: "#dc2626", // red-600
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#059669", // emerald-700
+    borderColor: "#b91c1c", // red-700
   },
   "& .MuiSelect-icon": {
-    color: "#059669", // emerald-600
+    color: "#dc2626", // red-600
   },
 });
 
-// Styled InputLabel with emerald focus color
-const EmeraldInputLabel = styled(InputLabel)({
+// Styled InputLabel with red focus color
+const RedInputLabel = styled(InputLabel)({
   "&.Mui-focused": {
-    color: "#059669", // emerald-600
+    color: "#dc2626", // red-600
   },
 });
 
-export const EmeraldSelect = ({ label, ...props }: EmeraldSelectProps) => {
+export const RedSelect = ({ label, ...props }: RedSelectProps) => {
   return (
     <FormControl fullWidth margin="normal">
-      <EmeraldInputLabel>{label}</EmeraldInputLabel>
-      <StyledSelect label={label} {...props} />
+      <RedInputLabel>{label}</RedInputLabel>
+      <StyledRedSelect label={label} {...props} />
     </FormControl>
   );
 };

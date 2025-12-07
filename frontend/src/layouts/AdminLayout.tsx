@@ -19,7 +19,7 @@ const AdminLayout = () => {
 
     return (
         <AdminContextProvider>
-        <main className="w-full md:pl-60">
+        <main className="w-full md:pl-60 bg-gradient-to-br from-red-50 to-red-100">
             <Sidebar menuItems={menuItems} user="Admin"/>
             <Outlet />
         </main>

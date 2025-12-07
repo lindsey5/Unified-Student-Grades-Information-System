@@ -1,12 +1,12 @@
 import { Modal, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { EmeraldTextField } from "../../Textfield";
+import { RedTextField } from "../../Textfield";     
+import { RedSelect } from "../../Select";        
 import { confirmDialog, errorAlert } from "../../../utils/swal";
 import { postData, updateData } from "../../../utils/api";
 import LoadingScreen from "../../LoadingScreen";
 import useFetch from "../../../hooks/useFetch";
-import { EmeraldSelect } from "../../Select";
 
 interface InstructorModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
-  const [status, setStatus] = useState<Instructor['status']>("active");
+  const [status, setStatus] = useState<Instructor["status"]>("active");
   const [loading, setLoading] = useState(false);
 
   const { data } = useFetch("/api/departments");
@@ -76,12 +76,12 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
         <LoadingScreen loading={loading} />
 
         {/* Title */}
-        <h2 className="text-lg font-semibold text-emerald-700 mb-4">
+        <h2 className="text-lg font-semibold text-red-700 mb-4">
           {instructor ? "Edit Instructor" : "Add Instructor"}
         </h2>
 
         {/* Firstname */}
-        <EmeraldTextField
+        <RedTextField
           label="Firstname"
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
@@ -90,7 +90,7 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
         />
 
         {/* Lastname */}
-        <EmeraldTextField
+        <RedTextField
           label="Lastname"
           value={lastname}
           onChange={(e) => setLastname(e.target.value)}
@@ -99,7 +99,7 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
         />
 
         {/* Department */}
-        <EmeraldSelect
+        <RedSelect
           label="Department"
           value={department || ""}
           onChange={(e) => setDepartment(e.target.value)}
@@ -109,17 +109,19 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
               {dept.name}
             </MenuItem>
           ))}
-        </EmeraldSelect>
+        </RedSelect>
 
         {/* Status */}
-        {instructor && <EmeraldSelect
-          label="Status"
-          value={status}
-          onChange={(e) => setStatus(e.target.value as Instructor['status'])}
-        >
-          <MenuItem value="active">Active</MenuItem>
-          <MenuItem value="inactive">Inactive</MenuItem>
-        </EmeraldSelect>}
+        {instructor && (
+          <RedSelect
+            label="Status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as Instructor["status"])}
+          >
+            <MenuItem value="active">Active</MenuItem>
+            <MenuItem value="inactive">Inactive</MenuItem>
+          </RedSelect>
+        )}
 
         {/* Actions */}
         <div className="flex justify-end gap-2 mt-4">
@@ -131,7 +133,7 @@ const InstructorModal = ({ isOpen, onClose, instructor }: InstructorModalProps) 
           </button>
           <button
             onClick={handleSaveInstructor}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
           >
             <Check size={18} />
             Save

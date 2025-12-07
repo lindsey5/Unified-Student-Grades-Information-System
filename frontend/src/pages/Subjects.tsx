@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AddButton, DeleteButton, EditButton } from "../components/Button";
 import SubjectModal from "../components/ui/SubjectModal";
 import useFetch from "../hooks/useFetch";
-import EmeraldTable from "../components/Table";
+import RedTable from "../components/Table";
 import { formatDateTime } from "../utils/dateUtils";
 import { Pagination, CircularProgress } from "@mui/material";
 import { SearchField } from "../components/Textfield";
@@ -34,7 +34,7 @@ const Subjects = () => {
         <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
         {/* Title + Add Button */}
         <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-emerald-700">Subjects</h1>
+            <h1 className="text-2xl font-bold text-red-700">Subjects</h1>
             <AddButton onClick={() => setIsModalOpen(true)} label="Add Subject" />
         </div>
 
@@ -53,7 +53,7 @@ const Subjects = () => {
         {/* Loading State */}
         {loading ? (
             <div className="w-full flex justify-center items-center h-64">
-            <CircularProgress sx={{ color: "#10b981" }} /> {/* Emerald spinner */}
+            <CircularProgress sx={{ color: "#DC2626" }} />
             </div>
         ) : subjectsData?.subjects?.length === 0 ? (
             <div className="w-full flex justify-center items-center h-64 text-gray-500">
@@ -61,7 +61,7 @@ const Subjects = () => {
             </div>
         ) : (
             <>
-            <EmeraldTable
+            <RedTable
                 columns={["#", "Subject", "Code", "Created At", "Actions"]}
                 data={
                 subjectsData?.subjects.map((subject: Subject, index: number) => ({

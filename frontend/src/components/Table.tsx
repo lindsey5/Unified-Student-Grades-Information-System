@@ -1,19 +1,16 @@
-type EmeraldTableProps = {
+type RedTableProps = {
   columns: string[];
   data: any[];
   classname?: string;
 };
 
-const EmeraldTable = ({
-  columns,
-  data,
-  classname,
-}: EmeraldTableProps) => {
+const RedTable = ({ columns, data, classname }: RedTableProps) => {
   return (
     <div className="w-full bg-white shadow-sm rounded-lg border border-gray-200">
+      {/* Desktop Table */}
       <div className={`hidden md:block max-h-screen overflow-y-auto ${classname}`}>
         <table className="min-w-full border-collapse">
-          <thead className="bg-emerald-600 text-white text-left text-sm font-medium sticky top-0">
+          <thead className="bg-red-600 text-white text-left text-sm font-medium sticky top-0">
             <tr>
               {columns.map((column) => (
                 <th key={column} className="py-3 px-4">
@@ -39,16 +36,17 @@ const EmeraldTable = ({
         </table>
       </div>
 
+      {/* Mobile Table */}
       <div className="block md:hidden p-4 space-y-4">
         {data.map((row, index) => (
           <div
             key={index}
-            className="bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-200"
+            className="bg-gradient-to-br from-red-50 to-white border border-red-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-red-200 transition-all duration-200"
           >
             <div className="space-y-3">
               {columns.map((column) => (
                 <div key={column} className="flex items-start justify-between gap-3">
-                  <span className="font-semibold text-emerald-700 text-xs uppercase tracking-wide flex-shrink-0">
+                  <span className="font-semibold text-red-700 text-xs uppercase tracking-wide flex-shrink-0">
                     {column}
                   </span>
                   <span className="text-gray-900 text-sm text-right font-medium">
@@ -57,8 +55,8 @@ const EmeraldTable = ({
                 </div>
               ))}
             </div>
-            <div className="mt-4 pt-3 border-t border-emerald-100">
-              <span className="text-xs text-emerald-600 font-medium">
+            <div className="mt-4 pt-3 border-t border-red-100">
+              <span className="text-xs text-red-600 font-medium">
                 Item {index + 1} of {data.length}
               </span>
             </div>
@@ -69,4 +67,4 @@ const EmeraldTable = ({
   );
 };
 
-export default EmeraldTable;
+export default RedTable;

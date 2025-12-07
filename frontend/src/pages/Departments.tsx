@@ -5,7 +5,7 @@ import { formatDateTime } from "../utils/dateUtils";
 import { AddButton, DeleteButton, EditButton } from "../components/Button";
 import { confirmDialog, successAlert, errorAlert } from "../utils/swal";
 import { deleteData } from "../utils/api";
-import EmeraldTable from "../components/Table";
+import RedTable from "../components/Table";
 import { CircularProgress } from "@mui/material"; // Spinner
 
 const Departments = () => {
@@ -48,7 +48,7 @@ const Departments = () => {
   return (
     <div className="w-full min-h-screen p-6 items-start flex flex-col gap-5">
       {/* Page Title */}
-      <h1 className="text-2xl font-bold text-emerald-700">Departments</h1>
+      <h1 className="text-2xl font-bold text-red-700">Departments</h1>
 
       {/* Add Department Button */}
       <AddButton onClick={() => setIsModalOpen(true)} label="Add Department" />
@@ -56,10 +56,10 @@ const Departments = () => {
       {/* Loading / No Data / Table */}
       {loading ? (
         <div className="w-full flex justify-center items-center h-64">
-          <CircularProgress sx={{ color: "#10b981" }} /> {/* Emerald Spinner */}
+          <CircularProgress sx={{ color: "#DC2626" }} />
         </div>
       ) : data?.departments?.length > 0 ? (
-        <EmeraldTable
+        <RedTable
           columns={["#", "Department Name", "Created At", "Actions"]}
           data={data.departments.map((department: Department, index: number) => ({
             "#": index + 1,

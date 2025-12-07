@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { CircularProgress } from "@mui/material";
 import { Navigate } from "react-router-dom";
-import EmeraldTable from "../../components/Table";
+import RedTable from "../../components/Table";
 import { GradeStatusChip } from "../../components/Chip";
 
 const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
@@ -11,7 +11,7 @@ const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
     if (loading) {
       return (
         <div className="w-full flex justify-center items-center h-32">
-          <CircularProgress sx={{ color: "#10b981" }} />
+          <CircularProgress sx={{ color: "#ef4444" }} /> {/* Red spinner */}
         </div>
       );
     }
@@ -23,15 +23,14 @@ const GradesInfoHeader = memo(({ semester }: { semester: Semester }) => {
     return (
       <div className="w-full flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-emerald-700 mb-2">
+          <h1 className="text-2xl font-bold text-red-700 mb-2">
             Your Grades
           </h1>
           <h1 className="text-gray-500">
             Student ID: {studentData?.student.student_id}
           </h1>
           <h1 className="text-gray-500">
-            Fullname: {studentData?.student.firstname}{" "}
-            {studentData?.student.lastname}
+            Fullname: {studentData?.student.firstname} {studentData?.student.lastname}
           </h1>
           <h1 className="text-gray-500">Course: {semester?.course.name}</h1>
           <h1 className="text-gray-500">
@@ -71,7 +70,7 @@ const Grades = () => {
         <div className="w-full border-b border-gray-200 flex gap-6 overflow-x-auto">
             {semestersLoading ? (
             <div className="w-full flex justify-center items-center h-20">
-                <CircularProgress sx={{ color: "#10b981" }} size={24} />
+                <CircularProgress sx={{ color: "#ef4444" }} size={24} />
             </div>
             ) : semestersData?.semesters?.length > 0 ? (
             semestersData.semesters.map((sem: any) => (
@@ -80,8 +79,8 @@ const Grades = () => {
                     onClick={() => setSelectedSemester(sem)}
                     className={`cursor-pointer relative pb-2 text-sm font-medium transition ${
                     selectedSemester?._id === sem._id
-                        ? "text-emerald-700 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-emerald-600"
-                        : "text-gray-500 hover:text-emerald-600"
+                        ? "text-red-700 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-red-600"
+                        : "text-gray-500 hover:text-red-600"
                     }`}
                 >
                     {sem.term} • {sem.schoolYear}
@@ -97,14 +96,14 @@ const Grades = () => {
         {selectedSemester &&
             (subjectsLoading ? (
             <div className="w-full flex justify-center items-center h-40">
-                <CircularProgress sx={{ color: "#10b981" }} />
+                <CircularProgress sx={{ color: "#ef4444" }} />
             </div>
             ) : subjectsData?.studentSubjects?.length > 0 ? (
               <>
-            <div className="block md:hidden w-full text-left font-semibold text-emerald-700 mb-2">
+            <div className="block md:hidden w-full text-left font-semibold text-red-700 mb-2">
               Total GWA: {totalGWA}
             </div>
-            <EmeraldTable
+            <RedTable
                 columns={[
                 "Code",
                 "Subject",
@@ -132,11 +131,11 @@ const Grades = () => {
                     "Mid Term": subject.midtermGrade.toFixed(2),
                     Final: subject.finalGrade.toFixed(2),
                     GWA: ((subject.midtermGrade + subject.finalGrade) / 2).toFixed(2),
-                    Status: <GradeStatusChip size="sm" grade={(subject.midtermGrade + subject.finalGrade) /2}/>
+                    Status: <GradeStatusChip size="sm" grade={(subject.midtermGrade + subject.finalGrade) /2} />
                 })) || []
                 }
             />
-            <div className="md:block hidden w-full text-right font-semibold text-emerald-700 mb-2">
+            <div className="md:block hidden w-full text-right font-semibold text-red-700 mb-2">
               Total GWA: {totalGWA}
             </div>
             </>
