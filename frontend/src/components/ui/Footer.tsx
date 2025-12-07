@@ -63,7 +63,7 @@ const Footer = () => {
                 </li>
                 <li className="flex items-center gap-3 text-sm text-red-100">
                     <Facebook size={18} className="text-red-400 flex-shrink-0" />
-                    <a href="mailto:lindseysamson5@gmail.com" className="hover:text-white transition-colors">
+                    <a href="https://www.facebook.com/TaguigCityUniversity" className="hover:text-white transition-colors">
                     https://www.facebook.com/TaguigCityUniversity
                     </a>
                 </li>
