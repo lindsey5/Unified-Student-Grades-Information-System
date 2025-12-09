@@ -4,11 +4,13 @@ import { postData } from '../../utils/api';
 import { errorAlert, successAlert } from '../../utils/swal';
 import { useNavigate } from 'react-router-dom';
 import useProtection from '../../hooks/useProtection';
+import { CircularProgress } from '@mui/material';
 
 const LoginPage = () => {
     const [userType, setUserType] = useState('student');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     useProtection();
 
@@ -20,11 +22,14 @@ const LoginPage = () => {
 
     const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true)
         await userLogin();
+        setLoading(false)
     }
 
     const userLogin = async () => {
         const user = userType === 'admin' ? 'admin' : userType === 'student' ? 'student' : 'registrar'
+        
         const response = await postData(`/api/auth/${user}`, { email, password });
 
         if (!response?.success) {
@@ -98,8 +103,9 @@ const LoginPage = () => {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
+                                        className="outline-none w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                                         placeholder="Enter your email"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -114,8 +120,9 @@ const LoginPage = () => {
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
+                                        className="outline-none w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                                         placeholder="Enter your password"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -130,13 +137,15 @@ const LoginPage = () => {
                                     </a>
                                 </div>
                             )}
-
+                            {loading ?  <div className="w-full flex justify-center">
+                                <CircularProgress sx={{ color: "#DC2626" }} />
+                            </div> : 
                             <button
                                 type="submit"
                                 className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-lg font-semibold shadow-lg hover:from-red-700 hover:to-red-800 transform hover:scale-[1.02] transition-all duration-200"
                             >
                                 Sign In as {userTypes.find(u => u.id === userType)?.label}
-                            </button>
+                            </button>}
                         </form>
                     </div>
 

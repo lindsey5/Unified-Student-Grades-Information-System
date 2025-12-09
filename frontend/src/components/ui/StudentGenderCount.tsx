@@ -14,31 +14,25 @@ import { CircularProgress } from "@mui/material";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const StudentCountChart = () => {
+const StudentGenderCountChart = () => {
   const [selectedCourse, setSelectedCourse] = useState<string>("all");
 
   const { data, loading } = useFetch(
     selectedCourse === "all"
-      ? "/api/students/count"
-      : `/api/students/count?course=${selectedCourse}`
+      ? "/api/students/gender-count"
+      : `/api/students/gender-count?course=${selectedCourse}`
   );
-
   const { data: coursesData } = useFetch("/api/courses");
 
   const chartData = useMemo(() => {
-    if (!data?.data) return null;
+    if (!data?.count) return null;
 
     return {
-      labels: ["Year 1", "Year 2", "Year 3", "Year 4"],
+      labels: ["Male", "Female"],
       datasets: [
         {
-          label: "Student Count",
-          data: [
-            data.data.year1,
-            data.data.year2,
-            data.data.year3,
-            data.data.year4,
-          ],
+          label: "Student Count by Gender",
+          data: data.count.map((count : any) => count.total),
           backgroundColor: "#ef4444", // red-500
           borderColor: "#b91c1c", // red-700
           borderWidth: 1,
@@ -63,9 +57,9 @@ const StudentCountChart = () => {
     <div className="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200">
       
       {/* Course filter */}
-      <div className="mb-4 flex flex-col items-start ustify-between gap-2 md:gap-4">
+      <div className="mb-4 flex flex-col items-start gap-2">
         <h1 className="text-xl font-bold text-red-700">
-          Student Count Per Year Level
+          Student Count by Gender
         </h1>
 
         <div className="flex items-center gap-2">
@@ -97,4 +91,4 @@ const StudentCountChart = () => {
   );
 };
 
-export default StudentCountChart;
+export default StudentGenderCountChart;

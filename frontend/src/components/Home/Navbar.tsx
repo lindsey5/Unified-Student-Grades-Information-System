@@ -37,18 +37,21 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="text-white fixed inset-x-0 top-0 bg-red-600 shadow-md z-50 border-b border-red-700">
+      <nav className="text-white fixed inset-x-0 top-0 bg-gradient-to-br from-red-800 to-red-900 shadow-md z-50 border-b border-red-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <a href="/" className="flex items-center gap-3 group">
               <img src="/logo.png" className="w-20 h-20" />
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">
+                <h1 className="hidden md:block text-xl font-bold">
+                  Taguig City University
+                </h1>
+                <h1 className="block md:hidden text-xl font-bold">
                   TCU
                 </h1>
-                <p className="text-xs font-medium">
-                  Taguig City University
+                <p className="text-sm font-medium">
+                  Unified Student Grades Information System
                 </p>
               </div>
             </a>
@@ -70,7 +73,7 @@ const Navbar = () => {
 
               <a
                 href="/login"
-                className="border border-white flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-lg hover:from-red-700 hover:to-red-800 shadow-md hover:shadow-lg transition-all duration-200"
+                className="border border-white flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-800 to-red-900 text-white font-semibold rounded-lg hover:from-red-700 hover:to-red-800 shadow-md hover:shadow-lg transition-all duration-200"
               >
                 <User size={18} />
                 <span>Log In</span>
@@ -108,7 +111,7 @@ const Navbar = () => {
                 <li className="pt-4 border-t border-red-200">
                   <a
                     href="/login"
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-lg hover:from-red-700 hover:to-red-800 shadow-md transition-all duration-200"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-red-800 to-red-900 text-white font-semibold rounded-lg hover:from-red-700 hover:to-red-800 shadow-md transition-all duration-200"
                     onClick={closeMenu}
                   >
                     <User size={18} />

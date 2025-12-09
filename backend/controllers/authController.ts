@@ -139,7 +139,7 @@ export const getUser = async (req : AuthenticatedRequest, res : Response) => {
 
 export const forgotPassword = async (req : Request, res : Response) => {
     try{
-        const student = await Student.findById(req.body.email);
+        const student = await Student.findOne({ email: req.body.email });
 
         if(!student){
             res.status(404).json({ message: 'Email doesn\'t exists.'});
@@ -165,3 +165,41 @@ export const forgotPassword = async (req : Request, res : Response) => {
         res.status(500).json({ message: err.message || 'Server Error' });
     }
 }
+
+export const resetPassword = async (req : Request, res : Response) => {
+    try{
+        const { token } = req.params;
+        const { newPassword } = req.body;
+
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        const resetToken = await ResetToken.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpire: { $gt: Date.now() },
+        });
+
+        if (!resetToken) {
+            res.status(400).json({ message: 'Token is invalid or expired.' });
+            return;
+        }
+
+        const student = await Student.findById(resetToken.student_id);
+        if(!student){
+            res.status(404).json({ success: false, message: 'Student not found'});
+            return;
+        }
+
+        if(!student.password){
+            res.status(400).json({ success: false, message: 'Failed to reset password. This account was created using Google Sign-In.'})
+            return;
+        }
+
+        student.password = newPassword;
+        await student.save();
+        await resetToken.deleteOne();
+
+        res.status(200).json({ success: true, message: 'Password has been reset successfully!' });
+    }catch(err : any){
+        console.log(err.message);
+        res.status(500).json({ success: false, message: err.message || 'Server error' });
+    }
+};

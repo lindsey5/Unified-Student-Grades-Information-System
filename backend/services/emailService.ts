@@ -20,7 +20,7 @@ export const sendStudentEmail = async (student: IStudent, password: string) => {
     `;
 
     const emailData = {
-      sender: { name: 'Evergreen College', email: process.env.EMAIL_USER },
+      sender: { name: 'Taguig City University - USGIS', email: process.env.EMAIL_USER },
       to: [{ email: student.email, name: `${student.firstname} ${student.lastname}` }],
       subject: 'Student Account Information',
       htmlContent,
@@ -36,26 +36,39 @@ export const sendStudentEmail = async (student: IStudent, password: string) => {
 };
 
 
-export const sendResetEmail = async (email : string, resetToken : string) => {
-  try{
-    const url = process.env.NODE_ENV === 'production' ? 'https:/evergreen-college.onrender.com' : 'http://localhost:5173';
+export const sendResetEmail = async (email: string, resetToken: string) => {
+  try {
+    const url =
+      process.env.NODE_ENV === "production"
+        ? "https:/tcu-usgis.onrender.com"
+        : "http://localhost:5173";
+
     const resetLink = `${url}/reset-password/${resetToken}`;
+
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background-color: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 10px; padding: 28px;">
-        <h2 style="text-align: center; color: #065f46; margin-bottom: 20px;">
-          Evergreen College — Password Reset
+      <div style="
+        font-family: Arial, sans-serif;
+        max-width: 520px;
+        margin: 0 auto;
+        background-color: #fff5f5;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 28px;
+      ">
+        <h2 style="text-align: center; color: #b91c1c; margin-bottom: 20px;">
+          Taguig City University - USGIS — Password Reset
         </h2>
 
-        <p style="font-size: 15px; color: #064e3b; line-height: 1.6;">
+        <p style="font-size: 15px; color: #7f1d1d; line-height: 1.6;">
           Hello,<br><br>
-          We received a request to reset the password for your Evergreen College account.
+          We received a request to reset the password for your Taguig City University - USGIS account.
           Click the button below to create a new password:
         </p>
 
         <div style="text-align: center; margin: 32px 0;">
           <a href="${resetLink}" target="_blank"
             style="
-              background-color: #059669;
+              background-color: #dc2626;
               color: white;
               text-decoration: none;
               padding: 14px 30px;
@@ -69,37 +82,38 @@ export const sendResetEmail = async (email : string, resetToken : string) => {
           </a>
         </div>
 
-        <p style="font-size: 14px; color: #065f46; text-align: center;">
+        <p style="font-size: 14px; color: #991b1b; text-align: center;">
           Or copy and paste this link into your browser:
         </p>
-        <p style="word-break: break-all; font-size: 13px; text-align: center; color: #047857;">
+
+        <p style="word-break: break-all; font-size: 13px; text-align: center; color: #b91c1c;">
           ${resetLink}
         </p>
 
-        <p style="font-size: 13px; color: #065f46; text-align: center; margin-top: 30px; line-height: 1.5;">
+        <p style="font-size: 13px; color: #7f1d1d; text-align: center; margin-top: 30px; line-height: 1.5;">
           This link will expire in <strong>10 minutes</strong>.<br>
           If you didn’t request this, you can safely ignore this email.
         </p>
 
-        <hr style="border: none; border-top: 1px solid #a7f3d0; margin: 25px 0;">
+        <hr style="border: none; border-top: 1px solid #fecaca; margin: 25px 0;">
 
-        <p style="text-align: center; font-size: 12px; color: #047857;">
-          © ${new Date().getFullYear()} Evergreen College. All rights reserved.
+        <p style="text-align: center; font-size: 12px; color: #b91c1c;">
+          © ${new Date().getFullYear()} Taguig City University - USGIS. All rights reserved.
         </p>
       </div>
-    `
+    `;
 
     await brevo.sendTransacEmail({
-      sender: { name: 'Evergreen College', email: process.env.EMAIL_USER },
+      sender: { name: "Taguig City University - USGIS", email: process.env.EMAIL_USER },
       to: [{ email }],
-      subject: `Evergreen College Password Reset Request`,
+      subject: `Taguig City University - USGIS Password Reset Request`,
       htmlContent,
     });
 
     return true;
 
   } catch (err: any) {
-    console.error('Error sending refund update email:', err.message);
-    throw new Error('Failed to send refund update email.');
+    console.error("Error sending to email:", err.message);
+    throw new Error("Failed to send refund update email.");
   }
-}
+};

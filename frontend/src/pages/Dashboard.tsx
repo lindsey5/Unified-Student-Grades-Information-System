@@ -1,6 +1,7 @@
 import { TotalCoursesCard, TotalDepartmentsCard, TotalInstructorsCard, TotalStudentCard } from "../components/ui/DashboardCard";
 import RecentStudentsTable from "../components/ui/RecentStudentsTable";
 import StudentCountChart from "../components/ui/StudentCountChart";
+import StudentGenderCountChart from "../components/ui/StudentGenderCount";
 import StudentRankingTable from "../components/ui/StudentRanking";
 
 const Dashboard = () => {
@@ -17,8 +18,11 @@ const Dashboard = () => {
         </div>
 
         {/* Chart */}
+        <div className="grid md:grid-cols-2 gap-5">
+            <StudentCountChart />
+            <StudentGenderCountChart />
+        </div>
         <StudentRankingTable />
-        <StudentCountChart />
         <RecentStudentsTable />
         </div>
     );

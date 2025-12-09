@@ -21,6 +21,7 @@ import RegistrarLayout from './layouts/RegistrarLayout'
 import RegistrarProfile from './pages/RegistrarProfile'
 import AdminProfile from './pages/AdminProfile'
 import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPassword from './pages/auth/ResetPassword'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path='courses' element={<CoursesPage />} />
         <Route path='login' element={<LoginPage />} />
         <Route path='forgot-password' element={<ForgotPassword />} />
+        <Route path='reset-password/:token' element={<ResetPassword />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path='departments' element={<Departments />} />
